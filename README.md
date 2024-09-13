@@ -147,4 +147,4 @@ Framing text, and when possible the code comments, will be available in both Eng
 ---
 
 ## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+This project is a draft working progress file
