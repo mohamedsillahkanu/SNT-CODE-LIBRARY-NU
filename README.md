@@ -76,30 +76,19 @@ HOW TO DO IT(THE CODE)
     - Health Facility (HF)
     - Date HF started reporting
     - Is HF still active?
-    - Type of HF (District hospital, health post, etc.)
-```r
-HOW TO DO IT ( THE CODE)
-```
-  
+    - Type of HF (District hospital, health post, etc.) 
 - **A.2.2** Get DHIS2 Health Facility (HF) List from the Malaria Program
   - **A.2.2.1** Useful Columns:
     - adm0, adm1, adm2, adm3
     - Health Facility (HF)
     - Date HF started reporting in DHIS2
     - Is HF still active?
-    - Type of HF (MCHP, CHP, CHC, Hospital)
-   
+    - Type of HF (MCHP, CHP, CHC, Hospital)   
   #### How to do it
-```r
-HOW TO DO IT (THE CODE)
-```
-
 - **A.2.3** Reconciling the MFL and the DHIS2 HF list
   - **A.2.3.1** Identifying common HFs in both lists using fuzzy name matching
   - **A.2.3.2** Reconciling inconsistent HF Type
   - **A.2.3.3** Reconciling HF adm1, adm2, adm3 designation
- 
-    #### How to do it
 ```r
 HOW TO DO IT (THE CODE)
 ```
@@ -117,29 +106,14 @@ HOW TO DO IT (THE CODE)
 - **A.3.3** Merging datasets, handling duplicates
 - **A.3.4** Data cleaning (exploration, renaming variables, handling missing data)
 - **A.3.5** Outlier detection and correction
-
-#### How to do it
 ```r
-
      The code goes here with step by step explanation
-
-
 ```
 #### A.4 DHS data
 #### A.5 Climate data
 #### A.6 LMIS data
 #### A.7 Modeled data
 #### A.8 Population data
-
-#### How to do it
-```r
-
-     The code goes here with step by step explanation
-
-
-```
-
----
 
 ### B. EPIDEMIOLOGICAL STRATIFICATION
 - **B.1** Reporting Rate per Variable
