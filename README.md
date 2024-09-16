@@ -63,14 +63,9 @@ Framing text, and when possible the code comments, will be available in both Eng
 - **A.1.2** Rename and match names
 - **A.1.3** Link shapefiles to relevant scales
 - **A.1.4** Visualizing shapefiles and making basic maps
-#### How to do it
 ```r
-
-     The code goes here with step by step explanation
-
-
+HOW TO DO IT(THE CODE)
 ```
-
 #### A.2 Health Facilities
 - **A.2.1** Get MFL from the Malaria Program
   - **A.2.1.1** Useful Columns:
@@ -82,12 +77,8 @@ Framing text, and when possible the code comments, will be available in both Eng
     - Date HF started reporting
     - Is HF still active?
     - Type of HF (District hospital, health post, etc.)
-  #### How to do it
 ```r
-
-     The code goes here with step by step explanation
-
-
+HOW TO DO IT ( THE CODE)
 ```
   
 - **A.2.2** Get DHIS2 Health Facility (HF) List from the Malaria Program
@@ -100,10 +91,7 @@ Framing text, and when possible the code comments, will be available in both Eng
    
   #### How to do it
 ```r
-
-     The code goes here with step by step explanation
-
-
+HOW TO DO IT (THE CODE)
 ```
 
 - **A.2.3** Reconciling the MFL and the DHIS2 HF list
@@ -113,21 +101,14 @@ Framing text, and when possible the code comments, will be available in both Eng
  
     #### How to do it
 ```r
-
-     The code goes here with step by step explanation
-
-
+HOW TO DO IT (THE CODE)
 ```
 
 - **A.2.4** HF active / inactive status
   - Determining activity status from MFL and DHIS2
  
-    #### How to do it
 ```r
-
-     The code goes here with step by step explanation
-
-
+HOW TO DO IT (THE CODE)
 ```
 
 #### A.3 Routine case data from DHIS2
@@ -227,7 +208,6 @@ Framing text, and when possible the code comments, will be available in both Eng
 
 
 ```
-
 
 ---
 
