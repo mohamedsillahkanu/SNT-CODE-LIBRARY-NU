@@ -54,9 +54,9 @@ When multiple algorithmic options could be used, strengths and limitations of ea
 Framing text, and when possible the code comments, will be available in both English and French.
 
 ---
-
+---
 ## Library elements
-
+---
 ### A. DATA ASSEMBLY AND MANAGEMENT
 #### A.1 Shapefiles
 - **A.1.1** Import shapefiles
@@ -66,6 +66,7 @@ Framing text, and when possible the code comments, will be available in both Eng
 ```r
 HOW TO DO IT(THE CODE)
 ```
+---
 #### A.2 Health Facilities
 - **A.2.1** Get MFL from the Malaria Program
   - **A.2.1.1** Useful Columns:
@@ -92,14 +93,14 @@ HOW TO DO IT(THE CODE)
 ```r
 HOW TO DO IT (THE CODE)
 ```
-
+---
 - **A.2.4** HF active / inactive status
   - Determining activity status from MFL and DHIS2
  
 ```r
 HOW TO DO IT (THE CODE)
 ```
-
+---
 #### A.3 Routine case data from DHIS2
 - **A.3.1** Data extraction and import process
 - **A.3.2** Sanity Checks (column names, dataset length)
