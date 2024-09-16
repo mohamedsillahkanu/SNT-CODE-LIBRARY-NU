@@ -228,7 +228,6 @@ Framing text, and when possible the code comments, will be available in both Eng
 
 ```
 
-### NB
 
 ---
 
