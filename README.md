@@ -84,7 +84,7 @@ HOW TO DO IT(THE CODE)
     - Date HF started reporting in DHIS2
     - Is HF still active?
     - Type of HF (MCHP, CHP, CHC, Hospital)   
-  #### How to do it
+  
 - **A.2.3** Reconciling the MFL and the DHIS2 HF list
   - **A.2.3.1** Identifying common HFs in both lists using fuzzy name matching
   - **A.2.3.2** Reconciling inconsistent HF Type
