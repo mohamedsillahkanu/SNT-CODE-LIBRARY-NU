@@ -1,83 +1,87 @@
-# CODE LIBRARY for SUB-NATIONAL TAILORING
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sub-National Tailoring Code Library</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+        }
+        .toc {
+            width: 25%;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border-right: 1px solid #ddd;
+        }
+        .content {
+            width: 75%;
+            padding: 20px;
+        }
+        .toc ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .toc li {
+            margin-bottom: 10px;
+        }
+        .toc a {
+            text-decoration: none;
+            color: #333;
+        }
+        .toc a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
 
-**Version**: 11 September 2024  
-**Authors**: Mohamed Kanu, Sammy Oppong, Jaline Gerardin
+<div class="container">
+    <!-- Left Hand Side (Table of Contents) -->
+    <div class="toc">
+        <h3>Table of Contents</h3>
+        <ul>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#data-management">A. Data Assembly and Management</a></li>
+            <li><a href="#epi-stratification">B. Epidemiological Stratification</a></li>
+            <li><a href="#other-determinants">C. Stratification of Other Determinants</a></li>
+            <li><a href="#past-interventions">D. Review of Past Interventions</a></li>
+            <li><a href="#targeting">E. Targeting of Interventions</a></li>
+            <li><a href="#retrospective">F. Retrospective Analysis</a></li>
+            <li><a href="#urban-micro">G. Urban Microstratification</a></li>
+        </ul>
+    </div>
 
-<details>
-  <summary>Overview</summary>
-  <ul>
-    <li>Motivation</li>
-    <li>Objectives</li>
-    <li>Target audience</li>
-    <li>Scope</li>
-  </ul>
-</details>
+    <!-- Right Hand Side (Content) -->
+    <div class="content">
+        <h2 id="overview">Overview</h2>
+        <p>Here goes the overview text.</p>
 
-<details>
-  <summary>A. DATA ASSEMBLY AND MANAGEMENT</summary>
-  <ul>
-    <li><a href="#a1-shapefiles">A.1 Shapefiles</a></li>
-    <li><a href="#a2-health-facilities">A.2 Health Facilities</a></li>
-    <li><a href="#a3-routine-case-data-from-dhis2">A.3 Routine case data from DHIS2</a></li>
-    <li>A.4 DHS data</li>
-    <li>A.5 Climate data</li>
-    <li>A.6 LMIS data</li>
-    <li>A.7 Modeled data</li>
-    <li>A.8 Population data</li>
-  </ul>
-</details>
+        <h2 id="data-management">A. Data Assembly and Management</h2>
+        <p>Here goes the data assembly and management content.</p>
 
-<details>
-  <summary>B. EPIDEMIOLOGICAL STRATIFICATION</summary>
-  <ul>
-    <li>B.1 Reporting Rate per Variable</li>
-    <li>B.2 Group and merge data frame</li>
-    <li>5.4 Crude Incidence by Year</li>
-    <li>5.5 Adjusted Incidence by Year</li>
-    <li>5.6 Option to Select Incidence</li>
-    <li>5.7 Risk Categorization</li>
-  </ul>
-</details>
+        <h2 id="epi-stratification">B. Epidemiological Stratification</h2>
+        <p>Here goes the epidemiological stratification content.</p>
 
-<details>
-  <summary>C. STRATIFICATION OF OTHER DETERMINANTS</summary>
-  <ul>
-    <li>C.1 Access to Care</li>
-    <li>C.2 Seasonality</li>
-    <li>C.3 Insecticide Resistance</li>
-    <li>C.4 Anti-Malaria Drug Resistance</li>
-  </ul>
-</details>
+        <h2 id="other-determinants">C. Stratification of Other Determinants</h2>
+        <p>Here goes the stratification of other determinants content.</p>
 
-<details>
-  <summary>D. REVIEW OF PAST INTERVENTIONS</summary>
-  <ul>
-    <li>7.0 EPI Coverage and Dropout Rate</li>
-    <li>7.1 IPTp and ANC Coverage</li>
-    <li>7.2 PMC (Prevention of Malaria in Pregnancy)</li>
-    <li>7.3 SMC (Seasonal Malaria Chemoprevention)</li>
-    <li>7.4 Malaria Vaccine</li>
-    <li>7.5 ITN Ownership, Access, Usage, and Type</li>
-    <li>7.6 ITN Operational Coverage</li>
-    <li>7.7 IRS (Indoor Residual Spraying)</li>
-    <li>7.8 LSM (Larval Source Management)</li>
-    <li>7.9 Assessing the Quality of Case Management</li>
-  </ul>
-</details>
+        <h2 id="past-interventions">D. Review of Past Interventions</h2>
+        <p>Here goes the review of past interventions content.</p>
 
-<details>
-  <summary>E. Targeting of Interventions</summary>
-</details>
+        <h2 id="targeting">E. Targeting of Interventions</h2>
+        <p>Here goes the targeting of interventions content.</p>
 
-<details>
-  <summary>F. Retrospective Analysis</summary>
-</details>
+        <h2 id="retrospective">F. Retrospective Analysis</h2>
+        <p>Here goes the retrospective analysis content.</p>
 
-<details>
-  <summary>G. Urban Microstratification</summary>
-</details>
+        <h2 id="urban-micro">G. Urban Microstratification</h2>
+        <p>Here goes the urban microstratification content.</p>
+    </div>
+</div>
 
----
-
-## A.1 Shapefiles
-(You can put more detailed content for each section below, for example, a full page on working with Shapefiles in R.)
+</body>
+</html>
