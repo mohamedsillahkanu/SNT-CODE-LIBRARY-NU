@@ -1,0 +1,16 @@
+---
+title: "Project Analysis"
+format: html
+---
+
+# Project Analysis
+
+This is a Quarto Markdown file that supports advanced features like code execution and formatting.
+
+## Data Summary
+
+Here’s a summary of the data used in the project.
+
+```{r}
+# Example R code block
+summary(mtcars)
