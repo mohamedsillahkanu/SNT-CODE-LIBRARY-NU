@@ -1,0 +1,33 @@
+/* Styling for the project */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 20px;
+}
+
+h1 {
+    color: #0056b3;
+}
+
+h2 {
+    color: #333;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul li {
+    margin: 10px 0;
+}
+
+a {
+    color: #ff5733;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
