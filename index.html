@@ -136,12 +136,97 @@
     <script>
         function showCode(language) {
             const codeSnippets = {
-                "JavaScript": "// Sample JavaScript Code\nfunction greet(name) {\n    console.log(`Hello, ${name}!`);\n}\n\ngreet('World');",
-                "Python": "# Sample Python Code\ndef greet(name):\n    print(f'Hello, {name}!')\n\ngreet('World')",
-                "HTML & CSS": "<!-- Sample HTML Code -->\n<div class='greet'>Hello, World!</div>\n<style>.greet { color: teal; }</style>",
-                "Java": "// Sample Java Code\npublic class Greet {\n    public static void main(String[] args) {\n        System.out.println(\"Hello, World!\");\n    }\n}",
-                "SQL": "-- Sample SQL Query\nSELECT * FROM users WHERE active = 1;",
-                "Ruby": "# Sample Ruby Code\ndef greet(name)\n  puts \"Hello, #{name}!\"\nend\n\ngreet('World')"
+                "R English": `# Load necessary libraries
+library(sf)
+library(ggplot2)
+
+# Load shapefiles
+admin1 <- st_read("/path/to/admin1.shp")
+admin2 <- st_read("/path/to/admin2.shp")
+
+# Ensure both layers have the same CRS
+admin1 <- st_transform(admin1, crs = st_crs(admin2))
+
+# Plot overlays
+ggplot() +
+  geom_sf(data = admin1, fill = NA, color = "blue") +
+  geom_sf(data = admin2, fill = NA, color = "red") +
+  labs(title = "Overlay of Admin Units")`,
+
+                "R French": `# Charger les bibliothèques nécessaires
+library(sf)
+library(ggplot2)
+
+# Charger les shapefiles
+admin1 <- st_read("/chemin/vers/admin1.shp")
+admin2 <- st_read("/chemin/vers/admin2.shp")
+
+# Assurer que les deux couches ont le même CRS
+admin1 <- st_transform(admin1, crs = st_crs(admin2))
+
+# Tracer les superpositions
+ggplot() +
+  geom_sf(data = admin1, fill = NA, color = "blue") +
+  geom_sf(data = admin2, fill = NA, color = "red") +
+  labs(title = "Superposition des unités administratives")`,
+
+                "Python English": `import geopandas as gpd
+import matplotlib.pyplot as plt
+
+# Load shapefiles
+admin1 = gpd.read_file("/path/to/admin1.shp")
+admin2 = gpd.read_file("/path/to/admin2.shp")
+
+# Ensure both layers have the same CRS
+admin1 = admin1.to_crs(admin2.crs)
+
+# Plot overlays
+fig, ax = plt.subplots()
+admin1.plot(ax=ax, edgecolor='blue')
+admin2.plot(ax=ax, edgecolor='red')
+plt.title("Overlay of Admin Units")
+plt.show()`,
+
+                "Python French": `import geopandas as gpd
+import matplotlib.pyplot as plt
+
+# Charger les shapefiles
+admin1 = gpd.read_file("/chemin/vers/admin1.shp")
+admin2 = gpd.read_file("/chemin/vers/admin2.shp")
+
+# Assurer que les deux couches ont le même CRS
+admin1 = admin1.to_crs(admin2.crs)
+
+# Tracer les superpositions
+fig, ax = plt.subplots()
+admin1.plot(ax=ax, edgecolor='blue')
+admin2.plot(ax=ax, edgecolor='red')
+plt.title("Superposition des unités administratives")
+plt.show()`,
+
+                "Stata English": `* Load shapefiles
+shp2dta using "/path/to/admin1.shp", database(admin1_db) coordinates(admin1_coords)
+shp2dta using "/path/to/admin2.shp", database(admin2_db) coordinates(admin2_coords)
+
+* Merge shapefiles
+drop _all
+use admin1_db, clear
+append using admin2_db
+
+* Plot overlays
+spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolor(red ..)`,
+
+                "Stata French": `* Charger les shapefiles
+shp2dta using "/chemin/vers/admin1.shp", database(admin1_db) coordinates(admin1_coords)
+shp2dta using "/chemin/vers/admin2.shp", database(admin2_db) coordinates(admin2_coords)
+
+* Fusionner les shapefiles
+drop _all
+use admin1_db, clear
+append using admin2_db
+
+* Tracer les superpositions
+spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolor(red ..)`
             };
 
             const codeDisplay = document.querySelector('.code-display pre');
@@ -164,55 +249,4 @@
     <div class="sidebar">
         <h2>Code Library</h2>
         <ul>
-            <li onclick="showCode('JavaScript')">JavaScript</li>
-            <li>
-                Python
-                <ul class="dropdown-content">
-                    <li onclick="showCode('Python')">Python Basics</li>
-                    <li onclick="showCode('Python')">Python Advanced</li>
-                </ul>
-            </li>
-            <li onclick="showCode('HTML & CSS')">HTML & CSS</li>
-            <li>
-                Java
-                <ul class="dropdown-content">
-                    <li onclick="showCode('Java')">Java Basics</li>
-                    <li onclick="showCode('Java')">Java OOP</li>
-                </ul>
-            </li>
-            <li onclick="showCode('SQL')">SQL</li>
-            <li>
-                Ruby
-                <ul class="dropdown-content">
-                    <li onclick="showCode('Ruby')">Ruby Basics</li>
-                    <li onclick="showCode('Ruby')">Ruby on Rails</li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-    <div class="content">
-        <div class="section-buttons">
-            <button onclick="showCode('JavaScript')">JavaScript</button>
-            <button onclick="showCode('Python')">Python</button>
-            <button onclick="showCode('HTML & CSS')">HTML & CSS</button>
-            <button onclick="showCode('Java')">Java</button>
-            <button onclick="showCode('SQL')">SQL</button>
-            <button onclick="showCode('Ruby')">Ruby</button>
-        </div>
-        <div class="search-bar">
-            <input type="text" placeholder="Search code snippets...">
-        </div>
-        <div class="code-display">
-            <span class="language">JavaScript</span>
-            <pre>
-// Sample JavaScript Code
-function greet(name) {
-    console.log(`Hello, ${name}!`);
-}
-
-greet('World');
-            </pre>
-        </div>
-    </div>
-</body>
-</html>
+            <li onclick="showCode
