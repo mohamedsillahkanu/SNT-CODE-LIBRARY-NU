@@ -249,12 +249,27 @@ spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolo
     <div class="sidebar">
         <h2>Code Library</h2>
         <ul>
-            <li onclick="showCode('R English')">R English</li>
-            <li onclick="showCode('R French')">R French</li>
-            <li onclick="showCode('Python English')">Python English</li>
-            <li onclick="showCode('Python French')">Python French</li>
-            <li onclick="showCode('Stata English')">Stata English</li>
-            <li onclick="showCode('Stata French')">Stata French</li>
+            <li>
+                R
+                <ul class="dropdown-content">
+                    <li onclick="showCode('R English')">English</li>
+                    <li onclick="showCode('R French')">French</li>
+                </ul>
+            </li>
+            <li>
+                Python
+                <ul class="dropdown-content">
+                    <li onclick="showCode('Python English')">English</li>
+                    <li onclick="showCode('Python French')">French</li>
+                </ul>
+            </li>
+            <li>
+                Stata
+                <ul class="dropdown-content">
+                    <li onclick="showCode('Stata English')">English</li>
+                    <li onclick="showCode('Stata French')">French</li>
+                </ul>
+            </li>
         </ul>
     </div>
     <div class="content">
@@ -263,32 +278,4 @@ spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolo
             <button onclick="showCode('R French')">R French</button>
             <button onclick="showCode('Python English')">Python English</button>
             <button onclick="showCode('Python French')">Python French</button>
-            <button onclick="showCode('Stata English')">Stata English</button>
-            <button onclick="showCode('Stata French')">Stata French</button>
-        </div>
-        <div class="search-bar">
-            <input type="text" placeholder="Search code snippets...">
-        </div>
-        <div class="code-display">
-            <span class="language">R English</span>
-            <pre>
-# Load necessary libraries
-library(sf)
-library(ggplot2)
-
-# Load shapefiles
-admin1 <- st_read("/path/to/admin1.shp")
-admin2 <- st_read("/path/to/admin2.shp")
-
-# Ensure both layers have the same CRS
-admin1 <- st_transform(admin1, crs = st_crs(admin2))
-
-# Plot overlays
-ggplot() +
-  geom_sf(data = admin1, fill = NA, color = "blue") +
-  geom_sf(data = admin2, fill = NA, color = "red") +
-  labs(title = "Overlay of Admin Units")
-            </pre>
-        </div>
-    </div>
-</body>
+            <button onclick="show
