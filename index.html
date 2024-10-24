@@ -36,6 +36,7 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s;
+            position: relative;
         }
         .sidebar li:hover {
             background-color: #3a3b52;
@@ -43,6 +44,24 @@
         .sidebar li.active {
             background-color: #47B5FF;
             color: #000000;
+        }
+        .dropdown-content {
+            display: none;
+            position: relative;
+            margin-top: 5px;
+            background-color: #3a3b52;
+            padding-left: 10px;
+            border-radius: 5px;
+        }
+        .sidebar li:hover .dropdown-content {
+            display: block;
+        }
+        .dropdown-content li {
+            padding: 8px;
+            cursor: pointer;
+        }
+        .dropdown-content li:hover {
+            background-color: #474761;
         }
         .content {
             flex-grow: 1;
@@ -82,17 +101,52 @@
             font-weight: bold;
         }
     </style>
+    <script>
+        function showCode(language) {
+            const codeSnippets = {
+                "JavaScript": "// Sample JavaScript Code\nfunction greet(name) {\n    console.log(`Hello, ${name}!`);\n}\n\ngreet('World');",
+                "Python": "# Sample Python Code\ndef greet(name):\n    print(f'Hello, {name}!')\n\ngreet('World')",
+                "HTML & CSS": "<!-- Sample HTML Code -->\n<div class='greet'>Hello, World!</div>\n<style>.greet { color: teal; }</style>",
+                "Java": "// Sample Java Code\npublic class Greet {\n    public static void main(String[] args) {\n        System.out.println(\"Hello, World!\");\n    }\n}",
+                "SQL": "-- Sample SQL Query\nSELECT * FROM users WHERE active = 1;",
+                "Ruby": "# Sample Ruby Code\ndef greet(name)\n  puts \"Hello, #{name}!\"\nend\n\ngreet('World')"
+            };
+
+            const codeDisplay = document.querySelector('.code-display pre');
+            const languageLabel = document.querySelector('.code-display .language');
+            codeDisplay.textContent = codeSnippets[language];
+            languageLabel.textContent = language;
+        }
+    </script>
 </head>
 <body>
     <div class="sidebar">
         <h2>Code Library</h2>
         <ul>
-            <li class="active">JavaScript</li>
-            <li>Python</li>
-            <li>HTML & CSS</li>
-            <li>Java</li>
-            <li>SQL</li>
-            <li>Ruby</li>
+            <li onclick="showCode('JavaScript')">JavaScript</li>
+            <li>
+                Python
+                <ul class="dropdown-content">
+                    <li onclick="showCode('Python')">Python Basics</li>
+                    <li onclick="showCode('Python')">Python Advanced</li>
+                </ul>
+            </li>
+            <li onclick="showCode('HTML & CSS')">HTML & CSS</li>
+            <li>
+                Java
+                <ul class="dropdown-content">
+                    <li onclick="showCode('Java')">Java Basics</li>
+                    <li onclick="showCode('Java')">Java OOP</li>
+                </ul>
+            </li>
+            <li onclick="showCode('SQL')">SQL</li>
+            <li>
+                Ruby
+                <ul class="dropdown-content">
+                    <li onclick="showCode('Ruby')">Ruby Basics</li>
+                    <li onclick="showCode('Ruby')">Ruby on Rails</li>
+                </ul>
+            </li>
         </ul>
     </div>
     <div class="content">
