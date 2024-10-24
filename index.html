@@ -3,17 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Homepage</title>
-    <link rel="stylesheet" href="./style.css">
+    <title>Code Library UI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            background-color: #1e1e2e;
+            color: #ffffff;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #28293d;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .sidebar h2 {
+            color: #47B5FF;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar li {
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .sidebar li:hover {
+            background-color: #3a3b52;
+        }
+        .sidebar li.active {
+            background-color: #47B5FF;
+            color: #000000;
+        }
+        .content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+        .search-bar {
+            margin-bottom: 20px;
+        }
+        .search-bar input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 1em;
+        }
+        .code-display {
+            background-color: #33334d;
+            border-radius: 10px;
+            padding: 20px;
+            overflow: auto;
+            height: 100%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .code-display pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #00E0B5;
+        }
+        .code-display .language {
+            margin-bottom: 10px;
+            padding: 5px 10px;
+            background: #474761;
+            display: inline-block;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to the Project Homepage</h1>
-    <p>This project is designed to showcase how HTML, CSS, and Quarto Markdown files work together on GitHub.</p>
-    
-    <h2>Links</h2>
-    <ul>
-        <li><a href="./analysis.qmd">View Analysis (QMD)</a></li>
-        <li><a href="./style.css">View CSS Stylesheet</a></li>
-    </ul>
+    <div class="sidebar">
+        <h2>Code Library</h2>
+        <ul>
+            <li class="active">JavaScript</li>
+            <li>Python</li>
+            <li>HTML & CSS</li>
+            <li>Java</li>
+            <li>SQL</li>
+            <li>Ruby</li>
+        </ul>
+    </div>
+    <div class="content">
+        <div class="search-bar">
+            <input type="text" placeholder="Search code snippets...">
+        </div>
+        <div class="code-display">
+            <span class="language">JavaScript</span>
+            <pre>
+// Sample JavaScript Code
+function greet(name) {
+    console.log(`Hello, ${name}!`);
+}
+
+greet('World');
+            </pre>
+        </div>
+    </div>
 </body>
 </html>
