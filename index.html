@@ -63,6 +63,9 @@
         .sidebar li.active .dropdown-content {
             display: block;
         }
+        .sidebar li:hover .dropdown-content {
+            display: block;
+        }
         .dropdown-content li {
             padding: 8px;
             cursor: pointer;
@@ -153,17 +156,22 @@
             display: none;
         }
         .sample-image {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 2px solid #FF6347;
-            border-radius: 10px;
-            padding: 10px;
-        }
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border: 2px solid #FF6347;
+                border-radius: 10px;
+                padding: 10px;
+            }
+            .sample-image img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 10px;
+            }
         .sample-image img {
-            width: 100%;
-            height: auto;
-            object-fit: cover;
+            max-width: 100%;
+            height: 100%;
             border-radius: 10px;
         }
         .copy-btn {
@@ -189,7 +197,6 @@
         }
     </style>
     <script>
-        let currentSection = null;
         function selectSidebarItem(item, section) {
             // Highlight the selected sidebar item
             const sidebarItems = document.querySelectorAll('.sidebar li');
@@ -197,17 +204,15 @@
             item.classList.add('active');
             // Update URL hash
             window.location.hash = `/${section}`;
-            currentSection = section;
-            document.querySelector('.full-code').style.display = 'none';
-            document.querySelector('.sample-image img').src = 'https://via.placeholder.com/300x200.png?text=Select+a+Code+Language';
         }
 
         function showCode(language) {
-            if (!currentSection) {
+            const section = window.location.hash.split('/')[1];
+            if (!section) {
                 alert('Please select a section from the sidebar first.');
                 return;
             }
-            window.location.hash = `/${currentSection}/${language.toLowerCase().replace(' ', '-')}`;
+            window.location.hash = `/${section}/${language.toLowerCase().replace(' ', '-')}`;
             
             const codeSnippets = {
                 "shapefile-info": {
@@ -302,58 +307,14 @@ append using admin2_db
 
 * Plot overlays
 spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolor(red ..)`
-                },
-                "health-info": {
-                    "r-english": `# Load health facility data
-library(readr)
-
-# Load dataset
-health_data <- read_csv("/path/to/health_data.csv")
-
-# Print summary
-summary(health_data)`,
-                    "python-english": `import pandas as pd
-
-# Load health facility data
-health_data = pd.read_csv("/path/to/health_data.csv")
-
-# Print summary
-print(health_data.describe())`,
-                    "stata-english": `* Load health facility data
-import delimited "/path/to/health_data.csv"
-
-* Display summary
-describe`},
-                "routine-case-data": {
-                    "r-english": `# Load routine case data
-library(readr)
-
-# Load dataset
-routine_data <- read_csv("/path/to/routine_data.csv")
-
-# Print summary
-summary(routine_data)`,
-                    "python-english": `import pandas as pd
-
-# Load routine case data
-routine_data = pd.read_csv("/path/to/routine_data.csv")
-
-# Print summary
-print(routine_data.describe())`,
-                    "stata-english": `* Load routine case data
-import delimited "/path/to/routine_data.csv"
-
-* Display summary
-describe`}
+                }
             };
 
-            const selectedCode = codeSnippets[currentSection]?.[language.toLowerCase().replace(' ', '-')];
+            const selectedCode = codeSnippets[section]?.[language.toLowerCase().replace(' ', '-')];
             const codeDisplay = document.querySelector('.full-code');
             if (selectedCode) {
                 codeDisplay.innerText = selectedCode;
                 codeDisplay.style.display = 'block';
-                // Change the sample image to a relevant example image
-                document.querySelector('.sample-image img').src = `https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/16df021948e18e142e103ee7e9c78ff8311005ef/${currentSection}-${language.toLowerCase().replace(' ', '-')}.png`;
             } else {
                 codeDisplay.innerText = 'No code available.';
                 codeDisplay.style.display = 'block';
@@ -441,10 +402,10 @@ describe`}
             <div class="image-section">
                 <h3>Sample Image</h3>
                 <div class="sample-image">
-                    <img src="https://via.placeholder.com/300x200.png?text=Select+a+Code+Language" alt="Sample Image">
+                    <img src="https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/16df021948e18e142e103ee7e9c78ff8311005ef/overlay%20final3.png" alt="Sample Image">
                 </div>
             </div>
         </div>
     </div>
 </body>
-</html>
+</html> 
