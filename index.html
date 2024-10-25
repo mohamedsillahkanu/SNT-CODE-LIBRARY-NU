@@ -63,6 +63,9 @@
         .sidebar li.active .dropdown-content {
             display: block;
         }
+        .sidebar li:hover .dropdown-content {
+            display: block;
+        }
         .dropdown-content li {
             padding: 8px;
             cursor: pointer;
@@ -102,6 +105,30 @@
         .section-buttons button:hover {
             background-color: #3a3b52;
         }
+        .search-bar {
+            margin-bottom: 20px;
+        }
+        .search-bar input {
+            width: 85%;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 1em;
+        }
+        .search-bar button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #47B5FF;
+            color: #000;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+        .search-bar button:hover {
+            background-color: #3a3b52;
+            color: #ffffff;
+        }
         .main-content {
             display: flex;
             height: calc(100% - 100px);
@@ -129,17 +156,22 @@
             display: none;
         }
         .sample-image {
-            display: none;
-            justify-content: center;
-            align-items: center;
-            border: 2px solid #FF6347;
-            border-radius: 10px;
-            padding: 10px;
-        }
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border: 2px solid #FF6347;
+                border-radius: 10px;
+                padding: 10px;
+            }
+            .sample-image img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 10px;
+            }
         .sample-image img {
-            width: 100%;
+            max-width: 100%;
             height: 100%;
-            object-fit: cover;
             border-radius: 10px;
         }
         .copy-btn {
@@ -157,6 +189,10 @@
         }
         .copy-btn.active {
             background-color: #00E0B5;
+            color: #000000;
+        }
+        .sidebar li.active {
+            background-color: #47B5FF;
             color: #000000;
         }
     </style>
@@ -180,29 +216,108 @@
             
             const codeSnippets = {
                 "shapefile-info": {
-                    "r-english": `# Shapefile-info / R in English\n# Load necessary libraries\nlibrary(sf)\n\n# Load shapefile\nadmin <- st_read("/path/to/admin.shp")\n\n# Print shapefile info\nprint(admin)`
-                },
+                    "r-english": `# Load necessary libraries
+library(sf)
+
+# Load shapefile
+admin <- st_read("/path/to/admin.shp")
+
+# Print shapefile info
+print(admin)`,
+
+                    "python-english": `import geopandas as gpd
+
+# Load shapefile
+admin = gpd.read_file("/path/to/admin.shp")
+
+# Print shapefile info
+print(admin.head())`,
+
+                    "stata-english": `* Load shapefile
+shp2dta using "/path/to/admin.shp", database(admin_db) coordinates(admin_coords)
+
+* List shapefile info
+list`},
                 "basic-plot": {
-                    "r-english": `# Basic-plot / R in English\n# Load necessary libraries\nlibrary(sf)\nlibrary(ggplot2)\n\n# Load shapefile\nadmin <- st_read("/path/to/admin.shp")\n\n# Basic plot\nggplot() +\n  geom_sf(data = admin, fill = NA, color = "blue")`
+                    "r-english": `# Load necessary libraries
+library(sf)
+library(ggplot2)
+
+# Load shapefile
+admin <- st_read("/path/to/admin.shp")
+
+# Basic plot
+ggplot() +
+  geom_sf(data = admin, fill = NA, color = "blue")`,
+                    "python-english": `import geopandas as gpd
+import matplotlib.pyplot as plt
+
+# Load shapefile
+admin = gpd.read_file("/path/to/admin.shp")
+
+# Basic plot
+admin.plot()
+plt.show()`,
+                    "stata-english": `* Load shapefile
+shp2dta using "/path/to/admin.shp", database(admin_db) coordinates(admin_coords)
+
+* Basic plot
+spmap using admin_coords, id(_ID)`
+                },
+                "admin-unit-overlay": {
+                    "r-english": `# Load necessary libraries
+library(sf)
+library(ggplot2)
+
+# Load shapefiles
+admin1 <- st_read("/path/to/admin1.shp")
+admin2 <- st_read("/path/to/admin2.shp")
+
+# Ensure both layers have the same CRS
+admin1 <- st_transform(admin1, crs = st_crs(admin2))
+
+# Plot overlays
+ggplot() +
+  geom_sf(data = admin1, fill = NA, color = "blue") +
+  geom_sf(data = admin2, fill = NA, color = "red")`,
+                    "python-english": `import geopandas as gpd
+import matplotlib.pyplot as plt
+
+# Load shapefiles
+admin1 = gpd.read_file("/path/to/admin1.shp")
+admin2 = gpd.read_file("/path/to/admin2.shp")
+
+# Ensure both layers have the same CRS
+admin1 = admin1.to_crs(admin2.crs)
+
+# Plot overlays
+fig, ax = plt.subplots()
+admin1.plot(ax=ax, edgecolor='blue')
+admin2.plot(ax=ax, edgecolor='red')
+plt.title("Overlay of Admin Units")
+plt.show()`,
+                    "stata-english": `* Load shapefiles
+shp2dta using "/path/to/admin1.shp", database(admin1_db) coordinates(admin1_coords)
+shp2dta using "/path/to/admin2.shp", database(admin2_db) coordinates(admin2_coords)
+
+* Merge shapefiles
+drop _all
+use admin1_db, clear
+append using admin2_db
+
+* Plot overlays
+spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolor(red ..)`
                 }
             };
 
             const selectedCode = codeSnippets[section]?.[language.toLowerCase().replace(' ', '-')];
             const codeDisplay = document.querySelector('.full-code');
-            const sampleImage = document.querySelector('.sample-image');
             if (selectedCode) {
                 codeDisplay.innerText = selectedCode;
                 codeDisplay.style.display = 'block';
-                // Display sample image if available
-                if (section === 'shapefile-info' && language.toLowerCase() === 'r english') {
-                    sampleImage.style.display = 'flex';
-                } else {
-                    sampleImage.style.display = 'none';
-                }
             } else {
                 codeDisplay.innerText = 'No code available.';
                 codeDisplay.style.display = 'block';
-                sampleImage.style.display = 'none';
             }
 
             // Update active button styling
@@ -238,6 +353,23 @@
                 <ul class="dropdown-content">
                     <li onclick="selectSidebarItem(this, 'shapefile-info')">Shapefile Info</li>
                     <li onclick="selectSidebarItem(this, 'basic-plot')">Basic Plot</li>
+                    <li onclick="selectSidebarItem(this, 'admin-unit-overlay')">Admin Unit Overlay</li>
+                </ul>
+            </li>
+            <li>
+                A.2 Health Facilities
+                <ul class="dropdown-content">
+                    <li onclick="selectSidebarItem(this, 'health-info')">R</li>
+                    <li onclick="selectSidebarItem(this, 'health-info')">Python</li>
+                    <li onclick="selectSidebarItem(this, 'health-info')">Stata</li>
+                </ul>
+            </li>
+            <li>
+                A.3 Routine Case Data from DHIS2
+                <ul class="dropdown-content">
+                    <li onclick="selectSidebarItem(this, 'routine-case-data')">R</li>
+                    <li onclick="selectSidebarItem(this, 'routine-case-data')">Python</li>
+                    <li onclick="selectSidebarItem(this, 'routine-case-data')">Stata</li>
                 </ul>
             </li>
         </ul>
@@ -245,7 +377,19 @@
     <div class="content">
         <div class="section-buttons">
             <button onclick="showCode('R English')" id="r-english-btn">R English</button>
+            <button onclick="showCode('R French')" id="r-french-btn">R French</button>
             <button onclick="showCode('Python English')" id="python-english-btn">Python English</button>
+            <button onclick="showCode('Python French')" id="python-french-btn">Python French</button>
+            <button onclick="showCode('Stata English')" id="stata-english-btn">Stata English</button>
+            <button onclick="showCode('Stata French')" id="stata-french-btn">Stata French</button>
+        </div>
+        <div class="topic-intro" style="background-color: #ffffff; color: #000; padding: 20px; border-radius: 10px;">
+            <p style="font-style: italic;">Welcome to the Code Library UI. Here you will find various examples of code snippets related to geospatial analysis, data visualization, and more. For further reading, please check out the following links:</p>
+            <ul>
+                <li><a href="https://en.wikipedia.org/wiki/Shapefile" target="_blank" style="color: #47B5FF;">Shapefile - Wikipedia</a></li>
+                <li><a href="https://geopandas.org/" target="_blank" style="color: #47B5FF;">Geopandas Documentation</a></li>
+                <li><a href="https://ggplot2.tidyverse.org/" target="_blank" style="color: #47B5FF;">ggplot2 Documentation</a></li>
+            </ul>
         </div>
         <div class="main-content">
             <div class="code-section">
@@ -264,4 +408,4 @@
         </div>
     </div>
 </body>
-</html>
+</html>  i want if shapefile-info is selected and R in English is selected. Display a sample image.. do the same connection for sidebar option+Code button selected and then sample output. ontop of the codesnippit write Shapefile-info/R in English with #47B5FF text color....do the same for all. Ilaso make the url tie to each page
