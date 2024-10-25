@@ -225,6 +225,20 @@
                 "routine-case-data": "Routine Case Data from DHIS2 analysis using R, Python, and Stata."
             };
             topicIntro.innerText = topicIntros[section] || "Welcome to the Code Library UI. Here you will find various examples of code snippets related to geospatial analysis, data visualization, and more.";
+            // Update image for the selected submenu
+            const imageSection = document.querySelector('.image-section img');
+            const images = {
+                "shapefile-info": "https://example.com/shapefile-info.png",
+                "basic-plot": "https://example.com/basic-plot.png",
+                "admin-unit-overlay": "https://example.com/admin-unit-overlay.png",
+                "shapefile-link": "https://example.com/shapefile-link.png",
+                "plot-map-numeric": "https://example.com/plot-map-numeric.png",
+                "plot-map-categorial": "https://example.com/plot-map-categorial.png",
+                "plot-map-manual": "https://example.com/plot-map-manual.png",
+                "health-info": "https://example.com/health-info.png",
+                "routine-case-data": "https://example.com/routine-case-data.png"
+            };
+            imageSection.src = images[section] || "https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/16df021948e18e142e103ee7e9c78ff8311005ef/overlay%20final3.png";
         }
 
         function showCode(language) {
