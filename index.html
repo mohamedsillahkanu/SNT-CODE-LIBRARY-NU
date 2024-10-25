@@ -156,22 +156,17 @@
             display: none;
         }
         .sample-image {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                border: 2px solid #FF6347;
-                border-radius: 10px;
-                padding: 10px;
-            }
-            .sample-image img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                border-radius: 10px;
-            }
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #FF6347;
+            border-radius: 10px;
+            padding: 10px;
+        }
         .sample-image img {
-            max-width: 100%;
+            width: 100%;
             height: 100%;
+            object-fit: cover;
             border-radius: 10px;
         }
         .copy-btn {
@@ -225,20 +220,13 @@
                 "routine-case-data": "Routine Case Data from DHIS2 analysis using R, Python, and Stata."
             };
             topicIntro.innerText = topicIntros[section] || "Welcome to the Code Library UI. Here you will find various examples of code snippets related to geospatial analysis, data visualization, and more.";
-            // Update image for the selected submenu
-            const imageSection = document.querySelector('.image-section img');
-            const images = {
-                "shapefile-info": "https://example.com/shapefile-info.png",
-                "basic-plot": "https://example.com/basic-plot.png",
-                "admin-unit-overlay": "https://example.com/admin-unit-overlay.png",
-                "shapefile-link": "https://example.com/shapefile-link.png",
-                "plot-map-numeric": "https://example.com/plot-map-numeric.png",
-                "plot-map-categorial": "https://example.com/plot-map-categorial.png",
-                "plot-map-manual": "https://example.com/plot-map-manual.png",
-                "health-info": "https://example.com/health-info.png",
-                "routine-case-data": "https://example.com/routine-case-data.png"
-            };
-            
+            // Display corresponding image section
+            const imageSections = document.querySelectorAll('.image-section');
+            imageSections.forEach(section => section.style.display = 'none');
+            const currentImageSection = document.getElementById(`${section}-image-section`);
+            if (currentImageSection) {
+                currentImageSection.style.display = 'block';
+            }
         }
 
         function showCode(language) {
@@ -386,7 +374,6 @@ spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolo
             <li>
                 Shapefiles
                 <ul class="dropdown-content">
-                   
                     <li onclick="selectSidebarItem(this, 'shapefile-info')">Shapefile Info</li>
                     <li onclick="selectSidebarItem(this, 'basic-plot')">Basic Plot</li>
                     <li onclick="selectSidebarItem(this, 'admin-unit-overlay')">Admin Unit Overlay</li>
@@ -434,10 +421,58 @@ spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolo
                 </div>
                 <pre class="full-code" style="background-color: #ffffff; color: #000;">No code selected.</pre>
             </div>
-            <div class="image-section">
-                <h3>Sample Image</h3>
+            <div id="shapefile-info-image-section" class="image-section" style="display: none;">
+                <h3>Shapefile Info Image</h3>
                 <div class="sample-image">
-                    
+                    <img src="https://example.com/shapefile-info.png" alt="Shapefile Info Image">
+                </div>
+            </div>
+            <div id="basic-plot-image-section" class="image-section" style="display: none;">
+                <h3>Basic Plot Image</h3>
+                <div class="sample-image">
+                    <img src="https://example.com/basic-plot.png" alt="Basic Plot Image">
+                </div>
+            </div>
+            <div id="admin-unit-overlay-image-section" class="image-section" style="display: none;">
+                <h3>Admin Unit Overlay Image</h3>
+                <div class="sample-image">
+                    <img src="https://example.com/admin-unit-overlay.png" alt="Admin Unit Overlay Image">
+                </div>
+            </div>
+            <div id="shapefile-link-image-section" class="image-section" style="display: none;">
+                <h3>Link Shapefile with Excel Image</h3>
+                <div class="sample-image">
+                    <img src="https://example.com/shapefile-link.png" alt="Link Shapefile with Excel Image">
+                </div>
+            </div>
+            <div id="plot-map-numeric-image-section" class="image-section" style="display: none;">
+                <h3>Map Using Numeric Variable Image</h3>
+                <div class="sample-image">
+                    <img src="https://example.com/plot-map-numeric.png" alt="Map Using Numeric Variable Image">
+                </div>
+            </div>
+            <div id="plot-map-categorial-image-section" class="image-section" style="display: none;">
+                <h3>Map Using Categorical Variable Image</h3>
+                <div class="sample-image">
+                    <img src="https://example.com/plot-map-categorial.png" alt="Map Using Categorical Variable Image">
+                </div>
+            </div>
+            <div id="plot-map-manual-image-section" class="image-section" style="display: none;">
+                <h3>Map Using Manual Coloring Image</h3>
+                <div class="sample-image">
+                    <img src="https://example.com/plot-map-manual.png" alt="Map Using Manual Coloring Image">
+                </div>
+            </div>
+            <div id="health-info-image-section" class="image-section" style="display: none;">
+                <h3>Health Info Image</h3>
+                <div class="sample-image">
+                    <img src="https://example.com/health-info.png" alt="Health Info Image">
+                </div>
+            </div>
+            <div id="routine-case-data-image-section" class="image-section" style="display: none;">
+                <h3>Routine Case Data Image</h3>
+                <div class="sample-image">
+                    <img src="https://example.com/routine-case-data.png" alt="Routine Case Data Image">
                 </div>
             </div>
         </div>
