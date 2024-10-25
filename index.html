@@ -162,7 +162,7 @@
         }
         .sample-image img {
             width: 100%;
-            height: 100%;
+            height: auto;
             object-fit: cover;
             border-radius: 10px;
         }
@@ -302,7 +302,49 @@ append using admin2_db
 
 * Plot overlays
 spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolor(red ..)`
-                }
+                },
+                "health-info": {
+                    "r-english": `# Load health facility data
+library(readr)
+
+# Load dataset
+health_data <- read_csv("/path/to/health_data.csv")
+
+# Print summary
+summary(health_data)`,
+                    "python-english": `import pandas as pd
+
+# Load health facility data
+health_data = pd.read_csv("/path/to/health_data.csv")
+
+# Print summary
+print(health_data.describe())`,
+                    "stata-english": `* Load health facility data
+import delimited "/path/to/health_data.csv"
+
+* Display summary
+describe`},
+                "routine-case-data": {
+                    "r-english": `# Load routine case data
+library(readr)
+
+# Load dataset
+routine_data <- read_csv("/path/to/routine_data.csv")
+
+# Print summary
+summary(routine_data)`,
+                    "python-english": `import pandas as pd
+
+# Load routine case data
+routine_data = pd.read_csv("/path/to/routine_data.csv")
+
+# Print summary
+print(routine_data.describe())`,
+                    "stata-english": `* Load routine case data
+import delimited "/path/to/routine_data.csv"
+
+* Display summary
+describe`}
             };
 
             const selectedCode = codeSnippets[currentSection]?.[language.toLowerCase().replace(' ', '-')];
@@ -311,7 +353,7 @@ spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolo
                 codeDisplay.innerText = selectedCode;
                 codeDisplay.style.display = 'block';
                 // Change the sample image to a relevant example image
-                document.querySelector('.sample-image img').src = `https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/16df021948e18e142e103ee7e9c78ff8311005ef/${currentSection}.png`;
+                document.querySelector('.sample-image img').src = `https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/16df021948e18e142e103ee7e9c78ff8311005ef/${currentSection}-${language.toLowerCase().replace(' ', '-')}.png`;
             } else {
                 codeDisplay.innerText = 'No code available.';
                 codeDisplay.style.display = 'block';
