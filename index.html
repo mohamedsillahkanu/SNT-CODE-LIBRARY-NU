@@ -63,6 +63,9 @@
         .sidebar li.active .dropdown-content {
             display: block;
         }
+        .sidebar li:hover .dropdown-content {
+            display: block;
+        }
         .dropdown-content li {
             padding: 8px;
             cursor: pointer;
@@ -153,17 +156,22 @@
             display: none;
         }
         .sample-image {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 2px solid #FF6347;
-            border-radius: 10px;
-            padding: 10px;
-        }
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border: 2px solid #FF6347;
+                border-radius: 10px;
+                padding: 10px;
+            }
+            .sample-image img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 10px;
+            }
         .sample-image img {
-            width: 100%;
+            max-width: 100%;
             height: 100%;
-            object-fit: cover;
             border-radius: 10px;
         }
         .copy-btn {
@@ -183,6 +191,10 @@
             background-color: #00E0B5;
             color: #000000;
         }
+        .sidebar li.active {
+            background-color: #47B5FF;
+            color: #000000;
+        }
     </style>
     <script>
         function selectSidebarItem(item, section) {
@@ -192,25 +204,52 @@
             item.classList.add('active');
             // Update URL hash
             window.location.hash = `/${section}`;
-
-            // Display the code and sample output for the selected section
-            showCodeForSection(section);
         }
 
-        function showCodeForSection(section) {
+        function showCode(language) {
+            const section = window.location.hash.split('/')[1];
+            if (!section) {
+                alert('Please select a section from the sidebar first.');
+                return;
+            }
+            window.location.hash = `/${section}/${language.toLowerCase().replace(' ', '-')}`;
+            
             const codeSnippets = {
                 "shapefile-info": {
-                    "code": `import geopandas as gpd
+                    "r-english": `# Load necessary libraries
+library(sf)
+
+# Load shapefile
+admin <- st_read("/path/to/admin.shp")
+
+# Print shapefile info
+print(admin)`,
+
+                    "python-english": `import geopandas as gpd
 
 # Load shapefile
 admin = gpd.read_file("/path/to/admin.shp")
 
 # Print shapefile info
 print(admin.head())`,
-                    "image": "https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/16df021948e18e142e103ee7e9c78ff8311005ef/overlay%20final3.png"
-                },
+
+                    "stata-english": `* Load shapefile
+shp2dta using "/path/to/admin.shp", database(admin_db) coordinates(admin_coords)
+
+* List shapefile info
+list`},
                 "basic-plot": {
-                    "code": `import geopandas as gpd
+                    "r-english": `# Load necessary libraries
+library(sf)
+library(ggplot2)
+
+# Load shapefile
+admin <- st_read("/path/to/admin.shp")
+
+# Basic plot
+ggplot() +
+  geom_sf(data = admin, fill = NA, color = "blue")`,
+                    "python-english": `import geopandas as gpd
 import matplotlib.pyplot as plt
 
 # Load shapefile
@@ -219,10 +258,29 @@ admin = gpd.read_file("/path/to/admin.shp")
 # Basic plot
 admin.plot()
 plt.show()`,
-                    "image": "https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/16df021948e18e142e103ee7e9c78ff8311005ef/overlay%20final3.png"
+                    "stata-english": `* Load shapefile
+shp2dta using "/path/to/admin.shp", database(admin_db) coordinates(admin_coords)
+
+* Basic plot
+spmap using admin_coords, id(_ID)`
                 },
                 "admin-unit-overlay": {
-                    "code": `import geopandas as gpd
+                    "r-english": `# Load necessary libraries
+library(sf)
+library(ggplot2)
+
+# Load shapefiles
+admin1 <- st_read("/path/to/admin1.shp")
+admin2 <- st_read("/path/to/admin2.shp")
+
+# Ensure both layers have the same CRS
+admin1 <- st_transform(admin1, crs = st_crs(admin2))
+
+# Plot overlays
+ggplot() +
+  geom_sf(data = admin1, fill = NA, color = "blue") +
+  geom_sf(data = admin2, fill = NA, color = "red")`,
+                    "python-english": `import geopandas as gpd
 import matplotlib.pyplot as plt
 
 # Load shapefiles
@@ -238,29 +296,46 @@ admin1.plot(ax=ax, edgecolor='blue')
 admin2.plot(ax=ax, edgecolor='red')
 plt.title("Overlay of Admin Units")
 plt.show()`,
-                    "image": "https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/16df021948e18e142e103ee7e9c78ff8311005ef/overlay%20final3.png"
+                    "stata-english": `* Load shapefiles
+shp2dta using "/path/to/admin1.shp", database(admin1_db) coordinates(admin1_coords)
+shp2dta using "/path/to/admin2.shp", database(admin2_db) coordinates(admin2_coords)
+
+* Merge shapefiles
+drop _all
+use admin1_db, clear
+append using admin2_db
+
+* Plot overlays
+spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolor(red ..)`
                 }
             };
 
-            const selectedSection = codeSnippets[section];
+            const selectedCode = codeSnippets[section]?.[language.toLowerCase().replace(' ', '-')];
             const codeDisplay = document.querySelector('.full-code');
-            const imageDisplay = document.querySelector('.sample-image img');
-
-            if (selectedSection) {
-                codeDisplay.innerText = selectedSection.code;
+            if (selectedCode) {
+                codeDisplay.innerText = selectedCode;
                 codeDisplay.style.display = 'block';
-                imageDisplay.src = selectedSection.image;
             } else {
                 codeDisplay.innerText = 'No code available.';
                 codeDisplay.style.display = 'block';
-                imageDisplay.src = '';
+            }
+
+            // Update active button styling
+            const buttons = document.querySelectorAll('.section-buttons button');
+            buttons.forEach(button => button.classList.remove('active'));
+            const activeButton = document.querySelector(`#${language.toLowerCase().replace(' ', '-')}-btn`);
+            if (activeButton) {
+                activeButton.classList.add('active');
             }
         }
 
-        function copyCode() {
-            let codeToCopy = document.querySelector('.full-code').innerText;
+        function copyCode(section) {
+            let codeToCopy;
+            if (section === 'code-section') {
+                codeToCopy = document.querySelector('.full-code').innerText;
+            }
             navigator.clipboard.writeText(codeToCopy).then(() => {
-                const button = document.querySelector('.copy-btn');
+                const button = document.querySelector(`button[onclick="copyCode('${section}')"]`);
                 button.classList.add('active');
                 setTimeout(() => {
                     button.classList.remove('active');
@@ -284,32 +359,50 @@ plt.show()`,
             <li>
                 A.2 Health Facilities
                 <ul class="dropdown-content">
-                    <li onclick="selectSidebarItem(this, 'health-info')">Health Info</li>
+                    <li onclick="selectSidebarItem(this, 'health-info')">R</li>
+                    <li onclick="selectSidebarItem(this, 'health-info')">Python</li>
+                    <li onclick="selectSidebarItem(this, 'health-info')">Stata</li>
                 </ul>
             </li>
             <li>
                 A.3 Routine Case Data from DHIS2
                 <ul class="dropdown-content">
-                    <li onclick="selectSidebarItem(this, 'routine-case-data')">Routine Case Data</li>
+                    <li onclick="selectSidebarItem(this, 'routine-case-data')">R</li>
+                    <li onclick="selectSidebarItem(this, 'routine-case-data')">Python</li>
+                    <li onclick="selectSidebarItem(this, 'routine-case-data')">Stata</li>
                 </ul>
             </li>
         </ul>
     </div>
     <div class="content">
         <div class="section-buttons">
-            <button onclick="copyCode()" class="copy-btn">Copy Code</button>
+            <button onclick="showCode('R English')" id="r-english-btn">R English</button>
+            <button onclick="showCode('R French')" id="r-french-btn">R French</button>
+            <button onclick="showCode('Python English')" id="python-english-btn">Python English</button>
+            <button onclick="showCode('Python French')" id="python-french-btn">Python French</button>
+            <button onclick="showCode('Stata English')" id="stata-english-btn">Stata English</button>
+            <button onclick="showCode('Stata French')" id="stata-french-btn">Stata French</button>
+        </div>
+        <div class="topic-intro" style="background-color: #ffffff; color: #000; padding: 20px; border-radius: 10px;">
+            <p style="font-style: italic;">Welcome to the Code Library UI. Here you will find various examples of code snippets related to geospatial analysis, data visualization, and more. For further reading, please check out the following links:</p>
+            <ul>
+                <li><a href="https://en.wikipedia.org/wiki/Shapefile" target="_blank" style="color: #47B5FF;">Shapefile - Wikipedia</a></li>
+                <li><a href="https://geopandas.org/" target="_blank" style="color: #47B5FF;">Geopandas Documentation</a></li>
+                <li><a href="https://ggplot2.tidyverse.org/" target="_blank" style="color: #47B5FF;">ggplot2 Documentation</a></li>
+            </ul>
         </div>
         <div class="main-content">
             <div class="code-section">
                 <div class="code-header">
                     <h3>Code</h3>
+                    <button class="copy-btn" onclick="copyCode('code-section')">Copy</button>
                 </div>
                 <pre class="full-code" style="background-color: #ffffff; color: #000;">No code selected.</pre>
             </div>
             <div class="image-section">
                 <h3>Sample Image</h3>
                 <div class="sample-image">
-                    <img src="" alt="Sample Image">
+                    <img src="https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/16df021948e18e142e103ee7e9c78ff8311005ef/overlay%20final3.png" alt="Sample Image">
                 </div>
             </div>
         </div>
