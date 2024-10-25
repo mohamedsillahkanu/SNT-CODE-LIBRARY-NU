@@ -173,35 +173,39 @@
             window.location.hash = `#${language.replace(' ', '-')}`;
             const codeSnippets = {
                 "R English Step": `# Step by step explanation for R code in English
+# Install necessary libraries
+install.packages(c("sf", "ggplot2", "dplyr"))
+
+# Load necessary libraries
 library(sf)
+library(dplyr)
 library(ggplot2)
 
-# Step 1: Load the shapefiles
-admin1 <- st_read("/path/to/admin1.shp")
-admin2 <- st_read("/path/to/admin2.shp")
+# Import Shapefiles
+import_shapefile <- function(filepath) {
+    shapefile <- st_read(filepath)  # Read the shapefile
+    return(shapefile)  # Return the loaded shapefile
+}
 
-# Step 2: Transform to the same CRS
-admin1 <- st_transform(admin1, crs = st_crs(admin2))
+# Rename and Match Names
+rename_shapefile_columns <- function(shapefile, new_names) {
+    colnames(shapefile) <- new_names  # Rename columns
+    return(shapefile)  # Return the renamed shapefile
+}
 
-# Step 3: Plot the overlays using ggplot2
-ggplot() +
-  geom_sf(data = admin1, fill = NA, color = "blue") +
-  geom_sf(data = admin2, fill = NA, color = "red")`,
+# Link Shapefiles to Relevant Scales
+link_shapefiles_to_scales <- function(shapefile, scales_df, link_col) {
+    linked_shapefile <- merge(shapefile, scales_df, by = link_col)  # Merge shapefile with scales
+    return(linked_shapefile)  # Return the linked shapefile
+}
 
-                "R English Full": `# Full R code in English
-library(sf)
-library(ggplot2)
-
-admin1 <- st_read("/path/to/admin1.shp")
-admin2 <- st_read("/path/to/admin2.shp")
-
-admin1 <- st_transform(admin1, crs = st_crs(admin2))
-
-ggplot() +
-  geom_sf(data = admin1, fill = NA, color = "blue") +
-  geom_sf(data = admin2, fill = NA, color = "red") +
-  labs(title = "Overlay of Admin Units")`
-            };
+# Visualizing Shapefiles and Making Basic Maps
+visualize_shapefile <- function(shapefile, variable) {
+    ggplot(data = shapefile) +
+        geom_sf(aes_string(fill = variable)) +
+        scale_fill_viridis_c() +
+        ggtitle(paste('Shapefile Visualization:', variable))
+};
 
             const stepDisplay = document.querySelector('.step-by-step');
             const fullCodeDisplay = document.querySelector('.full-code');
