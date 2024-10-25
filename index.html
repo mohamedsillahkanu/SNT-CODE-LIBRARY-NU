@@ -105,11 +105,25 @@
             margin-bottom: 20px;
         }
         .search-bar input {
-            width: 100%;
+            width: 85%;
             padding: 10px;
             border-radius: 5px;
             border: none;
             font-size: 1em;
+        }
+        .search-bar button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #47B5FF;
+            color: #000;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+        .search-bar button:hover {
+            background-color: #3a3b52;
+            color: #ffffff;
         }
         .code-display {
             background-color: #33334d;
@@ -250,24 +264,67 @@ spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolo
         <h2>Code Library</h2>
         <ul>
             <li>
-                R
+                A.1 Shapefiles
                 <ul class="dropdown-content">
-                    <li onclick="showCode('R English')">English</li>
-                    <li onclick="showCode('R French')">French</li>
+                    <li onclick="showCode('R English')">R</li>
+                    <li onclick="showCode('Python English')">Python</li>
+                    <li onclick="showCode('Stata English')">Stata</li>
                 </ul>
             </li>
             <li>
-                Python
+                A.2 Health Facilities
                 <ul class="dropdown-content">
-                    <li onclick="showCode('Python English')">English</li>
-                    <li onclick="showCode('Python French')">French</li>
+                    <li onclick="showCode('R French')">R</li>
+                    <li onclick="showCode('Python French')">Python</li>
+                    <li onclick="showCode('Stata French')">Stata</li>
                 </ul>
             </li>
             <li>
-                Stata
+                A.3 Routine Case Data from DHIS2
                 <ul class="dropdown-content">
-                    <li onclick="showCode('Stata English')">English</li>
-                    <li onclick="showCode('Stata French')">French</li>
+                    <li onclick="showCode('R English')">R</li>
+                    <li onclick="showCode('Python English')">Python</li>
+                    <li onclick="showCode('Stata English')">Stata</li>
+                </ul>
+            </li>
+            <li>
+                A.4 DHS Data
+                <ul class="dropdown-content">
+                    <li onclick="showCode('R French')">R</li>
+                    <li onclick="showCode('Python French')">Python</li>
+                    <li onclick="showCode('Stata French')">Stata</li>
+                </ul>
+            </li>
+            <li>
+                A.5 Population Data
+                <ul class="dropdown-content">
+                    <li onclick="showCode('R English')">R</li>
+                    <li onclick="showCode('Python English')">Python</li>
+                    <li onclick="showCode('Stata English')">Stata</li>
+                </ul>
+            </li>
+            <li>
+                A.6 Climate Data
+                <ul class="dropdown-content">
+                    <li onclick="showCode('R French')">R</li>
+                    <li onclick="showCode('Python French')">Python</li>
+                    <li onclick="showCode('Stata French')">Stata</li>
+                </ul>
+            </li>
+            <li>
+                A.7 LMIS Data
+                <ul class="dropdown-content">
+                    <li onclick="showCode('R English')">R</li>
+                    <li onclick="showCode('Python English')">Python</li>
+                    <li onclick="showCode('Stata English')">Stata</li>
+                </ul>
+            </li>
+            <li>
+                A.8 Modeled Data
+                <ul class="dropdown-content">
+                    <li onclick="showCode('R French')">R</li>
+                    <li onclick="showCode('Python French')">Python</li>
+                    <li onclick="showCode('Stata French')">Stata</li>
                 </ul>
             </li>
         </ul>
@@ -278,4 +335,34 @@ spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolo
             <button onclick="showCode('R French')">R French</button>
             <button onclick="showCode('Python English')">Python English</button>
             <button onclick="showCode('Python French')">Python French</button>
-            <button onclick="show
+            <button onclick="showCode('Stata English')">Stata English</button>
+            <button onclick="showCode('Stata French')">Stata French</button>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search code snippets...">
+            <button>Search</button>
+        </div>
+        <div class="code-display">
+            <span class="language">R English</span>
+            <pre>
+# Load necessary libraries
+library(sf)
+library(ggplot2)
+
+# Load shapefiles
+admin1 <- st_read("/path/to/admin1.shp")
+admin2 <- st_read("/path/to/admin2.shp")
+
+# Ensure both layers have the same CRS
+admin1 <- st_transform(admin1, crs = st_crs(admin2))
+
+# Plot overlays
+ggplot() +
+  geom_sf(data = admin1, fill = NA, color = "blue") +
+  geom_sf(data = admin2, fill = NA, color = "red") +
+  labs(title = "Overlay of Admin Units")
+            </pre>
+        </div>
+    </div>
+</body>
+</html>
