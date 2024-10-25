@@ -311,6 +311,197 @@ ggplot() +
                 border-radius: 10px;
             }
         </style>
+<style>
+            .main-content {
+                display: flex;
+                height: calc(100% - 100px);
+            }
+            .code-section, .image-section {
+                flex: 1;
+                background-color: #33334d;
+                border-radius: 10px;
+                padding: 20px;
+                overflow: auto;
+                margin: 10px;
+            }
+            .full-code {
+                color: #00E0B5;
+                background-color: #28293d;
+                padding: 10px;
+                border-radius: 10px;
+                overflow: auto;
+            }
+            .sample-image {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border: 2px solid #FF6347;
+                border-radius: 10px;
+                padding: 10px;
+            }
+            .sample-image img {
+                max-width: 100%;
+                border-radius: 10px;
+            }
+            .copy-btn {
+                margin-bottom: 10px;
+                padding: 8px;
+                background-color: #47B5FF;
+                color: #000000;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+            .copy-btn:hover {
+                background-color: #3a3b52;
+                color: #ffffff;
+            }
+            .copy-btn.active {
+                background-color: #00E0B5;
+                color: #000000;
+            }
+        </style>
+        <script>
+            function copyCode(section) {
+                let codeToCopy;
+                if (section === 'code-section') {
+                    codeToCopy = document.querySelector('.full-code').innerText;
+                }
+                navigator.clipboard.writeText(codeToCopy).then(() => {
+                    const button = document.querySelector(`button[onclick="copyCode('${section}')"]`);
+                    button.classList.add('active');
+                    setTimeout(() => {
+                        button.classList.remove('active');
+                    }, 1000);
+                });
+            }
+        </script>
+<style>
+            .section-buttons button {
+                padding: 10px;
+                margin-left: 10px;
+                background-color: #474761;
+                color: #ffffff;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+            .section-buttons button.active {
+                background-color: #47B5FF;
+                color: #000000;
+            }
+            .section-buttons button:hover {
+                background-color: #3a3b52;
+            }
+        </style>
+        <script>
+            function showCode(language) {
+                const codeSnippets = {
+                    "R English": `# Load necessary libraries
+library(sf)
+library(ggplot2)
+
+# Load shapefiles
+admin1 <- st_read("/path/to/admin1.shp")
+admin2 <- st_read("/path/to/admin2.shp")
+
+# Ensure both layers have the same CRS
+admin1 <- st_transform(admin1, crs = st_crs(admin2))
+
+# Plot overlays
+ggplot() +
+  geom_sf(data = admin1, fill = NA, color = "blue") +
+  geom_sf(data = admin2, fill = NA, color = "red")`,
+
+                    "R French": `# Charger les bibliothèques nécessaires
+library(sf)
+library(ggplot2)
+
+# Charger les shapefiles
+admin1 <- st_read("/chemin/vers/admin1.shp")
+admin2 <- st_read("/chemin/vers/admin2.shp")
+
+# Assurer que les deux couches ont le même CRS
+admin1 <- st_transform(admin1, crs = st_crs(admin2))
+
+# Tracer les superpositions
+ggplot() +
+  geom_sf(data = admin1, fill = NA, color = "blue") +
+  geom_sf(data = admin2, fill = NA, color = "red")`,
+
+                    "Python English": `import geopandas as gpd
+import matplotlib.pyplot as plt
+
+# Load shapefiles
+admin1 = gpd.read_file("/path/to/admin1.shp")
+admin2 = gpd.read_file("/path/to/admin2.shp")
+
+# Ensure both layers have the same CRS
+admin1 = admin1.to_crs(admin2.crs)
+
+# Plot overlays
+fig, ax = plt.subplots()
+admin1.plot(ax=ax, edgecolor='blue')
+admin2.plot(ax=ax, edgecolor='red')
+plt.title("Overlay of Admin Units")
+plt.show()`,
+
+                    "Python French": `import geopandas as gpd
+import matplotlib.pyplot as plt
+
+# Charger les shapefiles
+admin1 = gpd.read_file("/chemin/vers/admin1.shp")
+admin2 = gpd.read_file("/chemin/vers/admin2.shp")
+
+# Assurer que les deux couches ont le même CRS
+admin1 = admin1.to_crs(admin2.crs)
+
+# Tracer les superpositions
+fig, ax = plt.subplots()
+admin1.plot(ax=ax, edgecolor='blue')
+admin2.plot(ax=ax, edgecolor='red')
+plt.title("Superposition des unités administratives")
+plt.show()`,
+
+                    "Stata English": `* Load shapefiles
+shp2dta using "/path/to/admin1.shp", database(admin1_db) coordinates(admin1_coords)
+shp2dta using "/path/to/admin2.shp", database(admin2_db) coordinates(admin2_coords)
+
+* Merge shapefiles
+drop _all
+use admin1_db, clear
+append using admin2_db
+
+* Plot overlays
+spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolor(red ..)`,
+
+                    "Stata French": `* Charger les shapefiles
+shp2dta using "/chemin/vers/admin1.shp", database(admin1_db) coordinates(admin1_coords)
+shp2dta using "/chemin/vers/admin2.shp", database(admin2_db) coordinates(admin2_coords)
+
+* Fusionner les shapefiles
+drop _all
+use admin1_db, clear
+append using admin2_db
+
+* Tracer les superpositions
+spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolor(red ..)`
+                };
+
+                const codeDisplay = document.querySelector('.full-code');
+                codeDisplay.innerText = codeSnippets[language];
+
+                // Update active button styling
+                const buttons = document.querySelectorAll('.section-buttons button');
+                buttons.forEach(button => button.classList.remove('active'));
+                const activeButton = document.querySelector(`#${language.toLowerCase().replace(' ', '-')}-btn`);
+                if (activeButton) {
+                    activeButton.classList.add('active');
+                }
+            }
+        </script>
 </head>
 <body>
     <div class="sidebar">
@@ -344,26 +535,30 @@ ggplot() +
     </div>
     <div class="content">
         <div class="section-buttons">
-            <button onclick="showCode('R English')">R English</button>
-            <button onclick="showCode('R French')">R French</button>
-            <button onclick="showCode('Python English')">Python English</button>
-            <button onclick="showCode('Python French')">Python French</button>
-            <button onclick="showCode('Stata English')">Stata English</button>
-            <button onclick="showCode('Stata French')">Stata French</button>
+            <button onclick="showCode('R English')" id="r-english-btn">R English</button>
+            <button onclick="showCode('R French')" id="r-french-btn">R French</button>
+            <button onclick="showCode('Python English')" id="python-english-btn">Python English</button>
+            <button onclick="showCode('Python French')" id="python-french-btn">Python French</button>
+            <button onclick="showCode('Stata English')" id="stata-english-btn">Stata English</button>
+            <button onclick="showCode('Stata French')" id="stata-french-btn">Stata French</button>
         </div>
         <div class="search-bar">
             <input type="text" placeholder="Search code snippets...">
             <button>Search</button>
         </div>
         <div class="main-content">
-            <div class="code-and-image">
+            <div class="code-section">
                 <h3>Code</h3>
-                <button class="copy-btn" onclick="copyCode('code-and-image')">Copy</button>
+                <button class="copy-btn" onclick="copyCode('code-section')">Copy</button>
                 <pre class="full-code">No code selected.</pre>
+            </div>
+            <div class="image-section">
                 <h3>Sample Image</h3>
                 <div class="sample-image">
                     <img src="https://via.placeholder.com/300?text=Sample+Image" alt="Sample Image">
                 </div>
+            </div>
+        </div>
             </div>
         </div>
         </div>
