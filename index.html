@@ -202,12 +202,132 @@
             sidebarItems.forEach(el => el.classList.remove('active'));
             item.classList.add('active');
             // Update URL hash
-            window.location.hash = `/${section}`;
+            window.location.hash = `${section}`;
+        }`;
         }
 
         function showCode(language) {
-            const section = window.location.hash.split('/')[0].replace('#', '') || 'shapefile-info';
+            const hashParts = window.location.hash.split('/');
+            const section = hashParts[0].replace('#', '') || 'shapefile-info';
             window.location.hash = `#${section}/${language.toLowerCase().replace(' ', '-')}`;
+            
+            const codeSnippets = {
+                "shapefile-info": {
+                    "r-english": `# Load necessary libraries
+library(sf)
+
+# Load shapefile
+admin <- st_read("/path/to/admin.shp")
+
+# Print shapefile info
+print(admin)`,
+
+                    "python-english": `import geopandas as gpd
+
+# Load shapefile
+admin = gpd.read_file("/path/to/admin.shp")
+
+# Print shapefile info
+print(admin.head())`,
+
+                    "stata-english": `* Load shapefile
+shp2dta using "/path/to/admin.shp", database(admin_db) coordinates(admin_coords)
+
+* List shapefile info
+list`
+                },
+                "basic-plot": {
+                    "r-english": `# Load necessary libraries
+library(sf)
+library(ggplot2)
+
+# Load shapefile
+admin <- st_read("/path/to/admin.shp")
+
+# Basic plot
+ggplot() +
+  geom_sf(data = admin, fill = NA, color = "blue")`,
+                    "python-english": `import geopandas as gpd
+import matplotlib.pyplot as plt
+
+# Load shapefile
+admin = gpd.read_file("/path/to/admin.shp")
+
+# Basic plot
+admin.plot()
+plt.show()`,
+                    "stata-english": `* Load shapefile
+shp2dta using "/path/to/admin.shp", database(admin_db) coordinates(admin_coords)
+
+* Basic plot
+spmap using admin_coords, id(_ID)`
+                },
+                "admin-unit-overlay": {
+                    "r-english": `# Load necessary libraries
+library(sf)
+library(ggplot2)
+
+# Load shapefiles
+admin1 <- st_read("/path/to/admin1.shp")
+admin2 <- st_read("/path/to/admin2.shp")
+
+# Ensure both layers have the same CRS
+admin1 <- st_transform(admin1, crs = st_crs(admin2))
+
+# Plot overlays
+ggplot() +
+  geom_sf(data = admin1, fill = NA, color = "blue") +
+  geom_sf(data = admin2, fill = NA, color = "red")`,
+                    "python-english": `import geopandas as gpd
+import matplotlib.pyplot as plt
+
+# Load shapefiles
+admin1 = gpd.read_file("/path/to/admin1.shp")
+admin2 = gpd.read_file("/path/to/admin2.shp")
+
+# Ensure both layers have the same CRS
+admin1 = admin1.to_crs(admin2.crs)
+
+# Plot overlays
+fig, ax = plt.subplots()
+admin1.plot(ax=ax, edgecolor='blue')
+admin2.plot(ax=ax, edgecolor='red')
+plt.title("Overlay of Admin Units")
+plt.show()`,
+                    "stata-english": `* Load shapefiles
+shp2dta using "/path/to/admin1.shp", database(admin1_db) coordinates(admin1_coords)
+shp2dta using "/path/to/admin2.shp", database(admin2_db) coordinates(admin2_coords)
+
+* Merge shapefiles
+drop _all
+use admin1_db, clear
+append using admin2_db
+
+* Plot overlays
+spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolor(red ..)`
+                }
+            };
+
+            const selectedCode = codeSnippets[section]?.[language.toLowerCase().replace(' ', '-')];
+            const codeDisplay = document.querySelector('.full-code');
+            if (selectedCode) {
+                codeDisplay.innerText = selectedCode;
+                codeDisplay.style.display = 'block';
+            } else {
+                codeDisplay.innerText = 'No code available.';
+                codeDisplay.style.display = 'block';
+            }
+
+            // Update active button styling
+            const buttons = document.querySelectorAll('.section-buttons button');
+            buttons.forEach(button => button.classList.remove('active'));
+            const activeButton = document.querySelector(`#${language.toLowerCase().replace(' ', '-')}-btn`);
+            if (activeButton) {
+                activeButton.classList.add('active');
+                activeButton.style.backgroundColor = '#47B5FF';
+                activeButton.style.color = '#000000';
+            }
+        }/${language.toLowerCase().replace(' ', '-')}`;
             
             const codeSnippets = {
                 "shapefile-info": {
