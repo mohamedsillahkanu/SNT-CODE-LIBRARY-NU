@@ -63,9 +63,6 @@
         .sidebar li.active .dropdown-content {
             display: block;
         }
-        .sidebar li:hover .dropdown-content {
-            display: block;
-        }
         .dropdown-content li {
             padding: 8px;
             cursor: pointer;
@@ -156,22 +153,17 @@
             display: none;
         }
         .sample-image {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                border: 2px solid #FF6347;
-                border-radius: 10px;
-                padding: 10px;
-            }
-            .sample-image img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                border-radius: 10px;
-            }
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #FF6347;
+            border-radius: 10px;
+            padding: 10px;
+        }
         .sample-image img {
-            max-width: 100%;
+            width: 100%;
             height: 100%;
+            object-fit: cover;
             border-radius: 10px;
         }
         .copy-btn {
@@ -197,6 +189,7 @@
         }
     </style>
     <script>
+        let currentSection = null;
         function selectSidebarItem(item, section) {
             // Highlight the selected sidebar item
             const sidebarItems = document.querySelectorAll('.sidebar li');
@@ -204,15 +197,17 @@
             item.classList.add('active');
             // Update URL hash
             window.location.hash = `/${section}`;
+            currentSection = section;
+            document.querySelector('.full-code').style.display = 'none';
+            document.querySelector('.sample-image img').src = 'https://via.placeholder.com/300x200.png?text=Select+a+Code+Language';
         }
 
         function showCode(language) {
-            const section = window.location.hash.split('/')[1];
-            if (!section) {
+            if (!currentSection) {
                 alert('Please select a section from the sidebar first.');
                 return;
             }
-            window.location.hash = `/${section}/${language.toLowerCase().replace(' ', '-')}`;
+            window.location.hash = `/${currentSection}/${language.toLowerCase().replace(' ', '-')}`;
             
             const codeSnippets = {
                 "shapefile-info": {
@@ -310,11 +305,13 @@ spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolo
                 }
             };
 
-            const selectedCode = codeSnippets[section]?.[language.toLowerCase().replace(' ', '-')];
+            const selectedCode = codeSnippets[currentSection]?.[language.toLowerCase().replace(' ', '-')];
             const codeDisplay = document.querySelector('.full-code');
             if (selectedCode) {
                 codeDisplay.innerText = selectedCode;
                 codeDisplay.style.display = 'block';
+                // Change the sample image to a relevant example image
+                document.querySelector('.sample-image img').src = `https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/16df021948e18e142e103ee7e9c78ff8311005ef/${currentSection}.png`;
             } else {
                 codeDisplay.innerText = 'No code available.';
                 codeDisplay.style.display = 'block';
@@ -402,7 +399,7 @@ spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolo
             <div class="image-section">
                 <h3>Sample Image</h3>
                 <div class="sample-image">
-                    <img src="https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/16df021948e18e142e103ee7e9c78ff8311005ef/overlay%20final3.png" alt="Sample Image">
+                    <img src="https://via.placeholder.com/300x200.png?text=Select+a+Code+Language" alt="Sample Image">
                 </div>
             </div>
         </div>
