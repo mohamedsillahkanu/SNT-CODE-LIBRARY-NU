@@ -125,13 +125,33 @@
             background-color: #3a3b52;
             color: #ffffff;
         }
-        .code-display {
+        .main-content {
+            display: flex;
+            gap: 20px;
+            height: calc(100% - 100px);
+        }
+        .step-by-step, .full-code, .sample-image {
+            flex: 1;
             background-color: #33334d;
             border-radius: 10px;
             padding: 20px;
             overflow: auto;
-            height: 100%;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .step-by-step {
+            border: 2px solid #47B5FF;
+        }
+        .full-code {
+            border: 2px solid #00E0B5;
+        }
+        .sample-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #FF6347;
+        }
+        .sample-image img {
+            max-width: 100%;
+            border-radius: 10px;
         }
         .code-display pre {
             white-space: pre-wrap;
@@ -150,112 +170,60 @@
     <script>
         function showCode(language) {
             const codeSnippets = {
-                "R English": `# Load necessary libraries
+                "R English Step": `# Step by step explanation for R code in English
 library(sf)
 library(ggplot2)
 
-# Load shapefiles
+# Step 1: Load the shapefiles
 admin1 <- st_read("/path/to/admin1.shp")
 admin2 <- st_read("/path/to/admin2.shp")
 
-# Ensure both layers have the same CRS
+# Step 2: Transform to the same CRS
 admin1 <- st_transform(admin1, crs = st_crs(admin2))
 
-# Plot overlays
+# Step 3: Plot the overlays using ggplot2
 ggplot() +
   geom_sf(data = admin1, fill = NA, color = "blue") +
-  geom_sf(data = admin2, fill = NA, color = "red") +
-  labs(title = "Overlay of Admin Units")`,
+  geom_sf(data = admin2, fill = NA, color = "red")`,
 
-                "R French": `# Charger les bibliothèques nécessaires
+                "R English Full": `# Full R code in English
 library(sf)
 library(ggplot2)
 
-# Charger les shapefiles
-admin1 <- st_read("/chemin/vers/admin1.shp")
-admin2 <- st_read("/chemin/vers/admin2.shp")
+admin1 <- st_read("/path/to/admin1.shp")
+admin2 <- st_read("/path/to/admin2.shp")
 
-# Assurer que les deux couches ont le même CRS
 admin1 <- st_transform(admin1, crs = st_crs(admin2))
 
-# Tracer les superpositions
 ggplot() +
   geom_sf(data = admin1, fill = NA, color = "blue") +
   geom_sf(data = admin2, fill = NA, color = "red") +
-  labs(title = "Superposition des unités administratives")`,
-
-                "Python English": `import geopandas as gpd
-import matplotlib.pyplot as plt
-
-# Load shapefiles
-admin1 = gpd.read_file("/path/to/admin1.shp")
-admin2 = gpd.read_file("/path/to/admin2.shp")
-
-# Ensure both layers have the same CRS
-admin1 = admin1.to_crs(admin2.crs)
-
-# Plot overlays
-fig, ax = plt.subplots()
-admin1.plot(ax=ax, edgecolor='blue')
-admin2.plot(ax=ax, edgecolor='red')
-plt.title("Overlay of Admin Units")
-plt.show()`,
-
-                "Python French": `import geopandas as gpd
-import matplotlib.pyplot as plt
-
-# Charger les shapefiles
-admin1 = gpd.read_file("/chemin/vers/admin1.shp")
-admin2 = gpd.read_file("/chemin/vers/admin2.shp")
-
-# Assurer que les deux couches ont le même CRS
-admin1 = admin1.to_crs(admin2.crs)
-
-# Tracer les superpositions
-fig, ax = plt.subplots()
-admin1.plot(ax=ax, edgecolor='blue')
-admin2.plot(ax=ax, edgecolor='red')
-plt.title("Superposition des unités administratives")
-plt.show()`,
-
-                "Stata English": `* Load shapefiles
-shp2dta using "/path/to/admin1.shp", database(admin1_db) coordinates(admin1_coords)
-shp2dta using "/path/to/admin2.shp", database(admin2_db) coordinates(admin2_coords)
-
-* Merge shapefiles
-drop _all
-use admin1_db, clear
-append using admin2_db
-
-* Plot overlays
-spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolor(red ..)`,
-
-                "Stata French": `* Charger les shapefiles
-shp2dta using "/chemin/vers/admin1.shp", database(admin1_db) coordinates(admin1_coords)
-shp2dta using "/chemin/vers/admin2.shp", database(admin2_db) coordinates(admin2_coords)
-
-* Fusionner les shapefiles
-drop _all
-use admin1_db, clear
-append using admin2_db
-
-* Tracer les superpositions
-spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolor(red ..)`
+  labs(title = "Overlay of Admin Units")`
             };
 
-            const codeDisplay = document.querySelector('.code-display pre');
+            const stepDisplay = document.querySelector('.step-by-step');
+            const fullCodeDisplay = document.querySelector('.full-code');
+            const sampleImageDisplay = document.querySelector('.sample-image img');
             const languageLabel = document.querySelector('.code-display .language');
-            codeDisplay.textContent = codeSnippets[language];
-            languageLabel.textContent = language;
 
-            // Update section buttons color
-            const buttons = document.querySelectorAll('.section-buttons button');
-            buttons.forEach(button => {
-                button.classList.remove('active');
-                if (button.textContent === language) {
-                    button.classList.add('active');
-                }
-            });
+            // Set step by step content
+            stepDisplay.innerHTML = `<h3>Step by Step Code</h3><pre>${codeSnippets[language + ' Step'] || 'No step-by-step code available.'}</pre>`;
+
+            // Set full code content
+            fullCodeDisplay.innerHTML = `<h3>Full Code</h3><pre>${codeSnippets[language + ' Full'] || 'No full code available.'}</pre>`;
+
+            // Set a sample image if available
+            if (language.includes("R")) {
+                sampleImageDisplay.src = "https://via.placeholder.com/300?text=R+Plot+Example";
+            } else {
+                sampleImageDisplay.src = "https://via.placeholder.com/300?text=Other+Plot+Example";
+            }
+
+            // Update active link styling
+            const sidebarItems = document.querySelectorAll('.sidebar li');
+            sidebarItems.forEach(item => item.classList.remove('active'));
+            const activeItem = document.querySelector(`li[onclick="showCode('${language}')"]`);
+            if (activeItem) activeItem.classList.add('active');
         }
     </script>
 </head>
@@ -287,46 +255,6 @@ spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolo
                     <li onclick="showCode('Stata English')">Stata</li>
                 </ul>
             </li>
-            <li>
-                A.4 DHS Data
-                <ul class="dropdown-content">
-                    <li onclick="showCode('R French')">R</li>
-                    <li onclick="showCode('Python French')">Python</li>
-                    <li onclick="showCode('Stata French')">Stata</li>
-                </ul>
-            </li>
-            <li>
-                A.5 Population Data
-                <ul class="dropdown-content">
-                    <li onclick="showCode('R English')">R</li>
-                    <li onclick="showCode('Python English')">Python</li>
-                    <li onclick="showCode('Stata English')">Stata</li>
-                </ul>
-            </li>
-            <li>
-                A.6 Climate Data
-                <ul class="dropdown-content">
-                    <li onclick="showCode('R French')">R</li>
-                    <li onclick="showCode('Python French')">Python</li>
-                    <li onclick="showCode('Stata French')">Stata</li>
-                </ul>
-            </li>
-            <li>
-                A.7 LMIS Data
-                <ul class="dropdown-content">
-                    <li onclick="showCode('R English')">R</li>
-                    <li onclick="showCode('Python English')">Python</li>
-                    <li onclick="showCode('Stata English')">Stata</li>
-                </ul>
-            </li>
-            <li>
-                A.8 Modeled Data
-                <ul class="dropdown-content">
-                    <li onclick="showCode('R French')">R</li>
-                    <li onclick="showCode('Python French')">Python</li>
-                    <li onclick="showCode('Stata French')">Stata</li>
-                </ul>
-            </li>
         </ul>
     </div>
     <div class="content">
@@ -342,26 +270,18 @@ spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolo
             <input type="text" placeholder="Search code snippets...">
             <button>Search</button>
         </div>
-        <div class="code-display">
-            <span class="language">R English</span>
-            <pre>
-# Load necessary libraries
-library(sf)
-library(ggplot2)
-
-# Load shapefiles
-admin1 <- st_read("/path/to/admin1.shp")
-admin2 <- st_read("/path/to/admin2.shp")
-
-# Ensure both layers have the same CRS
-admin1 <- st_transform(admin1, crs = st_crs(admin2))
-
-# Plot overlays
-ggplot() +
-  geom_sf(data = admin1, fill = NA, color = "blue") +
-  geom_sf(data = admin2, fill = NA, color = "red") +
-  labs(title = "Overlay of Admin Units")
-            </pre>
+        <div class="main-content">
+            <div class="step-by-step">
+                <h3>Step by Step Code</h3>
+                <pre>No code selected.</pre>
+            </div>
+            <div class="full-code">
+                <h3>Full Code</h3>
+                <pre>No code selected.</pre>
+            </div>
+            <div class="sample-image">
+                <img src="https://via.placeholder.com/300?text=Sample+Image" alt="Sample Image">
+            </div>
         </div>
     </div>
 </body>
