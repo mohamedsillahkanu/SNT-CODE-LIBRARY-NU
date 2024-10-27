@@ -358,22 +358,36 @@ print("Hello, World!")</div>
         }
 
         // Function to run code
-        function runCode() {
+        async function runCode() {
             const code = editor.getValue();
+            const language = document.getElementById("language").value;
             const outputElement = document.getElementById("output");
-            
-            // Placeholder for running code using an API
-            // You would typically send the code to a server to execute
-            // Here we'll simulate a response
             
             // Clear previous output
             outputElement.innerText = "Executing code...";
             
-            // Simulating output for demonstration
-            setTimeout(() => {
-                outputElement.innerText = "Execution complete:\n\n" + code;
-            }, 1000);
+    try {
+        // Make the API call to execute the code
+        const response = await fetch('http://localhost:5000/execute', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ code: code, language: language })
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            outputElement.innerText = result.output;
+        } else {
+            outputElement.innerText = "Error: " + result.error;
         }
+    } catch (error) {
+        outputElement.innerText = "Error: " + error.message;
+    }
+}
+
+     
 
         function selectSidebarItem(item, section) {
             // Highlight the selected sidebar item
