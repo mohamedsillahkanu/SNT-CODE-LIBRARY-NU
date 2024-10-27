@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Code Library UI</title>
+    <title>Code library for stratification and SNT</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js" integrity="sha512-I1z9q65FW08G2+UB7oJQtx6jF8Y4GgdHCgptPtzDT8GC6Hn6Is/5P2PbLMstP5FSjzehlDdZT1OkK+qNfxdi0w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -197,8 +198,196 @@
             border-radius: 10px;
             margin-bottom: 20px;
         }
+        .editor-container {
+            flex-grow: 1;
+            margin-bottom: 20px;
+        }
+        #editor {
+            height: 400px;
+            width: 100%;
+            border-radius: 5px;
+        }
+        .run-button {
+            padding: 10px;
+            background-color: #47B5FF;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+        .run-button:hover {
+            background-color: #3a3b52;
+            color: #ffffff;
+        }
+        .output {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #33334d;
+            border-radius: 5px;
+        }
+        .language-select {
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 1em;
+            border-radius: 5px;
+            border: none;
+        }
     </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Code Library</h2>
+        <ul>
+            <li>
+                Shapefiles
+                <ul class="dropdown-content">
+                    <li onclick="selectSidebarItem(this, 'shapefile-info')">Shapefile Info</li>
+                    <li onclick="selectSidebarItem(this, 'basic-plot')">Basic Plot</li>
+                    <li onclick="selectSidebarItem(this, 'admin-unit-overlay')">Admin Unit Overlay</li>
+                    <li onclick="selectSidebarItem(this, 'shapefile-link')">Link shapefile with excel</li>
+                    <li onclick="selectSidebarItem(this, 'plot-map-numeric')">Map using numeric variable</li>
+                    <li onclick="selectSidebarItem(this, 'plot-map-categorial')">Map using categorical variable</li>
+                    <li onclick="selectSidebarItem(this, 'plot-map-manual')">Map using manual coloring</li>
+                </ul>
+            </li>
+            <li>
+                A.2 Health Facilities
+                <ul class="dropdown-content">
+                    <li onclick="selectSidebarItem(this, 'health-info')">R</li>
+                    <li onclick="selectSidebarItem(this, 'health-info')">Python</li>
+                    <li onclick="selectSidebarItem(this, 'health-info')">Stata</li>
+                </ul>
+            </li>
+            <li>
+                A.3 Routine Case Data from DHIS2
+                <ul class="dropdown-content">
+                    <li onclick="selectSidebarItem(this, 'routine-case-data')">R</li>
+                    <li onclick="selectSidebarItem(this, 'routine-case-data')">Python</li>
+                    <li onclick="selectSidebarItem(this, 'routine-case-data')">Stata</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div class="content">
+        <div class="section-buttons">
+            <button onclick="showCode('R English')" id="r-english-btn">R English</button>
+            <button onclick="showCode('R French')" id="r-french-btn">R French</button>
+            <button onclick="showCode('Python English')" id="python-english-btn">Python English</button>
+            <button onclick="showCode('Python French')" id="python-french-btn">Python French</button>
+            <button onclick="showCode('Stata English')" id="stata-english-btn">Stata English</button>
+            <button onclick="showCode('Stata French')" id="stata-french-btn">Stata French</button>
+        </div>
+        <select class="language-select" id="language" onchange="changeLanguage()">
+            <option value="python">Python</option>
+            <option value="r">R</option>
+        </select>
+        <div class="editor-container">
+            <div id="editor"># Write your code here in Python or R
+print("Hello, World!")</div>
+        </div>
+        <button class="run-button" onclick="runCode()">Run Code</button>
+        <div class="output" id="output">Output will appear here...</div>
+        <div class="topic-intro" style="background-color: #ffffff; color: #000; padding: 20px; border-radius: 10px;">
+            Welcome to the Code Library UI. Here you will find various examples of code snippets related to geospatial analysis, data visualization, and more.
+        </div>
+        <div class="main-content">
+            <div class="code-section">
+                <div class="code-header">
+                    <h3>Code</h3>
+                    <button class="copy-btn" onclick="copyCode('code-section')">Copy</button>
+                </div>
+                <pre class="full-code" style="background-color: #ffffff; color: #000;">No code selected.</pre>
+            </div>
+            <div id="shapefile-info-image-section" class="image-section" style="display: none;">
+                <h3>Shapefile Info Image</h3>
+                <div class="sample-image">
+                    <img src="https://example.com/shapefile-info.png" alt="Shapefile Info Image">
+                </div>
+            </div>
+            <div id="basic-plot-image-section" class="image-section" style="display: none;">
+                <h3>Basic Plot Image</h3>
+                <div class="sample-image">
+                    <img src="https://example.com/basic-plot.png" alt="Basic Plot Image">
+                </div>
+            </div>
+            <div id="admin-unit-overlay-image-section" class="image-section" style="display: none;">
+                <h3>Admin Unit Overlay Image</h3>
+                <div class="sample-image">
+                    <img src="https://example.com/admin-unit-overlay.png" alt="Admin Unit Overlay Image">
+                </div>
+            </div>
+            <div id="shapefile-link-image-section" class="image-section" style="display: none;">
+                <h3>Link Shapefile with Excel Image</h3>
+                <div class="sample-image">
+                    <img src="https://example.com/shapefile-link.png" alt="Link Shapefile with Excel Image">
+                </div>
+            </div>
+            <div id="plot-map-numeric-image-section" class="image-section" style="display: none;">
+                <h3>Map Using Numeric Variable Image</h3>
+                <div class="sample-image">
+                    <img src="https://example.com/plot-map-numeric.png" alt="Map Using Numeric Variable Image">
+                </div>
+            </div>
+            <div id="plot-map-categorial-image-section" class="image-section" style="display: none;">
+                <h3>Map Using Categorical Variable Image</h3>
+                <div class="sample-image">
+                    <img src="https://example.com/plot-map-categorial.png" alt="Map Using Categorical Variable Image">
+                </div>
+            </div>
+            <div id="plot-map-manual-image-section" class="image-section" style="display: none;">
+                <h3>Map Using Manual Coloring Image</h3>
+                <div class="sample-image">
+                    <img src="https://example.com/plot-map-manual.png" alt="Map Using Manual Coloring Image">
+                </div>
+            </div>
+            <div id="health-info-image-section" class="image-section" style="display: none;">
+                <h3>Health Info Image</h3>
+                <div class="sample-image">
+                    <img src="https://example.com/health-info.png" alt="Health Info Image">
+                </div>
+            </div>
+            <div id="routine-case-data-image-section" class="image-section" style="display: none;">
+                <h3>Routine Case Data Image</h3>
+                <div class="sample-image">
+                    <img src="https://example.com/routine-case-data.png" alt="Routine Case Data Image">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Initialize Ace Editor
+        var editor = ace.edit("editor");
+        editor.setTheme("ace/theme/monokai");
+        editor.session.setMode("ace/mode/python");
+
+        // Function to change language mode
+        function changeLanguage() {
+            const language = document.getElementById("language").value;
+            if (language === "python") {
+                editor.session.setMode("ace/mode/python");
+            } else if (language === "r") {
+                editor.session.setMode("ace/mode/r");
+            }
+        }
+
+        // Function to run code
+        function runCode() {
+            const code = editor.getValue();
+            const outputElement = document.getElementById("output");
+            
+            // Placeholder for running code using an API
+            // You would typically send the code to a server to execute
+            // Here we'll simulate a response
+            
+            // Simulating output for demonstration
+            setTimeout(() => {
+                outputElement.innerText = "Executing code...\n\n" + code + "\n\nExecution complete.";
+            }, 1000);
+        }
+
         function selectSidebarItem(item, section) {
             // Highlight the selected sidebar item
             const sidebarItems = document.querySelectorAll('.sidebar li');
@@ -399,116 +588,5 @@ spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolo
             });
         }
     </script>
-</head>
-<body>
-    <div class="sidebar">
-        <h2>Code Library</h2>
-        <ul>
-            <li>
-                Shapefiles
-                <ul class="dropdown-content">
-                    <li onclick="selectSidebarItem(this, 'shapefile-info')">Shapefile Info</li>
-                    <li onclick="selectSidebarItem(this, 'basic-plot')">Basic Plot</li>
-                    <li onclick="selectSidebarItem(this, 'admin-unit-overlay')">Admin Unit Overlay</li>
-                    <li onclick="selectSidebarItem(this, 'shapefile-link')">Link shapefile with excel</li>
-                    <li onclick="selectSidebarItem(this, 'plot-map-numeric')">Map using numeric variable</li>
-                    <li onclick="selectSidebarItem(this, 'plot-map-categorial')">Map using categorical variable</li>
-                    <li onclick="selectSidebarItem(this, 'plot-map-manual')">Map using manual coloring</li>
-                </ul>
-            </li>
-            <li>
-                A.2 Health Facilities
-                <ul class="dropdown-content">
-                    <li onclick="selectSidebarItem(this, 'health-info')">R</li>
-                    <li onclick="selectSidebarItem(this, 'health-info')">Python</li>
-                    <li onclick="selectSidebarItem(this, 'health-info')">Stata</li>
-                </ul>
-            </li>
-            <li>
-                A.3 Routine Case Data from DHIS2
-                <ul class="dropdown-content">
-                    <li onclick="selectSidebarItem(this, 'routine-case-data')">R</li>
-                    <li onclick="selectSidebarItem(this, 'routine-case-data')">Python</li>
-                    <li onclick="selectSidebarItem(this, 'routine-case-data')">Stata</li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-    <div class="content">
-        <div class="section-buttons">
-            <button onclick="showCode('R English')" id="r-english-btn">R English</button>
-            <button onclick="showCode('R French')" id="r-french-btn">R French</button>
-            <button onclick="showCode('Python English')" id="python-english-btn">Python English</button>
-            <button onclick="showCode('Python French')" id="python-french-btn">Python French</button>
-            <button onclick="showCode('Stata English')" id="stata-english-btn">Stata English</button>
-            <button onclick="showCode('Stata French')" id="stata-french-btn">Stata French</button>
-        </div>
-        <div class="topic-intro" style="background-color: #ffffff; color: #000; padding: 20px; border-radius: 10px;">
-            Welcome to the Code Library UI. Here you will find various examples of code snippets related to geospatial analysis, data visualization, and more.
-        </div>
-        <div class="main-content">
-            <div class="code-section">
-                <div class="code-header">
-                    <h3>Code</h3>
-                    <button class="copy-btn" onclick="copyCode('code-section')">Copy</button>
-                </div>
-                <pre class="full-code" style="background-color: #ffffff; color: #000;">No code selected.</pre>
-            </div>
-            <div id="shapefile-info-image-section" class="image-section" style="display: none;">
-                <h3>Shapefile Info Image</h3>
-                <div class="sample-image">
-                    <img src="https://example.com/shapefile-info.png" alt="Shapefile Info Image">
-                </div>
-            </div>
-            <div id="basic-plot-image-section" class="image-section" style="display: none;">
-                <h3>Basic Plot Image</h3>
-                <div class="sample-image">
-                    <img src="https://example.com/basic-plot.png" alt="Basic Plot Image">
-                </div>
-            </div>
-            <div id="admin-unit-overlay-image-section" class="image-section" style="display: none;">
-                <h3>Admin Unit Overlay Image</h3>
-                <div class="sample-image">
-                    <img src="https://example.com/admin-unit-overlay.png" alt="Admin Unit Overlay Image">
-                </div>
-            </div>
-            <div id="shapefile-link-image-section" class="image-section" style="display: none;">
-                <h3>Link Shapefile with Excel Image</h3>
-                <div class="sample-image">
-                    <img src="https://example.com/shapefile-link.png" alt="Link Shapefile with Excel Image">
-                </div>
-            </div>
-            <div id="plot-map-numeric-image-section" class="image-section" style="display: none;">
-                <h3>Map Using Numeric Variable Image</h3>
-                <div class="sample-image">
-                    <img src="https://example.com/plot-map-numeric.png" alt="Map Using Numeric Variable Image">
-                </div>
-            </div>
-            <div id="plot-map-categorial-image-section" class="image-section" style="display: none;">
-                <h3>Map Using Categorical Variable Image</h3>
-                <div class="sample-image">
-                    <img src="https://example.com/plot-map-categorial.png" alt="Map Using Categorical Variable Image">
-                </div>
-            </div>
-            <div id="plot-map-manual-image-section" class="image-section" style="display: none;">
-                <h3>Map Using Manual Coloring Image</h3>
-                <div class="sample-image">
-                    <img src="https://example.com/plot-map-manual.png" alt="Map Using Manual Coloring Image">
-                </div>
-            </div>
-            <div id="health-info-image-section" class="image-section" style="display: none;">
-                <h3>Health Info Image</h3>
-                <div class="sample-image">
-                    <img src="https://example.com/health-info.png" alt="Health Info Image">
-                </div>
-            </div>
-            <div id="routine-case-data-image-section" class="image-section" style="display: none;">
-                <h3>Routine Case Data Image</h3>
-                <div class="sample-image">
-                    <img src="https://example.com/routine-case-data.png" alt="Routine Case Data Image">
-                </div>
-            </div>
-        </div>
-    </div>
 </body>
 </html>
