@@ -64,9 +64,6 @@
         .sidebar li.active .dropdown-content {
             display: block;
         }
-        .sidebar li:hover .dropdown-content {
-            display: block;
-        }
         .dropdown-content li {
             padding: 8px;
             cursor: pointer;
@@ -105,30 +102,6 @@
         }
         .section-buttons button:hover {
             background-color: #3a3b52;
-        }
-        .search-bar {
-            margin-bottom: 20px;
-        }
-        .search-bar input {
-            width: 85%;
-            padding: 10px;
-            border-radius: 5px;
-            border: none;
-            font-size: 1em;
-        }
-        .search-bar button {
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: #47B5FF;
-            color: #000;
-            cursor: pointer;
-            font-size: 1em;
-            transition: background-color 0.3s;
-        }
-        .search-bar button:hover {
-            background-color: #3a3b52;
-            color: #ffffff;
         }
         .main-content {
             display: flex;
@@ -199,8 +172,7 @@
             margin-bottom: 20px;
         }
         .editor-container {
-            flex-grow: 1;
-            margin-bottom: 20px;
+            margin-top: 20px;
         }
         #editor {
             height: 400px;
@@ -345,16 +317,16 @@
                 </div>
             </div>
         </div>
-        <select class="language-select" id="language" onchange="changeLanguage()">
-            <option value="python">Python</option>
-            <option value="r">R</option>
-        </select>
         <div class="editor-container">
+            <select class="language-select" id="language" onchange="changeLanguage()">
+                <option value="python">Python</option>
+                <option value="r">R</option>
+            </select>
             <div id="editor"># Write your code here in Python or R
 print("Hello, World!")</div>
+            <button class="run-button" onclick="runCode()">Run Code</button>
+            <div class="output" id="output">Output will appear here...</div>
         </div>
-        <button class="run-button" onclick="runCode()">Run Code</button>
-        <div class="output" id="output">Output will appear here...</div>
     </div>
 
     <script>
