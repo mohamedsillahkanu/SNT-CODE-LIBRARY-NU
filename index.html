@@ -198,6 +198,9 @@
             padding: 15px;
             background-color: #33334d;
             border-radius: 5px;
+            color: #ffffff;
+            font-family: monospace;
+            white-space: pre-wrap;
         }
         .language-select {
             margin-bottom: 10px;
@@ -363,9 +366,12 @@ print("Hello, World!")</div>
             // You would typically send the code to a server to execute
             // Here we'll simulate a response
             
+            // Clear previous output
+            outputElement.innerText = "Executing code...";
+            
             // Simulating output for demonstration
             setTimeout(() => {
-                outputElement.innerText = "Executing code...\n\n" + code + "\n\nExecution complete.";
+                outputElement.innerText = "Execution complete:\n\n" + code;
             }, 1000);
         }
 
@@ -563,6 +569,4 @@ spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolo
             navigator.clipboard.writeText(codeToCopy).then(() => {
                 const button = document.querySelector(`button[onclick="copyCode('${section}')"]`);
                 button.classList.add('active');
-                setTimeout(() => {
-                    button.classList.remove('active');
-                }, 1000);
+               
