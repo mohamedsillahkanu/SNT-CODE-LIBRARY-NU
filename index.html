@@ -322,7 +322,7 @@
                 <option value="python">Python</option>
                 <option value="r">R</option>
             </select>
-            <div id="editor"># Write your code here in Python or R
+            <div id="editor" contenteditable="true"># Write your code here in Python or R
 print("Hello, World!")</div>
             <button class="run-button" onclick="runCode()">Run Code</button>
             <div class="output" id="output">Output will appear here...</div>
@@ -340,6 +340,7 @@ print("Hello, World!")</div>
             enableSnippets: true,
             highlightActiveLine: true,
             highlightGutterLine: true,
+            readOnly: false,
         });
 
         // Function to change language mode
