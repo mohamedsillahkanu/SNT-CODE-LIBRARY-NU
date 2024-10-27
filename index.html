@@ -279,16 +279,6 @@
             <button onclick="showCode('Stata English')" id="stata-english-btn">Stata English</button>
             <button onclick="showCode('Stata French')" id="stata-french-btn">Stata French</button>
         </div>
-        <select class="language-select" id="language" onchange="changeLanguage()">
-            <option value="python">Python</option>
-            <option value="r">R</option>
-        </select>
-        <div class="editor-container">
-            <div id="editor"># Write your code here in Python or R
-print("Hello, World!")</div>
-        </div>
-        <button class="run-button" onclick="runCode()">Run Code</button>
-        <div class="output" id="output">Output will appear here...</div>
         <div class="topic-intro" style="background-color: #ffffff; color: #000; padding: 20px; border-radius: 10px;">
             Welcome to the Code Library UI. Here you will find various examples of code snippets related to geospatial analysis, data visualization, and more.
         </div>
@@ -355,6 +345,16 @@ print("Hello, World!")</div>
                 </div>
             </div>
         </div>
+        <select class="language-select" id="language" onchange="changeLanguage()">
+            <option value="python">Python</option>
+            <option value="r">R</option>
+        </select>
+        <div class="editor-container">
+            <div id="editor"># Write your code here in Python or R
+print("Hello, World!")</div>
+        </div>
+        <button class="run-button" onclick="runCode()">Run Code</button>
+        <div class="output" id="output">Output will appear here...</div>
     </div>
 
     <script>
@@ -362,6 +362,13 @@ print("Hello, World!")</div>
         var editor = ace.edit("editor");
         editor.setTheme("ace/theme/monokai");
         editor.session.setMode("ace/mode/python");
+        editor.setOptions({
+            enableBasicAutocompletion: true,
+            enableLiveAutocompletion: true,
+            enableSnippets: true,
+            highlightActiveLine: true,
+            highlightGutterLine: true,
+        });
 
         // Function to change language mode
         function changeLanguage() {
