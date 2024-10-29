@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Code Library for Stratification and SNT</title>
+    <title>Code library for stratification and SNT</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -63,6 +63,13 @@
         .sidebar li.active .dropdown-content {
             display: block;
         }
+        .dropdown-content li {
+            padding: 8px;
+            cursor: pointer;
+        }
+        .dropdown-content li:hover {
+            background-color: #474761;
+        }
         .content {
             flex-grow: 1;
             display: flex;
@@ -95,11 +102,41 @@
         .section-buttons button:hover {
             background-color: #3a3b52;
         }
-        .code-section {
-            flex-grow: 1;
+        .search-bar {
+            margin-bottom: 20px;
+        }
+        .search-bar input {
+            width: 85%;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 1em;
+        }
+        .search-bar button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #47B5FF;
+            color: #000;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+        .search-bar button:hover {
+            background-color: #3a3b52;
+            color: #ffffff;
+        }
+        .main-content {
             display: flex;
-            flex-direction: column;
-            gap: 10px;
+            height: calc(100% - 100px);
+        }
+        .code-section, .image-section {
+            flex: 1;
+            background-color: #33334d;
+            border-radius: 10px;
+            padding: 20px;
+            overflow: auto;
+            margin: 10px;
         }
         .code-header {
             display: flex;
@@ -113,15 +150,21 @@
             overflow: auto;
             margin-top: 10px;
             color: #000;
+            display: none;
         }
-        .explanation {
-            background-color: #28293d;
-            padding: 15px;
+        .sample-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #FF6347;
             border-radius: 10px;
-            margin-top: 20px;
-            color: #ffffff;
-            font-size: 0.9em;
-            line-height: 1.5;
+            padding: 10px;
+        }
+        .sample-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
         }
         .copy-btn {
             padding: 8px;
@@ -140,8 +183,64 @@
             background-color: #00E0B5;
             color: #000000;
         }
+        .sidebar li.active {
+            background-color: #47B5FF;
+            color: #000000;
+        }
+        .topic-intro {
+            background-color: #ffffff;
+            color: #000;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .step-by-step {
+            background-color: #ffffff;
+            color: #000;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            overflow: auto;
+        }
+        .step-by-step h3 {
+            color: #47B5FF;
+            margin-bottom: 10px;
+        }
+        .step-by-step p {
+            margin-bottom: 10px;
+        }
     </style>
     <script>
+        function selectSidebarItem(item, section) {
+            // Highlight the selected sidebar item
+            const sidebarItems = document.querySelectorAll('.sidebar li');
+            sidebarItems.forEach(el => el.classList.remove('active'));
+            item.classList.add('active');
+            // Update URL hash
+            window.location.hash = `/${section}`;
+            // Display topic intro for the selected submenu
+            const topicIntro = document.querySelector('.topic-intro');
+            const topicIntros = {
+                "shapefile-info": "Learn how to extract basic information from shapefiles using different programming languages.",
+                "basic-plot": "Understand how to create a basic plot of geographic boundaries from shapefiles.",
+                "admin-unit-overlay": "Overlay multiple administrative units to compare spatial relationships.",
+                "shapefile-link": "Link shapefiles with Excel data for enhanced geospatial analysis.",
+                "plot-map-numeric": "Create maps based on numeric variables, allowing you to visualize quantitative data.",
+                "plot-map-categorial": "Create maps based on categorical variables, useful for classification analysis.",
+                "plot-map-manual": "Use manual coloring techniques to enhance visual interpretations of maps.",
+                "health-info": "Health Facilities information related to mapping and analysis in R, Python, and Stata.",
+                "routine-case-data": "Routine Case Data from DHIS2 analysis using R, Python, and Stata."
+            };
+            topicIntro.innerText = topicIntros[section] || "Welcome to the Code Library UI. Here you will find various examples of code snippets related to geospatial analysis, data visualization, and more.";
+            // Display corresponding image section
+            const imageSections = document.querySelectorAll('.image-section');
+            imageSections.forEach(section => section.style.display = 'none');
+            const currentImageSection = document.getElementById(`${section}-image-section`);
+            if (currentImageSection) {
+                currentImageSection.style.display = 'block';
+            }
+        }
+
         function showCode(language) {
             const section = window.location.hash.split('/')[1];
             if (!section) {
@@ -158,6 +257,7 @@
 install.packages(c("sf", "ggplot2"))
 
 # Load the packages
+
 library(sf)
 library(ggplot2)
 
@@ -192,28 +292,100 @@ ggplot() +
     panel.border = element_blank()        # Remove border around the plot
   )
 `,
-                    explanation: `
-1. **Install Necessary Packages**: This code installs the required packages 'sf' and 'ggplot2'. The 'sf' package handles geospatial data, while 'ggplot2' is for plotting.
-2. **Load Packages**: 'sf' and 'ggplot2' are loaded to enable spatial data operations and visualizations.
-3. **Load Shapefiles**: Shapefiles representing administrative levels are loaded using 'st_read'. These files contain geographical boundaries of the regions.
-4. **Check and Set Coordinate Reference System (CRS)**: If the CRS is missing, it assigns a CRS (in this case, WGS 84, with code 4326).
-5. **Ensure Consistent CRS**: The two shapefiles are transformed to have the same CRS to avoid projection issues.
-6. **Plot Overlays**: Using 'ggplot()', the boundaries from 'admin1' and 'admin2' are overlaid, with distinct colors and line widths for visual differentiation. The plot is styled with 'theme_minimal()' for cleaner aesthetics.`
+
+                    "python-english": `import geopandas as gpd
+
+# Load shapefile
+admin = gpd.read_file("/path/to/admin.shp")
+
+# Print shapefile info
+print(admin.head())`,
+
+                    "stata-english": `* Load shapefile
+shp2dta using "/path/to/admin.shp", database(admin_db) coordinates(admin_coords)
+
+* List shapefile info
+list`},
+                "basic-plot": {
+                    "r-english": `# Load necessary libraries
+library(sf)
+library(ggplot2)
+
+# Load shapefile
+admin <- st_read("/path/to/admin.shp")
+
+# Basic plot
+ggplot() +
+  geom_sf(data = admin, fill = NA, color = "blue")`,
+                    "python-english": `import geopandas as gpd
+import matplotlib.pyplot as plt
+
+# Load shapefile
+admin = gpd.read_file("/path/to/admin.shp")
+
+# Basic plot
+admin.plot()
+plt.show()`,
+                    "stata-english": `* Load shapefile
+shp2dta using "/path/to/admin.shp", database(admin_db) coordinates(admin_coords)
+
+* Basic plot
+spmap using admin_coords, id(_ID)`
+                },
+                "admin-unit-overlay": {
+                    "r-english": `# Load necessary libraries
+library(sf)
+library(ggplot2)
+
+# Load shapefiles
+admin1 <- st_read("/path/to/admin1.shp")
+admin2 <- st_read("/path/to/admin2.shp")
+
+# Ensure both layers have the same CRS
+admin1 <- st_transform(admin1, crs = st_crs(admin2))
+
+# Plot overlays
+ggplot() +
+  geom_sf(data = admin1, fill = NA, color = "blue") +
+  geom_sf(data = admin2, fill = NA, color = "red")`,
+                    "python-english": `import geopandas as gpd
+import matplotlib.pyplot as plt
+
+# Load shapefiles
+admin1 = gpd.read_file("/path/to/admin1.shp")
+admin2 = gpd.read_file("/path/to/admin2.shp")
+
+# Ensure both layers have the same CRS
+admin1 = admin1.to_crs(admin2.crs)
+
+# Plot overlays
+fig, ax = plt.subplots()
+admin1.plot(ax=ax, edgecolor='blue')
+admin2.plot(ax=ax, edgecolor='red')
+plt.title("Overlay of Admin Units")
+plt.show()`,
+                    "stata-english": `* Load shapefiles
+shp2dta using "/path/to/admin1.shp", database(admin1_db) coordinates(admin1_coords)
+shp2dta using "/path/to/admin2.shp", database(admin2_db) coordinates(admin2_coords)
+
+* Merge shapefiles
+drop _all
+use admin1_db, clear
+append using admin2_db
+
+* Plot overlays
+spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolor(red ..)`
                 }
             };
 
             const selectedCode = codeSnippets[section]?.[language.toLowerCase().replace(' ', '-')];
             const codeDisplay = document.querySelector('.full-code');
-            const explanationDisplay = document.querySelector('.explanation');
             if (selectedCode) {
                 codeDisplay.innerText = selectedCode;
                 codeDisplay.style.display = 'block';
-                explanationDisplay.innerHTML = codeSnippets[section]?.explanation || 'No explanation available.';
-                explanationDisplay.style.display = 'block';
             } else {
                 codeDisplay.innerText = 'No code available.';
                 codeDisplay.style.display = 'block';
-                explanationDisplay.style.display = 'none';
             }
 
             // Update active button styling
@@ -223,6 +395,16 @@ ggplot() +
             if (activeButton) {
                 activeButton.classList.add('active');
             }
+
+            // Display step-by-step explanation
+            const stepByStepDisplay = document.querySelector('.step-by-step');
+            const stepByStepExplanations = {
+                "shapefile-info": "This code extracts information from a shapefile to understand the structure of spatial data. It starts by installing and loading necessary libraries (e.g., sf, ggplot2). Then, it reads the shapefiles and checks for the Coordinate Reference System (CRS). If the CRS is missing, a CRS is assigned. Finally, a plot is created to overlay different administrative units with customized aesthetics.",
+                "basic-plot": "This script is used to create a basic plot of geographic boundaries using shapefiles. It loads the necessary libraries (sf, ggplot2), reads the shapefile data, and plots the geographic information, with customized colors and options for a clearer map.",
+                "admin-unit-overlay": "This code aims to overlay two different administrative units to visualize spatial relationships. It begins by loading the necessary libraries, followed by loading the shapefiles for the administrative units. The CRS of both layers is ensured to be the same, and then the units are plotted on top of each other using different colors for differentiation."
+            };
+            stepByStepDisplay.innerText = stepByStepExplanations[section] || "No detailed explanation available for this code.";
+            stepByStepDisplay.style.display = 'block';
         }
 
         function copyCode(section) {
@@ -250,6 +432,26 @@ ggplot() +
                     <li onclick="selectSidebarItem(this, 'shapefile-info')">Shapefile Info</li>
                     <li onclick="selectSidebarItem(this, 'basic-plot')">Basic Plot</li>
                     <li onclick="selectSidebarItem(this, 'admin-unit-overlay')">Admin Unit Overlay</li>
+                    <li onclick="selectSidebarItem(this, 'shapefile-link')">Link shapefile with excel</li>
+                    <li onclick="selectSidebarItem(this, 'plot-map-numeric')">Map using numeric variable</li>
+                    <li onclick="selectSidebarItem(this, 'plot-map-categorial')">Map using categorical variable</li>
+                    <li onclick="selectSidebarItem(this, 'plot-map-manual')">Map using manual coloring</li>
+                </ul>
+            </li>
+            <li>
+                A.2 Health Facilities
+                <ul class="dropdown-content">
+                    <li onclick="selectSidebarItem(this, 'health-info')">R</li>
+                    <li onclick="selectSidebarItem(this, 'health-info')">Python</li>
+                    <li onclick="selectSidebarItem(this, 'health-info')">Stata</li>
+                </ul>
+            </li>
+            <li>
+                A.3 Routine Case Data from DHIS2
+                <ul class="dropdown-content">
+                    <li onclick="selectSidebarItem(this, 'routine-case-data')">R</li>
+                    <li onclick="selectSidebarItem(this, 'routine-case-data')">Python</li>
+                    <li onclick="selectSidebarItem(this, 'routine-case-data')">Stata</li>
                 </ul>
             </li>
         </ul>
@@ -257,16 +459,81 @@ ggplot() +
     <div class="content">
         <div class="section-buttons">
             <button onclick="showCode('R English')" id="r-english-btn">R English</button>
+            <button onclick="showCode('R French')" id="r-french-btn">R French</button>
             <button onclick="showCode('Python English')" id="python-english-btn">Python English</button>
+            <button onclick="showCode('Python French')" id="python-french-btn">Python French</button>
             <button onclick="showCode('Stata English')" id="stata-english-btn">Stata English</button>
+            <button onclick="showCode('Stata French')" id="stata-french-btn">Stata French</button>
         </div>
-        <div class="code-section">
-            <div class="code-header">
-                <h3>Code</h3>
-                <button class="copy-btn" onclick="copyCode('code-section')">Copy</button>
+        <div class="topic-intro" style="background-color: #ffffff; color: #000; padding: 20px; border-radius: 10px;">
+            Welcome to the Code Library UI. Here you will find various examples of code snippets related to geospatial analysis, data visualization, and more.
+        </div>
+        <div class="main-content">
+            <div class="code-section">
+                <div class="code-header">
+                    <h3>Code</h3>
+                    <button class="copy-btn" onclick="copyCode('code-section')">Copy</button>
+                </div>
+                <pre class="full-code" style="background-color: #ffffff; color: #000;">No code selected.</pre>
             </div>
-            <pre class="full-code">No code selected.</pre>
-            <div class="explanation">No explanation available.</div>
+            <div id="shapefile-info-image-section" class="image-section" style="display: none;">
+                <h3>Shapefile Info Image</h3>
+                <div class="sample-image">
+                    <img src="https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/16df021948e18e142e103ee7e9c78ff8311005ef/overlay%20final3.png" alt="Shapefile Info Image">
+                </div>
+            </div>
+            <div id="basic-plot-image-section" class="image-section" style="display: none;">
+                <h3>Basic Plot Image</h3>
+                <div class="sample-image">
+                    <img src="https://example.com/basic-plot.png" alt="Basic Plot Image">
+                </div>
+            </div>
+            <div id="admin-unit-overlay-image-section" class="image-section" style="display: none;">
+                <h3>Admin Unit Overlay Image</h3>
+                <div class="sample-image">
+                    <img src="https://example.com/admin-unit-overlay.png" alt="Admin Unit Overlay Image">
+                </div>
+            </div>
+            <div id="shapefile-link-image-section" class="image-section" style="display: none;">
+                <h3>Link Shapefile with Excel Image</h3>
+                <div class="sample-image">
+                    <img src="https://example.com/shapefile-link.png" alt="Link Shapefile with Excel Image">
+                </div>
+            </div>
+            <div id="plot-map-numeric-image-section" class="image-section" style="display: none;">
+                <h3>Map Using Numeric Variable Image</h3>
+                <div class="sample-image">
+                    <img src="https://example.com/plot-map-numeric.png" alt="Map Using Numeric Variable Image">
+                </div>
+            </div>
+            <div id="plot-map-categorial-image-section" class="image-section" style="display: none;">
+                <h3>Map Using Categorical Variable Image</h3>
+                <div class="sample-image">
+                    <img src="https://example.com/plot-map-categorial.png" alt="Map Using Categorical Variable Image">
+                </div>
+            </div>
+            <div id="plot-map-manual-image-section" class="image-section" style="display: none;">
+                <h3>Map Using Manual Coloring Image</h3>
+                <div class="sample-image">
+                    <img src="https://example.com/plot-map-manual.png" alt="Map Using Manual Coloring Image">
+                </div>
+            </div>
+            <div id="health-info-image-section" class="image-section" style="display: none;">
+                <h3>Health Info Image</h3>
+                <div class="sample-image">
+                    <img src="https://example.com/health-info.png" alt="Health Info Image">
+                </div>
+            </div>
+            <div id="routine-case-data-image-section" class="image-section" style="display: none;">
+                <h3>Routine Case Data Image</h3>
+                <div class="sample-image">
+                    <img src="https://example.com/routine-case-data.png" alt="Routine Case Data Image">
+                </div>
+            </div>
+        </div>
+        <div class="step-by-step step-by-step-explanation" style="background-color: #ffffff; color: #000; padding: 20px; border-radius: 10px;">
+            <h3>Step-by-Step Explanation</h3>
+            <p>No detailed explanation available for this code.</p>
         </div>
     </div>
 </body>
