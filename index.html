@@ -201,6 +201,7 @@
             border-radius: 10px;
             margin-top: 20px;
             overflow: auto;
+            flex-grow: 1;
         }
         .step-by-step h3 {
             color: #47B5FF;
@@ -399,9 +400,9 @@ spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolo
             // Display step-by-step explanation
             const stepByStepDisplay = document.querySelector('.step-by-step');
             const stepByStepExplanations = {
-                "shapefile-info": "This code extracts information from a shapefile to understand the structure of spatial data. It starts by installing and loading necessary libraries (e.g., sf, ggplot2). Then, it reads the shapefiles and checks for the Coordinate Reference System (CRS). If the CRS is missing, a CRS is assigned. Finally, a plot is created to overlay different administrative units with customized aesthetics.",
-                "basic-plot": "This script is used to create a basic plot of geographic boundaries using shapefiles. It loads the necessary libraries (sf, ggplot2), reads the shapefile data, and plots the geographic information, with customized colors and options for a clearer map.",
-                "admin-unit-overlay": "This code aims to overlay two different administrative units to visualize spatial relationships. It begins by loading the necessary libraries, followed by loading the shapefiles for the administrative units. The CRS of both layers is ensured to be the same, and then the units are plotted on top of each other using different colors for differentiation."
+                "shapefile-info": "This code extracts information from a shapefile to understand the structure of spatial data.\n\n1. **Install necessary packages**: The first line installs the required packages (`sf`, `ggplot2`).\n2. **Load the packages**: The `library()` function is used to load these packages.\n3. **Load Shapefiles**: `st_read()` is used to load shapefiles for administrative levels.\n4. **Check and Set CRS if Missing**: The `st_crs()` function checks if the Coordinate Reference System (CRS) is set, and assigns it if missing.\n5. **Ensure Both Layers Have the Same CRS**: `st_transform()` ensures both layers are in the same CRS for compatibility.\n6. **Plot the Layers**: `ggplot()` with `geom_sf()` plots both administrative layers with custom aesthetics (e.g., color, line width).",
+                "basic-plot": "This script is used to create a basic plot of geographic boundaries using shapefiles.\n\n1. **Load necessary libraries**: The `sf` and `ggplot2` libraries are loaded for spatial data manipulation and visualization.\n2. **Load shapefile**: `st_read()` loads the geographic shapefile into the `admin` object.\n3. **Basic plot**: The `ggplot()` function is used to create a simple plot of the shapefile with a specified color.",
+                "admin-unit-overlay": "This code aims to overlay two different administrative units to visualize spatial relationships.\n\n1. **Load necessary libraries**: The `sf` and `ggplot2` libraries are loaded for spatial data processing and visualization.\n2. **Load shapefiles**: `st_read()` loads two shapefiles, `admin1` and `admin2`.\n3. **Ensure both layers have the same CRS**: The `st_transform()` function ensures both shapefiles have the same CRS to align correctly.\n4. **Plot overlays**: The `ggplot()` function with `geom_sf()` overlays the two administrative units with different colors (blue for `admin1`, red for `admin2`)."
             };
             stepByStepDisplay.innerText = stepByStepExplanations[section] || "No detailed explanation available for this code.";
             stepByStepDisplay.style.display = 'block';
@@ -531,7 +532,7 @@ spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolo
                 </div>
             </div>
         </div>
-        <div class="step-by-step step-by-step-explanation" style="background-color: #ffffff; color: #000; padding: 20px; border-radius: 10px;">
+        <div class="step-by-step step-by-step-explanation" style="background-color: #ffffff; color: #000; padding: 20px; border-radius: 10px; flex-grow: 1;">
             <h3>Step-by-Step Explanation</h3>
             <p>No detailed explanation available for this code.</p>
         </div>
