@@ -201,13 +201,21 @@
             border-radius: 10px;
             margin-top: 20px;
             overflow: auto;
-            flex-grow: 1;
+            flex-grow: 2;
         }
         .step-by-step h3 {
             color: #47B5FF;
             margin-bottom: 10px;
         }
         .step-by-step p {
+            margin-bottom: 10px;
+        }
+        .step-by-step code {
+            display: block;
+            background-color: #f0f0f0;
+            color: #000;
+            padding: 10px;
+            border-radius: 5px;
             margin-bottom: 10px;
         }
     </style>
@@ -280,7 +288,7 @@ admin1 <- st_transform(admin1, crs = st_crs(admin2))
 
 # Plot Admin 1 and Admin 2 Overlays with Modified Aesthetics
 ggplot() +
-  geom_sf(data = admin2, fill = NA, color = "black", lwd = 0.4) +    # Admin 2 in red with thinner lines
+  geom_sf(data = admin2, fill = NA, color = "black", lwd = 0.4) +    # Admin 2 in black with thinner lines
   geom_sf(data = admin1, fill = NA, color = "#47B5FF", lwd = 2) +   # Admin 1 in blue with thicker lines
   labs(title = "Overlay of Admin 2 and Admin 3 Units",
        subtitle = "Admin 2 (blue) and Admin 3 (black)") +
@@ -400,11 +408,73 @@ spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolo
             // Display step-by-step explanation
             const stepByStepDisplay = document.querySelector('.step-by-step');
             const stepByStepExplanations = {
-                "shapefile-info": "This code extracts information from a shapefile to understand the structure of spatial data.\n\n1. **Install necessary packages**: The first line installs the required packages (`sf`, `ggplot2`).\n2. **Load the packages**: The `library()` function is used to load these packages.\n3. **Load Shapefiles**: `st_read()` is used to load shapefiles for administrative levels.\n4. **Check and Set CRS if Missing**: The `st_crs()` function checks if the Coordinate Reference System (CRS) is set, and assigns it if missing.\n5. **Ensure Both Layers Have the Same CRS**: `st_transform()` ensures both layers are in the same CRS for compatibility.\n6. **Plot the Layers**: `ggplot()` with `geom_sf()` plots both administrative layers with custom aesthetics (e.g., color, line width).",
-                "basic-plot": "This script is used to create a basic plot of geographic boundaries using shapefiles.\n\n1. **Load necessary libraries**: The `sf` and `ggplot2` libraries are loaded for spatial data manipulation and visualization.\n2. **Load shapefile**: `st_read()` loads the geographic shapefile into the `admin` object.\n3. **Basic plot**: The `ggplot()` function is used to create a simple plot of the shapefile with a specified color.",
-                "admin-unit-overlay": "This code aims to overlay two different administrative units to visualize spatial relationships.\n\n1. **Load necessary libraries**: The `sf` and `ggplot2` libraries are loaded for spatial data processing and visualization.\n2. **Load shapefiles**: `st_read()` loads two shapefiles, `admin1` and `admin2`.\n3. **Ensure both layers have the same CRS**: The `st_transform()` function ensures both shapefiles have the same CRS to align correctly.\n4. **Plot overlays**: The `ggplot()` function with `geom_sf()` overlays the two administrative units with different colors (blue for `admin1`, red for `admin2`)."
+                "shapefile-info": `<code># Install necessary packages if not already installed
+install.packages(c("sf", "ggplot2"))</code>
+<p>This line installs the required packages (<code>sf</code> and <code>ggplot2</code>) if they are not already installed. The <code>sf</code> package is used for handling spatial data, and <code>ggplot2</code> is used for plotting.</p>
+<code># Load the packages
+library(sf)
+library(ggplot2)</code>
+<p>These lines load the necessary libraries to work with spatial data and create visualizations.</p>
+<code># Load Shapefiles
+admin1 <- st_read("/content/geoBoundaries-BFA-ADM2.shp")
+admin2 <- st_read("/content/geoBoundaries-BFA-ADM3.shp")</code>
+<p>These lines read in two shapefiles using the <code>st_read()</code> function. The files represent administrative units and are assigned to <code>admin1</code> and <code>admin2</code>.</p>
+<code># Check and Set CRS if Missing
+if (is.na(st_crs(admin1))) {
+  admin1 <- st_set_crs(admin1, 4326)  # Assign CRS (WGS 84 as an example)
+}</code>
+<p>This block checks if the Coordinate Reference System (CRS) is missing for <code>admin1</code>. If it is, it assigns the WGS 84 CRS, which is commonly used for geographic data.</p>
+<code>if (is.na(st_crs(admin2))) {
+  admin2 <- st_set_crs(admin2, 4326)  # Assign CRS (WGS 84 as an example)
+}</code>
+<p>The same check and CRS assignment is done for <code>admin2</code>.</p>
+<code># Ensure Both Layers Have the Same CRS
+admin1 <- st_transform(admin1, crs = st_crs(admin2))</code>
+<p>This line transforms <code>admin1</code> to ensure it has the same CRS as <code>admin2</code>, allowing for accurate overlay and comparison.</p>
+<code># Plot Admin 1 and Admin 2 Overlays with Modified Aesthetics
+ggplot() +
+  geom_sf(data = admin2, fill = NA, color = "black", lwd = 0.4) +    # Admin 2 in black with thinner lines
+  geom_sf(data = admin1, fill = NA, color = "#47B5FF", lwd = 2) +   # Admin 1 in blue with thicker lines
+  labs(title = "Overlay of Admin 2 and Admin 3 Units",
+       subtitle = "Admin 2 (blue) and Admin 3 (black)") +
+  theme_minimal() +
+  theme(
+    axis.text = element_blank(),          # Remove x and y axis tick labels
+    axis.title = element_blank(),         # Remove x and y axis titles
+    axis.ticks = element_blank(),         # Remove tick marks on axes
+    panel.grid = element_blank(),         # Remove grid lines
+    panel.border = element_blank()        # Remove border around the plot
+  )</code>
+<p>This block creates a plot overlaying <code>admin1</code> and <code>admin2</code> using <code>ggplot2</code>. It customizes the aesthetics with different colors, line widths, and removes axis labels, grid lines, and borders for a cleaner visual presentation.</p>`,
+                "basic-plot": `<code># Load necessary libraries
+library(sf)
+library(ggplot2)</code>
+<p>These lines load the necessary libraries: <code>sf</code> for spatial data handling and <code>ggplot2</code> for plotting.</p>
+<code># Load shapefile
+admin <- st_read("/path/to/admin.shp")</code>
+<p>This line reads the shapefile containing geographic data and assigns it to the variable <code>admin</code>.</p>
+<code># Basic plot
+ggplot() +
+  geom_sf(data = admin, fill = NA, color = "blue")</code>
+<p>This line creates a basic plot of the shapefile using <code>ggplot2</code>. The <code>geom_sf()</code> function is used to plot the spatial features, with the color set to blue.</p>`,
+                "admin-unit-overlay": `<code># Load necessary libraries
+library(sf)
+library(ggplot2)</code>
+<p>These lines load the necessary libraries for spatial data processing (<code>sf</code>) and visualization (<code>ggplot2</code>).</p>
+<code># Load shapefiles
+admin1 <- st_read("/path/to/admin1.shp")
+admin2 <- st_read("/path/to/admin2.shp")</code>
+<p>These lines load the shapefiles for two different administrative units, <code>admin1</code> and <code>admin2</code>.</p>
+<code># Ensure both layers have the same CRS
+admin1 <- st_transform(admin1, crs = st_crs(admin2))</code>
+<p>This line ensures that both shapefiles have the same CRS by transforming <code>admin1</code> to match the CRS of <code>admin2</code>.</p>
+<code># Plot overlays
+ggplot() +
+  geom_sf(data = admin1, fill = NA, color = "blue") +
+  geom_sf(data = admin2, fill = NA, color = "red")</code>
+<p>This block creates a plot overlaying <code>admin1</code> and <code>admin2</code> using different colors (blue and red) to differentiate between the two administrative units.</p>`
             };
-            stepByStepDisplay.innerText = stepByStepExplanations[section] || "No detailed explanation available for this code.";
+            stepByStepDisplay.innerHTML = stepByStepExplanations[section] || "<p>No detailed explanation available for this code.</p>";
             stepByStepDisplay.style.display = 'block';
         }
 
@@ -519,23 +589,4 @@ spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolo
                     <img src="https://example.com/plot-map-manual.png" alt="Map Using Manual Coloring Image">
                 </div>
             </div>
-            <div id="health-info-image-section" class="image-section" style="display: none;">
-                <h3>Health Info Image</h3>
-                <div class="sample-image">
-                    <img src="https://example.com/health-info.png" alt="Health Info Image">
-                </div>
-            </div>
-            <div id="routine-case-data-image-section" class="image-section" style="display: none;">
-                <h3>Routine Case Data Image</h3>
-                <div class="sample-image">
-                    <img src="https://example.com/routine-case-data.png" alt="Routine Case Data Image">
-                </div>
-            </div>
-        </div>
-        <div class="step-by-step step-by-step-explanation" style="background-color: #ffffff; color: #000; padding: 20px; border-radius: 10px; flex-grow: 1;">
-            <h3>Step-by-Step Explanation</h3>
-            <p>No detailed explanation available for this code.</p>
-        </div>
-    </div>
-</body>
-</html>
+            <div id
