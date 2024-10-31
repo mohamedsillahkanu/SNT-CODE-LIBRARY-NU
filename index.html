@@ -241,44 +241,55 @@
                 "shapefile-info": {
                     title: '<h3 style="color: #47B5FF;">Shapefile info: R in English</h3>',
                     "r-english": `
-# Install necessary packages if not already installed
-install.packages(c("sf", "ggplot2"))
+                
+# Step 1: Install necessary libraries
+install.packages("sf")
 
-# Load the packages
-
+# Step 2: Import necessary libraries
 library(sf)
-library(ggplot2)
 
-# Load Shapefiles
-admin1 <- st_read("/content/geoBoundaries-BFA-ADM2.shp")
-admin2 <- st_read("/content/geoBoundaries-BFA-ADM3.shp")
+# Explanation:
+# - sf: Used to work with geospatial data in R.
 
-# Check and Set CRS if Missing
-if (is.na(st_crs(admin1))) {
-  admin1 <- st_set_crs(admin1, 4326)  # Assign CRS (WGS 84 as an example)
-}
+# Step 3: Define the path to the shapefile components
 
-if (is.na(st_crs(admin2))) {
-  admin2 <- st_set_crs(admin2, 4326)  # Assign CRS (WGS 84 as an example)
-}
+shapefile_shx <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.shx'
+shapefile_dbf <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.dbf'
+shapefile_path <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.shp'
 
-# Ensure Both Layers Have the Same CRS
-admin1 <- st_transform(admin1, crs = st_crs(admin2))
+# Explanation:
+# - The variables 'shapefile_shx', 'shapefile_dbf', and 'shapefile_path' hold the raw paths to the shapefile components from the GitHub repository.
+# - All three files (.shp, .shx, .dbf) are required to correctly read the shapefile.
 
-# Plot Admin 1 and Admin 2 Overlays with Modified Aesthetics
-ggplot() +
-  geom_sf(data = admin2, fill = NA, color = "black", lwd = 0.4) +    # Admin 2 in red with thinner lines
-  geom_sf(data = admin1, fill = NA, color = "#47B5FF", lwd = 2) +   # Admin 1 in blue with thicker lines
-  labs(title = "Overlay of Admin 2 and Admin 3 Units",
-       subtitle = "Admin 2 (blue) and Admin 3 (black)") +
-  theme_minimal() +
-  theme(
-    axis.text = element_blank(),          # Remove x and y axis tick labels
-    axis.title = element_blank(),         # Remove x and y axis titles
-    axis.ticks = element_blank(),         # Remove tick marks on axes
-    panel.grid = element_blank(),         # Remove grid lines
-    panel.border = element_blank()        # Remove border around the plot
-  )
+# Step 3.1: Download the shapefile components
+download.file(shapefile_path, destfile = "Chiefdom_2021.shp")
+download.file(shapefile_shx, destfile = "Chiefdom_2021.shx")
+download.file(shapefile_dbf, destfile = "Chiefdom_2021.dbf")
+
+# Explanation:
+# - 'download.file()' is used to download each component of the shapefile from GitHub and save them locally.
+# - This ensures all necessary files are available for reading the shapefile.
+
+# Step 4: Load shapefile data into an sf object
+gdf <- st_read("Chiefdom_2021.shp")
+
+# Explanation:
+# - 'st_read()' reads the shapefile into an sf object, which is a data structure for handling geospatial data in R.
+# - The sf object 'gdf' contains both the geometry (spatial features) and attributes (data values) of the shapefile.
+
+# Step 4.1: Set the Coordinate Reference System (CRS)
+st_crs(gdf) <- 4326
+
+# Explanation:
+# - 'st_crs()' is used to set the CRS of the sf object.
+# - EPSG:4326 is a common CRS that represents coordinates in longitude and latitude.
+
+# Step 5: View the first few rows of the sf object
+print(gdf)
+
+# Explanation:
+# - 'print(gdf)' print only a portion of the spatial object by default.
+                         
 `,
 
                     "python-english": `import geopandas as gpd
