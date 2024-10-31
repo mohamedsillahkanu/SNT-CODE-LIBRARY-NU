@@ -16,7 +16,7 @@
             overflow: hidden;
         }
         .sidebar {
-            width: 250px;   
+            width: 250px;   /* Fixed width for sidebar */
             background-color: #28293d;
             padding: 20px;
             display: flex;
@@ -63,9 +63,6 @@
         .sidebar li.active .dropdown-content {
             display: block;
         }
-        .sidebar li:hover .dropdown-content {
-            display: block;
-        }
         .dropdown-content li {
             padding: 8px;
             cursor: pointer;
@@ -105,30 +102,6 @@
         .section-buttons button:hover {
             background-color: #3a3b52;
         }
-        .search-bar {
-            margin-bottom: 20px;
-        }
-        .search-bar input {
-            width: 85%;
-            padding: 10px;
-            border-radius: 5px;
-            border: none;
-            font-size: 1em;
-        }
-        .search-bar button {
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: #47B5FF;
-            color: #000;
-            cursor: pointer;
-            font-size: 1em;
-            transition: background-color 0.3s;
-        }
-        .search-bar button:hover {
-            background-color: #3a3b52;
-            color: #ffffff;
-        }
         .main-content {
             display: flex;
             height: calc(100% - 100px);
@@ -140,6 +113,7 @@
             padding: 20px;
             overflow: auto;
             margin: 10px;
+            display: none; /* Hide content sections initially */
         }
         .code-header {
             display: flex;
@@ -153,7 +127,6 @@
             overflow: auto;
             margin-top: 10px;
             color: #000;
-            display: none;
         }
         .sample-image {
             display: flex;
@@ -186,10 +159,6 @@
             background-color: #00E0B5;
             color: #000000;
         }
-        .sidebar li.active {
-            background-color: #47B5FF;
-            color: #000000;
-        }
         .topic-intro {
             background-color: #ffffff;
             color: #000;
@@ -220,13 +189,8 @@
                 "routine-case-data": "Routine Case Data from DHIS2 analysis using R, Python, and Stata."
             };
             topicIntro.innerText = topicIntros[section] || "Welcome to the Code Library UI. Here you will find various examples of code snippets related to geospatial analysis, data visualization, and more.";
-            // Display corresponding image section
-            const imageSections = document.querySelectorAll('.image-section');
-            imageSections.forEach(section => section.style.display = 'none');
-            const currentImageSection = document.getElementById(`${section}-image-section`);
-            if (currentImageSection) {
-                currentImageSection.style.display = 'block';
-            }
+            // Hide content sections initially
+            document.querySelectorAll('.code-section, .image-section').forEach(section => section.style.display = 'none');
         }
 
         function showCode(language) {
@@ -239,59 +203,25 @@
             
             const codeSnippets = {
                 "shapefile-info": {
-                    title: '<h3 style="color: #47B5FF;">Shapefile info: R in English</h3>',
                     "r-english": `
-                
-# Step 1: Install necessary libraries
-install.packages("sf")
+                        # Step 1: Install necessary libraries
+                        install.packages("sf")
 
-# Step 2: Import necessary libraries
-library(sf)
+                        # Step 2: Import necessary libraries
+                        library(sf)
 
-# Explanation:
-# - sf: Used to work with geospatial data in R.
+                        # Step 3: Define the path to the shapefile
+                        shapefile_path <- "./path/to/shapefile.shp"
 
-# Step 3: Define the path to the shapefile components
+                        # Step 4: Load shapefile data into an sf object
+                        gdf <- st_read(shapefile_path)
 
-shapefile_shx <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.shx'
-shapefile_dbf <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.dbf'
-shapefile_path <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.shp'
+                        # Step 5: Set the Coordinate Reference System (CRS)
+                        st_crs(gdf) <- 4326
 
-# Explanation:
-# - The variables 'shapefile_shx', 'shapefile_dbf', and 'shapefile_path' hold the raw paths to the shapefile components from the GitHub repository.
-# - All three files (.shp, .shx, .dbf) are required to correctly read the shapefile.
-
-# Step 3.1: Download the shapefile components
-download.file(shapefile_path, destfile = "Chiefdom_2021.shp")
-download.file(shapefile_shx, destfile = "Chiefdom_2021.shx")
-download.file(shapefile_dbf, destfile = "Chiefdom_2021.dbf")
-
-# Explanation:
-# - 'download.file()' is used to download each component of the shapefile from GitHub and save them locally.
-# - This ensures all necessary files are available for reading the shapefile.
-
-# Step 4: Load shapefile data into an sf object
-gdf <- st_read("Chiefdom_2021.shp")
-
-# Explanation:
-# - 'st_read()' reads the shapefile into an sf object, which is a data structure for handling geospatial data in R.
-# - The sf object 'gdf' contains both the geometry (spatial features) and attributes (data values) of the shapefile.
-
-# Step 4.1: Set the Coordinate Reference System (CRS)
-st_crs(gdf) <- 4326
-
-# Explanation:
-# - 'st_crs()' is used to set the CRS of the sf object.
-# - EPSG:4326 is a common CRS that represents coordinates in longitude and latitude.
-
-# Step 5: View the first few rows of the sf object
-print(gdf)
-
-# Explanation:
-# - 'print(gdf)' print only a portion of the spatial object by default.
-                         
-`,
-
+                        # Step 6: View the first few rows of the sf object
+                        print(gdf)
+                    `,
                     "python-english": `import geopandas as gpd
 
 # Load shapefile
@@ -299,92 +229,21 @@ admin = gpd.read_file("/path/to/admin.shp")
 
 # Print shapefile info
 print(admin.head())`,
-
                     "stata-english": `* Load shapefile
 shp2dta using "/path/to/admin.shp", database(admin_db) coordinates(admin_coords)
 
 * List shapefile info
-list`},
-                "basic-plot": {
-                    "r-english": `# Load necessary libraries
-library(sf)
-library(ggplot2)
-
-# Load shapefile
-admin <- st_read("/path/to/admin.shp")
-
-# Basic plot
-ggplot() +
-  geom_sf(data = admin, fill = NA, color = "blue")`,
-                    "python-english": `import geopandas as gpd
-import matplotlib.pyplot as plt
-
-# Load shapefile
-admin = gpd.read_file("/path/to/admin.shp")
-
-# Basic plot
-admin.plot()
-plt.show()`,
-                    "stata-english": `* Load shapefile
-shp2dta using "/path/to/admin.shp", database(admin_db) coordinates(admin_coords)
-
-* Basic plot
-spmap using admin_coords, id(_ID)`
-                },
-                "admin-unit-overlay": {
-                    "r-english": `# Load necessary libraries
-library(sf)
-library(ggplot2)
-
-# Load shapefiles
-admin1 <- st_read("/path/to/admin1.shp")
-admin2 <- st_read("/path/to/admin2.shp")
-
-# Ensure both layers have the same CRS
-admin1 <- st_transform(admin1, crs = st_crs(admin2))
-
-# Plot overlays
-ggplot() +
-  geom_sf(data = admin1, fill = NA, color = "blue") +
-  geom_sf(data = admin2, fill = NA, color = "red")`,
-                    "python-english": `import geopandas as gpd
-import matplotlib.pyplot as plt
-
-# Load shapefiles
-admin1 = gpd.read_file("/path/to/admin1.shp")
-admin2 = gpd.read_file("/path/to/admin2.shp")
-
-# Ensure both layers have the same CRS
-admin1 = admin1.to_crs(admin2.crs)
-
-# Plot overlays
-fig, ax = plt.subplots()
-admin1.plot(ax=ax, edgecolor='blue')
-admin2.plot(ax=ax, edgecolor='red')
-plt.title("Overlay of Admin Units")
-plt.show()`,
-                    "stata-english": `* Load shapefiles
-shp2dta using "/path/to/admin1.shp", database(admin1_db) coordinates(admin1_coords)
-shp2dta using "/path/to/admin2.shp", database(admin2_db) coordinates(admin2_coords)
-
-* Merge shapefiles
-drop _all
-use admin1_db, clear
-append using admin2_db
-
-* Plot overlays
-spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolor(red ..)`
-                }
+list`}
             };
 
             const selectedCode = codeSnippets[section]?.[language.toLowerCase().replace(' ', '-')];
             const codeDisplay = document.querySelector('.full-code');
             if (selectedCode) {
                 codeDisplay.innerText = selectedCode;
-                codeDisplay.style.display = 'block';
+                codeDisplay.parentElement.style.display = 'block';
             } else {
                 codeDisplay.innerText = 'No code available.';
-                codeDisplay.style.display = 'block';
+                codeDisplay.parentElement.style.display = 'block';
             }
 
             // Update active button styling
@@ -393,6 +252,13 @@ spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolo
             const activeButton = document.querySelector(`#${language.toLowerCase().replace(' ', '-')}-btn`);
             if (activeButton) {
                 activeButton.classList.add('active');
+            }
+
+            // Hide other sections
+            document.querySelectorAll('.image-section').forEach(section => section.style.display = 'none');
+            const currentImageSection = document.getElementById(`${section}-image-section`);
+            if (currentImageSection) {
+                currentImageSection.style.display = 'block';
             }
         }
 
@@ -469,54 +335,6 @@ spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolo
                 <h3>Shapefile Info Image</h3>
                 <div class="sample-image">
                     <img src="https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/16df021948e18e142e103ee7e9c78ff8311005ef/overlay%20final3.png" alt="Shapefile Info Image">
-                </div>
-            </div>
-            <div id="basic-plot-image-section" class="image-section" style="display: none;">
-                <h3>Basic Plot Image</h3>
-                <div class="sample-image">
-                    <img src="https://example.com/basic-plot.png" alt="Basic Plot Image">
-                </div>
-            </div>
-            <div id="admin-unit-overlay-image-section" class="image-section" style="display: none;">
-                <h3>Admin Unit Overlay Image</h3>
-                <div class="sample-image">
-                    <img src="https://example.com/admin-unit-overlay.png" alt="Admin Unit Overlay Image">
-                </div>
-            </div>
-            <div id="shapefile-link-image-section" class="image-section" style="display: none;">
-                <h3>Link Shapefile with Excel Image</h3>
-                <div class="sample-image">
-                    <img src="https://example.com/shapefile-link.png" alt="Link Shapefile with Excel Image">
-                </div>
-            </div>
-            <div id="plot-map-numeric-image-section" class="image-section" style="display: none;">
-                <h3>Map Using Numeric Variable Image</h3>
-                <div class="sample-image">
-                    <img src="https://example.com/plot-map-numeric.png" alt="Map Using Numeric Variable Image">
-                </div>
-            </div>
-            <div id="plot-map-categorial-image-section" class="image-section" style="display: none;">
-                <h3>Map Using Categorical Variable Image</h3>
-                <div class="sample-image">
-                    <img src="https://example.com/plot-map-categorial.png" alt="Map Using Categorical Variable Image">
-                </div>
-            </div>
-            <div id="plot-map-manual-image-section" class="image-section" style="display: none;">
-                <h3>Map Using Manual Coloring Image</h3>
-                <div class="sample-image">
-                    <img src="https://example.com/plot-map-manual.png" alt="Map Using Manual Coloring Image">
-                </div>
-            </div>
-            <div id="health-info-image-section" class="image-section" style="display: none;">
-                <h3>Health Info Image</h3>
-                <div class="sample-image">
-                    <img src="https://example.com/health-info.png" alt="Health Info Image">
-                </div>
-            </div>
-            <div id="routine-case-data-image-section" class="image-section" style="display: none;">
-                <h3>Routine Case Data Image</h3>
-                <div class="sample-image">
-                    <img src="https://example.com/routine-case-data.png" alt="Routine Case Data Image">
                 </div>
             </div>
         </div>
