@@ -127,6 +127,7 @@
             overflow: auto;
             margin-top: 10px;
             color: #000;
+            text-align: left; /* Left alignment for code */
         }
         .sample-image {
             display: flex;
@@ -202,9 +203,8 @@
             window.location.hash = `/${section}/${language.toLowerCase().replace(' ', '-')}`;
             
             const codeSnippets = {
-                "shapefile-info": {
-                    "r-english": {
-                        code: `# Step 1: Install necessary libraries
+                "r-english": {
+                    code: `# Step 1: Install necessary libraries
 install.packages("sf")
 
 # Step 2: Import necessary libraries
@@ -221,32 +221,69 @@ st_crs(gdf) <- 4326
 
 # Step 6: View the first few rows of the sf object
 print(gdf)`,
-                        image: "https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/16df021948e18e142e103ee7e9c78ff8311005ef/overlay%20final3.png"
-                    },
-                    "python-english": {
-                        code: `import geopandas as gpd
+                    image: "https://example.com/r-english-image.png"
+                },
+                "r-french": {
+                    code: `# Étape 1 : Installer les bibliothèques nécessaires
+install.packages("sf")
+
+# Étape 2 : Importer les bibliothèques nécessaires
+library(sf)
+
+# Étape 3 : Définir le chemin vers le fichier shapefile
+shapefile_path <- "./path/to/shapefile.shp"
+
+# Étape 4 : Charger les données shapefile dans un objet sf
+gdf <- st_read(shapefile_path)
+
+# Étape 5 : Définir le système de référence des coordonnées (CRS)
+st_crs(gdf) <- 4326
+
+# Étape 6 : Afficher les premières lignes de l'objet sf
+print(gdf)`,
+                    image: "https://example.com/r-french-image.png"
+                },
+                "python-english": {
+                    code: `import geopandas as gpd
 
 # Load shapefile
 admin = gpd.read_file("/path/to/admin.shp")
 
 # Print shapefile info
 print(admin.head())`,
-                        image: "https://example.com/python-shapefile-info.png"
-                    },
-                    "stata-english": {
-                        code: `* Load shapefile
+                    image: "https://example.com/python-english-image.png"
+                },
+                "python-french": {
+                    code: `import geopandas as gpd
+
+# Charger le shapefile
+admin = gpd.read_file("/chemin/vers/admin.shp")
+
+# Afficher les informations du shapefile
+print(admin.head())`,
+                    image: "https://example.com/python-french-image.png"
+                },
+                "stata-english": {
+                    code: `* Load shapefile
 shp2dta using "/path/to/admin.shp", database(admin_db) coordinates(admin_coords)
 
 * List shapefile info
 list`,
-                        image: "https://example.com/stata-shapefile-info.png"
-                    }
+                    image: "https://example.com/stata-english-image.png"
+                },
+                "stata-french": {
+                    code: `* Charger le shapefile
+shp2dta using "/chemin/vers/admin.shp", database(admin_db) coordinates(admin_coords)
+
+* Lister les informations du shapefile
+list`,
+                    image: "https://example.com/stata-french-image.png"
                 }
             };
 
-            const selectedCode = codeSnippets[section]?.[language.toLowerCase().replace(' ', '-')];
+            const selectedCode = codeSnippets[language.toLowerCase().replace(' ', '-')];
             const codeDisplay = document.querySelector('.full-code');
-            const imageDisplay = document.querySelector(`#${section}-image-section .sample-image img`);
+            const imageDisplay = document.querySelector('.sample-image img');
             if (selectedCode) {
                 codeDisplay.innerText = selectedCode.code;
                 codeDisplay.parentElement.style.display = 'block';
@@ -335,10 +372,10 @@ list`,
                 </div>
                 <pre class="full-code" style="background-color: #ffffff; color: #000;">No code selected.</pre>
             </div>
-            <div id="shapefile-info-image-section" class="image-section" style="display: none;">
-                <h3>Shapefile Info Image</h3>
+            <div class="image-section" style="display: none;">
+                <h3>Image</h3>
                 <div class="sample-image">
-                    <img src="" alt="Shapefile Info Image">
+                    <img src="" alt="Sample Image">
                 </div>
             </div>
         </div>
