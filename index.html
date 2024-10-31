@@ -1,5 +1,4 @@
-
-                <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -24,8 +23,6 @@
             flex-direction: column;
             gap: 20px;
             overflow-y: auto;
-            position: fixed; /* Fix the sidebar in place */
-            height: 100%;
             scrollbar-width: none; /* Hide scrollbar for Firefox */
         }
         .sidebar::-webkit-scrollbar {
@@ -78,7 +75,6 @@
             display: flex;
             flex-direction: column;
             padding: 20px;
-            margin-left: 270px; /* Account for fixed sidebar width */
             overflow-y: auto;
             scrollbar-width: none; /* Hide scrollbar for Firefox */
         }
@@ -109,7 +105,6 @@
         .main-content {
             display: flex;
             height: calc(100% - 100px);
-            gap: 20px;
         }
         .code-section, .image-section {
             flex: 1;
@@ -119,9 +114,8 @@
             overflow: auto;
             margin: 10px;
             display: none; /* Hide content sections initially */
-            max-width: 45%;
         }
-        .code-header {
+        .code-header, .image-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -142,11 +136,12 @@
             border: 2px solid #FF6347;
             border-radius: 10px;
             padding: 10px;
+            height: calc(100% - 40px);
         }
         .sample-image img {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: cover;
             border-radius: 10px;
         }
         .copy-btn {
@@ -209,9 +204,8 @@
             window.location.hash = `/${section}/${language.toLowerCase().replace(' ', '-')}`;
             
             const codeSnippets = {
-                "shapefile-info": {
-                    "r-english": {
-                        code: `# Step 1: Install necessary libraries
+                "r-english": {
+                    code: `# Step 1: Install necessary libraries
 install.packages("sf")
 
 # Step 2: Import necessary libraries
@@ -228,47 +222,67 @@ st_crs(gdf) <- 4326
 
 # Step 6: View the first few rows of the sf object
 print(gdf)`,
-                        image: "https://example.com/r-english-image.png"
-                    },
-                    "python-english": {
-                        code: `import geopandas as gpd
+                    image: "https://example.com/r-english-image.png"
+                },
+                "r-french": {
+                    code: `# Étape 1 : Installer les bibliothèques nécessaires
+install.packages("sf")
+
+# Étape 2 : Importer les bibliothèques nécessaires
+library(sf)
+
+# Étape 3 : Définir le chemin vers le fichier shapefile
+shapefile_path <- "./path/to/shapefile.shp"
+
+# Étape 4 : Charger les données shapefile dans un objet sf
+gdf <- st_read(shapefile_path)
+
+# Étape 5 : Définir le système de référence des coordonnées (CRS)
+st_crs(gdf) <- 4326
+
+# Étape 6 : Afficher les premières lignes de l'objet sf
+print(gdf)`,
+                    image: "https://example.com/r-french-image.png"
+                },
+                "python-english": {
+                    code: `import geopandas as gpd
 
 # Load shapefile
 admin = gpd.read_file("/path/to/admin.shp")
 
 # Print shapefile info
 print(admin.head())`,
-                        image: "https://example.com/python-english-image.png"
-                    },
-                    "stata-english": {
-                        code: `* Load shapefile
+                    image: "https://example.com/python-english-image.png"
+                },
+                "python-french": {
+                    code: `import geopandas as gpd
+
+# Charger le shapefile
+admin = gpd.read_file("/chemin/vers/admin.shp")
+
+# Afficher les informations du shapefile
+print(admin.head())`,
+                    image: "https://example.com/python-french-image.png"
+                },
+                "stata-english": {
+                    code: `* Load shapefile
 shp2dta using "/path/to/admin.shp", database(admin_db) coordinates(admin_coords)
 
 * List shapefile info
 list`,
-                        image: "https://example.com/stata-english-image.png"
-                    }
+                    image: "https://example.com/stata-english-image.png"
                 },
-                "basic-plot": {
-                    "r-english": {
-                        code: `# Step 1: Install necessary libraries
-install.packages("ggplot2")
+                "stata-french": {
+                    code: `* Charger le shapefile
+shp2dta using "/chemin/vers/admin.shp", database(admin_db) coordinates(admin_coords)
 
-# Step 2: Import necessary libraries
-library(ggplot2)
-
-# Step 3: Load shapefile data into an sf object
-gdf <- st_read("./path/to/shapefile.shp")
-
-# Step 4: Plot the shapefile
-ggplot() + geom_sf(data = gdf)`,
-                        image: "https://example.com/basic-plot-image.png"
-                    }
+* Lister les informations du shapefile
+list`,
+                    image: "https://example.com/stata-french-image.png"
                 }
-                // Add similar entries for other sections here
             };
 
-            const selectedCode = codeSnippets[section]?.[language.toLowerCase().replace(' ', '-')];
+            const selectedCode = codeSnippets[language.toLowerCase().replace(' ', '-')];
             const codeDisplay = document.querySelector('.full-code');
             const imageDisplay = document.querySelector('.sample-image img');
             if (selectedCode) {
@@ -309,22 +323,44 @@ ggplot() + geom_sf(data = gdf)`,
     <div class="sidebar">
         <h2>Code Library</h2>
         <ul>
-            <li onclick="selectSidebarItem(this, 'shapefile-info')">Shapefile Info</li>
-            <li onclick="selectSidebarItem(this, 'basic-plot')">Basic Plot</li>
-            <li onclick="selectSidebarItem(this, 'admin-unit-overlay')">Admin Unit Overlay</li>
-            <li onclick="selectSidebarItem(this, 'shapefile-link')">Link shapefile with excel</li>
-            <li onclick="selectSidebarItem(this, 'plot-map-numeric')">Map using numeric variable</li>
-            <li onclick="selectSidebarItem(this, 'plot-map-categorial')">Map using categorical variable</li>
-            <li onclick="selectSidebarItem(this, 'plot-map-manual')">Map using manual coloring</li>
-            <li onclick="selectSidebarItem(this, 'health-info')">Health Facilities Info</li>
-            <li onclick="selectSidebarItem(this, 'routine-case-data')">Routine Case Data</li>
+            <li>
+                Shapefiles
+                <ul class="dropdown-content">
+                    <li onclick="selectSidebarItem(this, 'shapefile-info')">Shapefile Info</li>
+                    <li onclick="selectSidebarItem(this, 'basic-plot')">Basic Plot</li>
+                    <li onclick="selectSidebarItem(this, 'admin-unit-overlay')">Admin Unit Overlay</li>
+                    <li onclick="selectSidebarItem(this, 'shapefile-link')">Link shapefile with excel</li>
+                    <li onclick="selectSidebarItem(this, 'plot-map-numeric')">Map using numeric variable</li>
+                    <li onclick="selectSidebarItem(this, 'plot-map-categorial')">Map using categorical variable</li>
+                    <li onclick="selectSidebarItem(this, 'plot-map-manual')">Map using manual coloring</li>
+                </ul>
+            </li>
+            <li>
+                A.2 Health Facilities
+                <ul class="dropdown-content">
+                    <li onclick="selectSidebarItem(this, 'health-info')">R</li>
+                    <li onclick="selectSidebarItem(this, 'health-info')">Python</li>
+                    <li onclick="selectSidebarItem(this, 'health-info')">Stata</li>
+                </ul>
+            </li>
+            <li>
+                A.3 Routine Case Data from DHIS2
+                <ul class="dropdown-content">
+                    <li onclick="selectSidebarItem(this, 'routine-case-data')">R</li>
+                    <li onclick="selectSidebarItem(this, 'routine-case-data')">Python</li>
+                    <li onclick="selectSidebarItem(this, 'routine-case-data')">Stata</li>
+                </ul>
+            </li>
         </ul>
     </div>
     <div class="content">
         <div class="section-buttons">
             <button onclick="showCode('R English')" id="r-english-btn">R English</button>
+            <button onclick="showCode('R French')" id="r-french-btn">R French</button>
             <button onclick="showCode('Python English')" id="python-english-btn">Python English</button>
+            <button onclick="showCode('Python French')" id="python-french-btn">Python French</button>
             <button onclick="showCode('Stata English')" id="stata-english-btn">Stata English</button>
+            <button onclick="showCode('Stata French')" id="stata-french-btn">Stata French</button>
         </div>
         <div class="topic-intro" style="background-color: #ffffff; color: #000; padding: 20px; border-radius: 10px;">
             Welcome to the Code Library UI. Here you will find various examples of code snippets related to geospatial analysis, data visualization, and more.
@@ -332,13 +368,15 @@ ggplot() + geom_sf(data = gdf)`,
         <div class="main-content">
             <div class="code-section">
                 <div class="code-header">
-                    <h3 id="code-title">Code</h3>
+                    <h3>Code</h3>
                     <button class="copy-btn" onclick="copyCode('code-section')">Copy</button>
                 </div>
                 <pre class="full-code" style="background-color: #ffffff; color: #000;">No code selected.</pre>
             </div>
             <div class="image-section" style="display: none;">
-                <h3 id="image-title">Image</h3>
+                <div class="image-header">
+                    <h3>Image</h3>
+                </div>
                 <div class="sample-image">
                     <img src="" alt="Sample Image">
                 </div>
@@ -347,4 +385,3 @@ ggplot() + geom_sf(data = gdf)`,
     </div>
 </body>
 </html>
-                         
