@@ -197,6 +197,9 @@
             topicIntro.innerText = topicIntros[section] || "Welcome to the Code Library UI. Here you will find various examples of code snippets related to geospatial analysis, data visualization, and more.";
             // Hide content sections initially
             document.querySelectorAll('.code-section, .image-section').forEach(section => section.style.display = 'none');
+            // Set default titles for code and image sections
+            document.getElementById('code-title').innerText = `Code for ${section}`;
+            document.getElementById('image-title').innerText = `Image for ${section}`;
         }
 
         function showCode(language) {
@@ -262,6 +265,26 @@ gdf <- st_read("./path/to/shapefile.shp")
 # Step 4: Plot the shapefile
 ggplot() + geom_sf(data = gdf)`,
                         image: "https://example.com/basic-plot-image.png"
+                    },
+                    "python-english": {
+                        code: `import geopandas as gpd
+import matplotlib.pyplot as plt
+
+# Load shapefile
+gdf = gpd.read_file("/path/to/shapefile.shp")
+
+# Plot the shapefile
+gdf.plot()
+plt.show()`,
+                        image: "https://example.com/basic-plot-python-image.png"
+                    },
+                    "stata-english": {
+                        code: `* Load shapefile
+shp2dta using "/path/to/admin.shp", database(admin_db) coordinates(admin_coords)
+
+* Plot shapefile
+spmap using admin_coords, id(_ID)`,
+                        image: "https://example.com/basic-plot-stata-image.png"
                     }
                 }
                 // Add similar entries for other sections here
