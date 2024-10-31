@@ -203,44 +203,55 @@
             
             const codeSnippets = {
                 "shapefile-info": {
-                    "r-english": `
-                        # Step 1: Install necessary libraries
-                        install.packages("sf")
+                    "r-english": {
+                        code: `# Step 1: Install necessary libraries
+install.packages("sf")
 
-                        # Step 2: Import necessary libraries
-                        library(sf)
+# Step 2: Import necessary libraries
+library(sf)
 
-                        # Step 3: Define the path to the shapefile
-                        shapefile_path <- "./path/to/shapefile.shp"
+# Step 3: Define the path to the shapefile
+shapefile_path <- "./path/to/shapefile.shp"
 
-                        # Step 4: Load shapefile data into an sf object
-                        gdf <- st_read(shapefile_path)
+# Step 4: Load shapefile data into an sf object
+gdf <- st_read(shapefile_path)
 
-                        # Step 5: Set the Coordinate Reference System (CRS)
-                        st_crs(gdf) <- 4326
+# Step 5: Set the Coordinate Reference System (CRS)
+st_crs(gdf) <- 4326
 
-                        # Step 6: View the first few rows of the sf object
-                        print(gdf)
-                    `,
-                    "python-english": `import geopandas as gpd
+# Step 6: View the first few rows of the sf object
+print(gdf)`,
+                        image: "https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/16df021948e18e142e103ee7e9c78ff8311005ef/overlay%20final3.png"
+                    },
+                    "python-english": {
+                        code: `import geopandas as gpd
 
 # Load shapefile
 admin = gpd.read_file("/path/to/admin.shp")
 
 # Print shapefile info
 print(admin.head())`,
-                    "stata-english": `* Load shapefile
+                        image: "https://example.com/python-shapefile-info.png"
+                    },
+                    "stata-english": {
+                        code: `* Load shapefile
 shp2dta using "/path/to/admin.shp", database(admin_db) coordinates(admin_coords)
 
 * List shapefile info
-list`}
+list`,
+                        image: "https://example.com/stata-shapefile-info.png"
+                    }
+                }
             };
 
             const selectedCode = codeSnippets[section]?.[language.toLowerCase().replace(' ', '-')];
             const codeDisplay = document.querySelector('.full-code');
+            const imageDisplay = document.querySelector(`#${section}-image-section .sample-image img`);
             if (selectedCode) {
-                codeDisplay.innerText = selectedCode;
+                codeDisplay.innerText = selectedCode.code;
                 codeDisplay.parentElement.style.display = 'block';
+                imageDisplay.src = selectedCode.image;
+                imageDisplay.parentElement.parentElement.style.display = 'block';
             } else {
                 codeDisplay.innerText = 'No code available.';
                 codeDisplay.parentElement.style.display = 'block';
@@ -252,13 +263,6 @@ list`}
             const activeButton = document.querySelector(`#${language.toLowerCase().replace(' ', '-')}-btn`);
             if (activeButton) {
                 activeButton.classList.add('active');
-            }
-
-            // Hide other sections
-            document.querySelectorAll('.image-section').forEach(section => section.style.display = 'none');
-            const currentImageSection = document.getElementById(`${section}-image-section`);
-            if (currentImageSection) {
-                currentImageSection.style.display = 'block';
             }
         }
 
@@ -334,7 +338,7 @@ list`}
             <div id="shapefile-info-image-section" class="image-section" style="display: none;">
                 <h3>Shapefile Info Image</h3>
                 <div class="sample-image">
-                    <img src="https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/16df021948e18e142e103ee7e9c78ff8311005ef/overlay%20final3.png" alt="Shapefile Info Image">
+                    <img src="" alt="Shapefile Info Image">
                 </div>
             </div>
         </div>
