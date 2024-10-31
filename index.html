@@ -170,42 +170,32 @@
         }
     </style>
     <script>
+        let selectedSection = "";
+        let selectedLanguage = "";
+
         function selectSidebarItem(item, section) {
             // Highlight the selected sidebar item
             const sidebarItems = document.querySelectorAll('.sidebar li');
             sidebarItems.forEach(el => el.classList.remove('active'));
             item.classList.add('active');
-            // Update URL hash
-            window.location.hash = `/${section}`;
-            // Display topic intro for the selected submenu
-            const topicIntro = document.querySelector('.topic-intro');
-            const topicIntros = {
-                "shapefile-info": "Learn how to extract basic information from shapefiles using different programming languages.",
-                "basic-plot": "Understand how to create a basic plot of geographic boundaries from shapefiles.",
-                "admin-unit-overlay": "Overlay multiple administrative units to compare spatial relationships.",
-                "shapefile-link": "Link shapefiles with Excel data for enhanced geospatial analysis.",
-                "plot-map-numeric": "Create maps based on numeric variables, allowing you to visualize quantitative data.",
-                "plot-map-categorial": "Create maps based on categorical variables, useful for classification analysis.",
-                "plot-map-manual": "Use manual coloring techniques to enhance visual interpretations of maps.",
-                "health-info": "Health Facilities information related to mapping and analysis in R, Python, and Stata.",
-                "routine-case-data": "Routine Case Data from DHIS2 analysis using R, Python, and Stata."
-            };
-            topicIntro.innerText = topicIntros[section] || "Welcome to the Code Library UI. Here you will find various examples of code snippets related to geospatial analysis, data visualization, and more.";
-            // Hide content sections initially
-            document.querySelectorAll('.code-section, .image-section').forEach(section => section.style.display = 'none');
+            selectedSection = section;
+            updateContent();
         }
 
         function showCode(language) {
-            const section = window.location.hash.split('/')[1];
-            if (!section) {
+            if (!selectedSection) {
                 alert('Please select a section from the sidebar first.');
                 return;
             }
-            window.location.hash = `/${section}/${language.toLowerCase().replace(' ', '-')}`;
-            
+            selectedLanguage = language;
+            updateContent();
+        }
+
+        function updateContent() {
             const codeSnippets = {
-                "r-english": {
-                    code: `# Step 1: Install necessary libraries
+                "shapefile-info": {
+                    "r-english": {
+                        code: `# Step 1: Install necessary libraries
 install.packages("sf")
 
 # Step 2: Import necessary libraries
@@ -222,86 +212,69 @@ st_crs(gdf) <- 4326
 
 # Step 6: View the first few rows of the sf object
 print(gdf)`,
-                    image: "https://example.com/r-english-image.png"
-                },
-                "r-french": {
-                    code: `# Étape 1 : Installer les bibliothèques nécessaires
-install.packages("sf")
-
-# Étape 2 : Importer les bibliothèques nécessaires
-library(sf)
-
-# Étape 3 : Définir le chemin vers le fichier shapefile
-shapefile_path <- "./path/to/shapefile.shp"
-
-# Étape 4 : Charger les données shapefile dans un objet sf
-gdf <- st_read(shapefile_path)
-
-# Étape 5 : Définir le système de référence des coordonnées (CRS)
-st_crs(gdf) <- 4326
-
-# Étape 6 : Afficher les premières lignes de l'objet sf
-print(gdf)`,
-                    image: "https://example.com/r-french-image.png"
-                },
-                "python-english": {
-                    code: `import geopandas as gpd
+                        image: "https://example.com/r-english-image.png"
+                    },
+                    "python-english": {
+                        code: `import geopandas as gpd
 
 # Load shapefile
 admin = gpd.read_file("/path/to/admin.shp")
 
 # Print shapefile info
 print(admin.head())`,
-                    image: "https://example.com/python-english-image.png"
+                        image: "https://example.com/python-english-image.png"
+                    }
                 },
-                "python-french": {
-                    code: `import geopandas as gpd
+                "basic-plot": {
+                    "r-english": {
+                        code: `# Load necessary libraries
+library(sf)
+library(ggplot2)
 
-# Charger le shapefile
-admin = gpd.read_file("/chemin/vers/admin.shp")
+# Load shapefile
+gdf <- st_read("./path/to/shapefile.shp")
 
-# Afficher les informations du shapefile
-print(admin.head())`,
-                    image: "https://example.com/python-french-image.png"
-                },
-                "stata-english": {
-                    code: `* Load shapefile
-shp2dta using "/path/to/admin.shp", database(admin_db) coordinates(admin_coords)
+# Plot basic map
+ggplot(data = gdf) +
+  geom_sf()`,
+                        image: "https://example.com/r-basic-plot.png"
+                    },
+                    "python-english": {
+                        code: `import geopandas as gpd
+import matplotlib.pyplot as plt
 
-* List shapefile info
-list`,
-                    image: "https://example.com/stata-english-image.png"
-                },
-                "stata-french": {
-                    code: `* Charger le shapefile
-shp2dta using "/chemin/vers/admin.shp", database(admin_db) coordinates(admin_coords)
+# Load shapefile
+gdf = gpd.read_file("./path/to/shapefile.shp")
 
-* Lister les informations du shapefile
-list`,
-                    image: "https://example.com/stata-french-image.png"
+# Plot basic map
+gdf.plot()
+plt.show()`,
+                        image: "https://example.com/python-basic-plot.png"
+                    }
                 }
+                // Add more sections and languages here
             };
 
-            const selectedCode = codeSnippets[language.toLowerCase().replace(' ', '-')];
             const codeDisplay = document.querySelector('.full-code');
             const imageDisplay = document.querySelector('.sample-image img');
             const codeSection = document.querySelector('.code-section');
             const imageSection = document.querySelector('.image-section');
-            
-            if (selectedCode) {
-                codeDisplay.innerText = selectedCode.code;
+
+            if (selectedSection && selectedLanguage && codeSnippets[selectedSection] && codeSnippets[selectedSection][selectedLanguage.toLowerCase().replace(' ', '-')]) {
+                const selectedContent = codeSnippets[selectedSection][selectedLanguage.toLowerCase().replace(' ', '-')];
+                codeDisplay.innerText = selectedContent.code;
                 codeSection.style.display = 'block';
-                imageDisplay.src = selectedCode.image;
+                imageDisplay.src = selectedContent.image;
                 imageSection.style.display = 'block';
             } else {
-                codeDisplay.innerText = 'No code available.';
-                codeSection.style.display = 'block';
+                codeSection.style.display = 'none';
+                imageSection.style.display = 'none';
             }
 
             // Update active button styling
             const buttons = document.querySelectorAll('.section-buttons button');
             buttons.forEach(button => button.classList.remove('active'));
-            const activeButton = document.querySelector(`#${language.toLowerCase().replace(' ', '-')}-btn`);
+            const activeButton = document.querySelector(`#${selectedLanguage.toLowerCase().replace(' ', '-')}-btn`);
             if (activeButton) {
                 activeButton.classList.add('active');
             }
@@ -340,11 +313,7 @@ list`,
     <div class="content">
         <div class="section-buttons">
             <button onclick="showCode('R English')" id="r-english-btn">R English</button>
-            <button onclick="showCode('R French')" id="r-french-btn">R French</button>
             <button onclick="showCode('Python English')" id="python-english-btn">Python English</button>
-            <button onclick="showCode('Python French')" id="python-french-btn">Python French</button>
-            <button onclick="showCode('Stata English')" id="stata-english-btn">Stata English</button>
-            <button onclick="showCode('Stata French')" id="stata-french-btn">Stata French</button>
         </div>
         <div class="topic-intro" style="background-color: #ffffff; color: #000; padding: 20px; border-radius: 10px;">
             Welcome to the Code Library UI. Here you will find various examples of code snippets related to geospatial analysis, data visualization, and more.
@@ -356,3 +325,16 @@ list`,
                     <button class="copy-btn" onclick="copyCode('code-section')">Copy</button>
                 </div>
                 <pre class="full-code" style="background-color: #ffffff; color: #000;">No code selected.</pre>
+            </div>
+            <div class="image-section">
+                <div class="image-header">
+                    <h3>Image</h3>
+                </div>
+                <div class="sample-image">
+                    <img src="" alt="Sample Image">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
