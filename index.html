@@ -16,7 +16,7 @@
             overflow: hidden;
         }
         .sidebar {
-            width: 250px;   /* Fixed width for sidebar */
+            min-width: 250px;
             background-color: #28293d;
             padding: 20px;
             display: flex;
@@ -285,14 +285,17 @@ list`,
             const selectedCode = codeSnippets[language.toLowerCase().replace(' ', '-')];
             const codeDisplay = document.querySelector('.full-code');
             const imageDisplay = document.querySelector('.sample-image img');
+            const codeSection = document.querySelector('.code-section');
+            const imageSection = document.querySelector('.image-section');
+            
             if (selectedCode) {
                 codeDisplay.innerText = selectedCode.code;
-                codeDisplay.parentElement.style.display = 'block';
+                codeSection.style.display = 'block';
                 imageDisplay.src = selectedCode.image;
-                imageDisplay.parentElement.parentElement.style.display = 'block';
+                imageSection.style.display = 'block';
             } else {
                 codeDisplay.innerText = 'No code available.';
-                codeDisplay.parentElement.style.display = 'block';
+                codeSection.style.display = 'block';
             }
 
             // Update active button styling
@@ -323,34 +326,15 @@ list`,
     <div class="sidebar">
         <h2>Code Library</h2>
         <ul>
-            <li>
-                Shapefiles
-                <ul class="dropdown-content">
-                    <li onclick="selectSidebarItem(this, 'shapefile-info')">Shapefile Info</li>
-                    <li onclick="selectSidebarItem(this, 'basic-plot')">Basic Plot</li>
-                    <li onclick="selectSidebarItem(this, 'admin-unit-overlay')">Admin Unit Overlay</li>
-                    <li onclick="selectSidebarItem(this, 'shapefile-link')">Link shapefile with excel</li>
-                    <li onclick="selectSidebarItem(this, 'plot-map-numeric')">Map using numeric variable</li>
-                    <li onclick="selectSidebarItem(this, 'plot-map-categorial')">Map using categorical variable</li>
-                    <li onclick="selectSidebarItem(this, 'plot-map-manual')">Map using manual coloring</li>
-                </ul>
-            </li>
-            <li>
-                A.2 Health Facilities
-                <ul class="dropdown-content">
-                    <li onclick="selectSidebarItem(this, 'health-info')">R</li>
-                    <li onclick="selectSidebarItem(this, 'health-info')">Python</li>
-                    <li onclick="selectSidebarItem(this, 'health-info')">Stata</li>
-                </ul>
-            </li>
-            <li>
-                A.3 Routine Case Data from DHIS2
-                <ul class="dropdown-content">
-                    <li onclick="selectSidebarItem(this, 'routine-case-data')">R</li>
-                    <li onclick="selectSidebarItem(this, 'routine-case-data')">Python</li>
-                    <li onclick="selectSidebarItem(this, 'routine-case-data')">Stata</li>
-                </ul>
-            </li>
+            <li onclick="selectSidebarItem(this, 'shapefile-info')">Shapefile Info</li>
+            <li onclick="selectSidebarItem(this, 'basic-plot')">Basic Plot</li>
+            <li onclick="selectSidebarItem(this, 'admin-unit-overlay')">Admin Unit Overlay</li>
+            <li onclick="selectSidebarItem(this, 'shapefile-link')">Link shapefile with excel</li>
+            <li onclick="selectSidebarItem(this, 'plot-map-numeric')">Map using numeric variable</li>
+            <li onclick="selectSidebarItem(this, 'plot-map-categorial')">Map using categorical variable</li>
+            <li onclick="selectSidebarItem(this, 'plot-map-manual')">Map using manual coloring</li>
+            <li onclick="selectSidebarItem(this, 'health-info')">Health Facilities</li>
+            <li onclick="selectSidebarItem(this, 'routine-case-data')">Routine Case Data from DHIS2</li>
         </ul>
     </div>
     <div class="content">
@@ -372,16 +356,3 @@ list`,
                     <button class="copy-btn" onclick="copyCode('code-section')">Copy</button>
                 </div>
                 <pre class="full-code" style="background-color: #ffffff; color: #000;">No code selected.</pre>
-            </div>
-            <div class="image-section" style="display: none;">
-                <div class="image-header">
-                    <h3>Image</h3>
-                </div>
-                <div class="sample-image">
-                    <img src="" alt="Sample Image">
-                </div>
-            </div>
-        </div>
-    </div>
-</body>
-</html>
