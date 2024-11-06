@@ -23,7 +23,6 @@
             flex-direction: column;
             gap: 20px;
             overflow-y: auto;
-            scrollbar-width: none;
         }
         .sidebar h2 {
             color: #47B5FF;
@@ -63,7 +62,7 @@
             overflow-y: auto;
         }
         .section-buttons {
-            align-self: flex-end;
+            align-self: flex-start;
             margin-bottom: 20px;
         }
         .section-buttons button {
@@ -74,7 +73,6 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
         }
         .section-buttons button.active {
             background-color: #47B5FF;
@@ -127,34 +125,60 @@
         let currentSection = '';
         let currentLanguage = '';
 
-        // Toggle dropdown on click, prevent closing when clicking inside
-        function toggleDropdown(item) {
-            item.classList.toggle('open');
-        }
+        // Load content based on the URL hash
+        window.onload = function() {
+            const currentUrl = window.location.href;
 
-        // Prevent dropdown from collapsing when clicking on a submenu item
-        function selectSidebarItem(event, item, section) {
-            event.stopPropagation();  // Prevent the click event from propagating to the parent
-            document.querySelectorAll('.sidebar li').forEach(el => el.classList.remove('active'));
-            item.classList.add('active');
+            if (currentUrl.includes('#Overview')) {
+                loadContent('overview');
+            } else if (currentUrl.includes('#shapefile-info')) {
+                loadContent('shapefile-info');
+            } else if (currentUrl.includes('#vector-analysis')) {
+                loadContent('vector-analysis');
+            } else if (currentUrl.includes('#data-cleaning')) {
+                loadContent('data-cleaning');
+            }
+        };
+
+        // Function to load content based on section
+        function loadContent(section) {
             currentSection = section;
             updateContent();
+            document.querySelectorAll('.sidebar li').forEach(el => el.classList.remove('active'));
+            document.querySelector(`#${section}-btn`).classList.add('active');
         }
 
-        function showCode(language) {
-            currentLanguage = language;
-            updateContent();
-            document.querySelectorAll('.section-buttons button').forEach(button => button.classList.remove('active'));
-            document.querySelector(`#${language.toLowerCase().replace(' ', '-')}-btn`).classList.add('active');
-        }
-
+        // Update the content based on selected section and language
         function updateContent() {
             const topicIntro = document.querySelector('.topic-intro');
             const codeDisplay = document.querySelector('.full-code');
             const sampleImage = document.querySelector('.sample-image img');
 
-            // Only show content if both section and language are selected
-            if (!currentSection || !currentLanguage) {
+            // Display overview content
+            if (currentSection === 'overview') {
+                topicIntro.innerHTML = `
+                    <h3 class="sidebar-title">Version: 3 October 2024 </h3>
+                    <h3 class="sidebar-title">Authors: Mohamed Sillah Kanu, Sammy Oppong, Jaline Gerardin </h3>
+                    <h2>Overview</h2>
+                    <h3>Motivation</h3>
+                    <p>SNT is here to stay: many NMCPs have found it useful and are continuing to embrace it and further develop it for their analytical needs. Since 2019, multiple individuals have supported the analysis portions of SNT. In most cases, individuals have built their own code in a variety of languages (Stata, R, and Python), sometimes building on others’ previous code and sometimes re-developed independently.</p>
+                    <h3>Objectives</h3>
+                    <p>We will build a code library for SNT analysis to:</p>
+                    <p>1. Improve quality and reproducibility of SNT analysis by ensuring that analysts are using similar, correct approaches.</p>
+                    <p>2. Improve efficiency of SNT analysis by minimizing duplication of effort.</p>
+                    <p>3. Promote accessibility of SNT analysis by lowering barriers to entry.</p>
+                    <h3>Target audience</h3>
+                    <p>Anyone doing this kind of work. We assume some basic knowledge of R, some understanding of the data, and a strong connection to the NMCP.</p>
+                    <h3>Scope</h3>
+                    <p>All analysis steps of SNT up to but not including mathematical modeling; some related analysis.</p>
+                `;
+                document.querySelector('.code-section').style.display = 'none';
+                document.querySelector('.image-section').style.display = 'none';
+                return;
+            }
+
+            // Display error if no section or language selected
+            if (!currentLanguage) {
                 topicIntro.innerText = 'Error: Please select both a section and a language.';
                 codeDisplay.innerText = '';
                 sampleImage.src = '';
@@ -167,6 +191,7 @@
             document.querySelector('.code-section').style.display = 'block';
             document.querySelector('.image-section').style.display = 'block';
 
+            // Example of content for other sections
             if (currentSection === 'shapefile-info' && currentLanguage === 'R English') {
                 topicIntro.innerText = 'R code to display shapefile info.';
                 codeDisplay.innerText = `
@@ -174,20 +199,6 @@ library(sf)
 admin <- st_read("/path/to/admin.shp")
 print(admin)`;
                 sampleImage.src = 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/main/shapefile-info.png';
-            } else if (currentSection === 'shapefile-info' && currentLanguage === 'Python English') {
-                topicIntro.innerText = 'Python code to display shapefile info.';
-                codeDisplay.innerText = `
-import geopandas as gpd
-admin = gpd.read_file("/path/to/admin.shp")
-print(admin.head())`;
-                sampleImage.src = 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/main/shapefile-info.png';
-            } else if (currentSection === 'vector-analysis' && currentLanguage === 'R English') {
-                topicIntro.innerText = 'R code for vector analysis.';
-                codeDisplay.innerText = `
-library(sp)
-coordinates(data) <- ~longitude+latitude
-plot(data)`;
-                sampleImage.src = 'https://via.placeholder.com/300x200.png?text=Vector+Analysis+Example';
             } else if (currentSection === 'vector-analysis' && currentLanguage === 'Python English') {
                 topicIntro.innerText = 'Python code for vector analysis.';
                 codeDisplay.innerText = `
@@ -201,13 +212,23 @@ plt.show()`;
 library(dplyr)
 clean_data <- data %>% filter(!is.na(variable))`;
                 sampleImage.src = 'https://via.placeholder.com/300x200.png?text=Data+Cleaning+Example';
-            } else if (currentSection === 'data-cleaning' && currentLanguage === 'Python English') {
-                topicIntro.innerText = 'Python code for data cleaning.';
-                codeDisplay.innerText = `
-import pandas as pd
-clean_data = data.dropna(subset=['variable'])`;
-                sampleImage.src = 'https://via.placeholder.com/300x200.png?text=Data+Cleaning+Example';
             }
+        }
+
+        // Function to handle sidebar item clicks and toggle active state
+        function selectSidebarItem(event, item, section) {
+            event.stopPropagation();
+            document.querySelectorAll('.sidebar li').forEach(el => el.classList.remove('active'));
+            item.classList.add('active');
+            loadContent(section);
+        }
+
+        // Language button click handler
+        function showCode(language) {
+            currentLanguage = language;
+            updateContent();
+            document.querySelectorAll('.section-buttons button').forEach(button => button.classList.remove('active'));
+            document.querySelector(`#${language.toLowerCase().replace(' ', '-')}-btn`).classList.add('active');
         }
     </script>
 </head>
@@ -215,28 +236,13 @@ clean_data = data.dropna(subset=['variable'])`;
     <div class="sidebar">
         <h2>Code Library</h2>
         <ul>
-            <li onclick="toggleDropdown(this)">
-                A.1 Shapefiles
+            <li id="overview-btn" onclick="loadContent('overview')">Overview</li>
+            <li class="dropdown" onclick="this.classList.toggle('open')">
+                <span>Shapefile Info</span>
                 <ul class="dropdown-content">
                     <li onclick="selectSidebarItem(event, this, 'shapefile-info')">Shapefile Info</li>
-                    <li onclick="selectSidebarItem(event, this, 'shapefile-merge')">Shapefile Merge</li>
-                    <li onclick="selectSidebarItem(event, this, 'shapefile-conversion')">Shapefile Conversion</li>
-                </ul>
-            </li>
-            <li onclick="toggleDropdown(this)">
-                A.2 Vector Analysis
-                <ul class="dropdown-content">
                     <li onclick="selectSidebarItem(event, this, 'vector-analysis')">Vector Analysis</li>
-                    <li onclick="selectSidebarItem(event, this, 'buffer-analysis')">Buffer Analysis</li>
-                    <li onclick="selectSidebarItem(event, this, 'overlay-analysis')">Overlay Analysis</li>
-                </ul>
-            </li>
-            <li onclick="toggleDropdown(this)">
-                A.3 Data Cleaning
-                <ul class="dropdown-content">
                     <li onclick="selectSidebarItem(event, this, 'data-cleaning')">Data Cleaning</li>
-                    <li onclick="selectSidebarItem(event, this, 'remove-duplicates')">Remove Duplicates</li>
-                    <li onclick="selectSidebarItem(event, this, 'normalize-data')">Normalize Data</li>
                 </ul>
             </li>
         </ul>
