@@ -194,8 +194,15 @@
             window.location.hash = `/${section}`;
             currentSection = section;
 
-            // Display the content based on the selection
-            showCodeContent(section);
+            // Hide all content sections
+            const allSections = document.querySelectorAll('.content-section');
+            allSections.forEach(section => section.style.display = 'none');
+
+            // Display the selected content section
+            const selectedSection = document.querySelector(`#${section}-section`);
+            if (selectedSection) {
+                selectedSection.style.display = 'block';
+            }
         }
 
         function toggleDropdown(item) {
@@ -205,7 +212,7 @@
             }
         }
 
-        function showCodeContent(section) {
+        function showCode(language, section) {
             const codeSnippets = {
                 "shapefile-info": {
                     "r-english": `# Load necessary libraries
@@ -301,69 +308,14 @@ spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolo
                 }
             };
 
-            // Get the selected code snippet (default to Python-English if available)
-            const selectedCode = codeSnippets[section]?.["python-english"];
-            const codeDisplay = document.querySelector('.full-code');
-            if (selectedCode) {
+            const codeDisplay = document.querySelector(`#${section}-code`);
+            const selectedCode = codeSnippets[section]?.[language.toLowerCase().replace(' ', '-')];
+            if (selectedCode && codeDisplay) {
                 codeDisplay.innerText = selectedCode;
-                document.querySelector('.code-section').style.display = 'block';
-                codeDisplay.style.display = 'block';
-
-                // Update sample image
-                document.querySelector('.sample-image img').src = `https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/16df021948e18e142e103ee7e9c78ff8311005ef/${section}.png`;
-                document.querySelector('.sample-image').style.display = 'block';
-
-                // Show buttons for language selection
-                document.querySelector('.section-buttons').style.display = 'block';
-            } else {
-                // Hide if no code snippet found
-                document.querySelector('.code-section').style.display = 'none';
-                document.querySelector('.sample-image').style.display = 'none';
-                document.querySelector('.section-buttons').style.display = 'none';
-            }
-        }
-
-        function showCode(language) {
-            if (!currentSection) {
-                alert('Please select a section from the sidebar first.');
-                return;
-            }
-
-            const codeSnippets = {
-                "shapefile-info": {
-                    "r-english": `# Load necessary libraries
-library(sf)
-
-# Load shapefile
-admin <- st_read("/path/to/admin.shp")
-
-# Print shapefile info
-print(admin)`,
-                    "python-english": `import geopandas as gpd
-
-# Load shapefile
-admin = gpd.read_file("/path/to/admin.shp")
-
-# Print shapefile info
-print(admin.head())`,
-                    "stata-english": `* Load shapefile
-shp2dta using "/path/to/admin.shp", database(admin_db) coordinates(admin_coords)
-
-* List shapefile info
-list`
-                }
-            };
-
-            // Get the selected code snippet
-            const selectedCode = codeSnippets[currentSection]?.[language.toLowerCase().replace(' ', '-')];
-            const codeDisplay = document.querySelector('.full-code');
-            if (selectedCode) {
-                codeDisplay.innerText = selectedCode;
-                document.querySelector('.code-section').style.display = 'block';
                 codeDisplay.style.display = 'block';
 
                 // Update active button styling
-                const buttons = document.querySelectorAll('.section-buttons button');
+                const buttons = document.querySelectorAll(`#${section}-section .section-buttons button`);
                 buttons.forEach(button => button.classList.remove('active'));
                 const activeButton = document.querySelector(`#${language.toLowerCase().replace(' ', '-')}-btn`);
                 if (activeButton) {
@@ -372,10 +324,10 @@ list`
             }
         }
 
-        function copyCode() {
-            const codeToCopy = document.querySelector('.full-code').innerText;
+        function copyCode(section) {
+            const codeToCopy = document.querySelector(`#${section}-code`).innerText;
             navigator.clipboard.writeText(codeToCopy).then(() => {
-                const button = document.querySelector('.copy-btn');
+                const button = document.querySelector(`#${section}-copy-btn`);
                 button.classList.add('active');
                 setTimeout(() => {
                     button.classList.remove('active');
@@ -416,40 +368,38 @@ list`
         </ul>
     </div>
     <div class="content">
-        <div class="topic-intro">
-            <h3 class="sidebar-title">Version: 3 October 2024</h3>
-            <h3 class="sidebar-title">Authors: Mohamed Sillah Kanu, Sammy Oppong, Jaline Gerardin</h3>
-            <h2>Overview</h2>
-            <h3>Motivation</h3>
-            <p>SNT is here to stay: many NMCPs have found it useful and are continuing to embrace it and further develop it for their analytical needs. Since 2019, multiple individuals have supported the analysis portions of SNT. In most cases, individuals have built their own code in a variety of languages (Stata, R, and Python), sometimes building on others’ previous code and sometimes re-developed independently.</p>
-            <p>As SNT matures, more quality assurance is needed such that NMCPs can be confident that the analysis they use to inform their decisions is of high quality regardless of the individual supporting analyst. The continued rollout of SNT also means that analysis can become more efficient if analysts are better able to build on each other’s work rather than tempted to reinvent what has already been developed. Lastly, SNT analysis can become much more accessible if there is a common resource available to help those with intermediate coding skills quickly access the collective knowledge of the SNT analyst community.</p>
+        <div id="shapefile-info-section" class="content-section" style="display: none;">
+            <div class="section-buttons">
+                <button onclick="showCode('R English', 'shapefile-info')" id="r-english-btn">R English</button>
+                <button onclick="showCode('Python English', 'shapefile-info')" id="python-english-btn">Python English</button>
+                <button onclick="showCode('Stata English', 'shapefile-info')" id="stata-english-btn">Stata English</button>
+                <button class="copy-btn" id="shapefile-info-copy-btn" onclick="copyCode('shapefile-info')">Copy</button>
+            </div>
+            <div class="code-section">
+                <pre id="shapefile-info-code" class="full-code">No code selected.</pre>
+            </div>
+            <div class="sample-image">
+                <img src="https://via.placeholder.com/300x200.png?text=Select+a+Code+Language" alt="Sample Image">
+            </div>
+        </div>
 
-            <h3>Objectives</h3>
-            <p>We will build a code library for SNT analysis to:</p>
-            <ul>
-                <li>Improve quality and reproducibility of SNT analysis by ensuring that analysts are using similar, correct approaches.</li>
-                <li>Improve efficiency of SNT analysis by minimizing duplication of effort.</li>
-                <li>Promote accessibility of SNT analysis by lowering barriers to entry.</li>
-            </ul>
+        <!-- Add more content sections for each sidebar item (e.g., basic-plot-section, admin-unit-overlay-section) -->
+        <div id="basic-plot-section" class="content-section" style="display: none;">
+            <div class="section-buttons">
+                <button onclick="showCode('R English', 'basic-plot')" id="r-english-btn">R English</button>
+                <button onclick="showCode('Python English', 'basic-plot')" id="python-english-btn">Python English</button>
+                <button onclick="showCode('Stata English', 'basic-plot')" id="stata-english-btn">Stata English</button>
+                <button class="copy-btn" id="basic-plot-copy-btn" onclick="copyCode('basic-plot')">Copy</button>
+            </div>
+            <div class="code-section">
+                <pre id="basic-plot-code" class="full-code">No code selected.</pre>
+            </div>
+            <div class="sample-image">
+                <img src="https://via.placeholder.com/300x200.png?text=Select+a+Code+Language" alt="Sample Image">
+            </div>
+        </div>
 
-            <h3>Target audience</h3>
-            <p>Anyone doing this kind of work. We assume some basic knowledge of R, some understanding of the data, and a strong connection to the NMCP.</p>
-
-            <h3>Scope</h3>
-            <p>All analysis steps of SNT up to but not including mathematical modeling; some related analysis.</p>
-        </div>
-        <div class="section-buttons" style="display: none;">
-            <button onclick="showCode('R English')" id="r-english-btn">R English</button>
-            <button onclick="showCode('Python English')" id="python-english-btn">Python English</button>
-            <button onclick="showCode('Stata English')" id="stata-english-btn">Stata English</button>
-            <button class="copy-btn" onclick="copyCode()">Copy</button>
-        </div>
-        <div class="code-section" style="display: none;">
-            <pre class="full-code">No code selected.</pre>
-        </div>
-        <div class="sample-image" style="display: none;">
-            <img src="https://via.placeholder.com/300x200.png?text=Select+a+Code+Language" alt="Sample Image">
-        </div>
+        <!-- Add more content sections similarly for each button in the sidebar -->
     </div>
 </body>
 
