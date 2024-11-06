@@ -104,8 +104,7 @@
         }
 
         .section-buttons {
-            align-self: flex-end;
-            margin-bottom: 20px;
+            margin-top: 20px;
         }
 
         .section-buttons button {
@@ -232,8 +231,8 @@ list`
                 }
             };
 
-            // Get the selected code snippet
-            const selectedCode = codeSnippets[section]?.["python-english"]; // Default to Python-English if available
+            // Get the selected code snippet (default to Python-English if available)
+            const selectedCode = codeSnippets[section]?.["python-english"];
             const codeDisplay = document.querySelector('.full-code');
             if (selectedCode) {
                 codeDisplay.innerText = selectedCode;
@@ -243,9 +242,14 @@ list`
                 // Update sample image
                 document.querySelector('.sample-image img').src = `https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/16df021948e18e142e103ee7e9c78ff8311005ef/${section}.png`;
                 document.querySelector('.sample-image').style.display = 'block';
+
+                // Show buttons for language selection
+                document.querySelector('.section-buttons').style.display = 'block';
             } else {
+                // Hide if no code snippet found
                 document.querySelector('.code-section').style.display = 'none';
                 document.querySelector('.sample-image').style.display = 'none';
+                document.querySelector('.section-buttons').style.display = 'none';
             }
         }
 
@@ -364,7 +368,7 @@ list`
             <h3>Scope</h3>
             <p>All analysis steps of SNT up to but not including mathematical modeling; some related analysis.</p>
         </div>
-        <div class="section-buttons">
+        <div class="section-buttons" style="display: none;">
             <button onclick="showCode('R English')" id="r-english-btn">R English</button>
             <button onclick="showCode('Python English')" id="python-english-btn">Python English</button>
             <button onclick="showCode('Stata English')" id="stata-english-btn">Stata English</button>
