@@ -212,18 +212,24 @@ clean_data = data.dropna(subset=['variable'])`;
                 A.1 Shapefiles
                 <ul class="dropdown-content">
                     <li onclick="selectSidebarItem(this, 'shapefile-info')">Shapefile Info</li>
+                    <li onclick="selectSidebarItem(this, 'shapefile-merge')">Shapefile Merge</li>
+                    <li onclick="selectSidebarItem(this, 'shapefile-conversion')">Shapefile Conversion</li>
                 </ul>
             </li>
             <li onclick="toggleDropdown(this)">
                 A.2 Vector Analysis
                 <ul class="dropdown-content">
                     <li onclick="selectSidebarItem(this, 'vector-analysis')">Vector Analysis</li>
+                    <li onclick="selectSidebarItem(this, 'buffer-analysis')">Buffer Analysis</li>
+                    <li onclick="selectSidebarItem(this, 'overlay-analysis')">Overlay Analysis</li>
                 </ul>
             </li>
             <li onclick="toggleDropdown(this)">
                 A.3 Data Cleaning
                 <ul class="dropdown-content">
                     <li onclick="selectSidebarItem(this, 'data-cleaning')">Data Cleaning</li>
+                    <li onclick="selectSidebarItem(this, 'remove-duplicates')">Remove Duplicates</li>
+                    <li onclick="selectSidebarItem(this, 'data-imputation')">Data Imputation</li>
                 </ul>
             </li>
         </ul>
@@ -249,5 +255,5 @@ clean_data = data.dropna(subset=['variable'])`;
             </div>
         </div>
     </div>
-
-    
+</body>
+</html>
