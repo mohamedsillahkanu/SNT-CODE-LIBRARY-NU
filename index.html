@@ -286,25 +286,25 @@ list`
             <li onclick="toggleDropdown(this)">
                 A.1 Shapefiles
                 <ul class="dropdown-content">
-                    <li onclick="selectSidebarItem(this, 'shapefile-info')">Shapefile Info</li>
-                    <li onclick="selectSidebarItem(this, 'basic-plot')">Basic Plot</li>
-                    <li onclick="selectSidebarItem(this, 'admin-unit-overlay')">Admin Unit Overlay</li>
+                    <li onclick="event.stopPropagation(); selectSidebarItem(this, 'shapefile-info')">Shapefile Info</li>
+                    <li onclick="event.stopPropagation(); selectSidebarItem(this, 'basic-plot')">Basic Plot</li>
+                    <li onclick="event.stopPropagation(); selectSidebarItem(this, 'admin-unit-overlay')">Admin Unit Overlay</li>
                 </ul>
             </li>
             <li onclick="toggleDropdown(this)">
                 A.2 Health Facilities
                 <ul class="dropdown-content">
-                    <li onclick="selectSidebarItem(this, 'health-info')">R</li>
-                    <li onclick="selectSidebarItem(this, 'health-info')">Python</li>
-                    <li onclick="selectSidebarItem(this, 'health-info')">Stata</li>
+                    <li onclick="event.stopPropagation(); selectSidebarItem(this, 'health-info')">R</li>
+                    <li onclick="event.stopPropagation(); selectSidebarItem(this, 'health-info')">Python</li>
+                    <li onclick="event.stopPropagation(); selectSidebarItem(this, 'health-info')">Stata</li>
                 </ul>
             </li>
             <li onclick="toggleDropdown(this)">
                 A.3 Routine Case Data from DHIS2
                 <ul class="dropdown-content">
-                    <li onclick="selectSidebarItem(this, 'routine-case-data')">R</li>
-                    <li onclick="selectSidebarItem(this, 'routine-case-data')">Python</li>
-                    <li onclick="selectSidebarItem(this, 'routine-case-data')">Stata</li>
+                    <li onclick="event.stopPropagation(); selectSidebarItem(this, 'routine-case-data')">R</li>
+                    <li onclick="event.stopPropagation(); selectSidebarItem(this, 'routine-case-data')">Python</li>
+                    <li onclick="event.stopPropagation(); selectSidebarItem(this, 'routine-case-data')">Stata</li>
                 </ul>
             </li>
         </ul>
