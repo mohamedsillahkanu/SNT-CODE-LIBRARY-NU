@@ -38,11 +38,6 @@
             margin-bottom: 20px;
         }
 
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-        }
-
         .sidebar li {
             padding: 10px;
             border-radius: 5px;
@@ -319,12 +314,26 @@ list`
             <button onclick="showCode('Stata French')" id="stata-french-btn">Stata French</button>
         </div>
         <div class="topic-intro" style="background-color: #ffffff; color: #000; padding: 20px; border-radius: 10px;">
-            <p style="font-style: italic;">Welcome to the Code Library UI. Here you will find various examples of code snippets related to geospatial analysis, data visualization, and more. For further reading, please check out the following links:</p>
+            <h3 class="sidebar-title">Version: 3 October 2024</h3>
+            <h3 class="sidebar-title">Authors: Mohamed Sillah Kanu, Sammy Oppong, Jaline Gerardin</h3>
+            <h2>Overview</h2>
+            <h3>Motivation</h3>
+            <p>SNT is here to stay: many NMCPs have found it useful and are continuing to embrace it and further develop it for their analytical needs. Since 2019, multiple individuals have supported the analysis portions of SNT. In most cases, individuals have built their own code in a variety of languages (Stata, R, and Python), sometimes building on others’ previous code and sometimes re-developed independently.</p>
+            <p>As SNT matures, more quality assurance is needed such that NMCPs can be confident that the analysis they use to inform their decisions is of high quality regardless of the individual supporting analyst. The continued rollout of SNT also means that analysis can become more efficient if analysts are better able to build on each other’s work rather than tempted to reinvent what has already been developed. Lastly, SNT analysis can become much more accessible if there is a common resource available to help those with intermediate coding skills quickly access the collective knowledge of the SNT analyst community.</p>
+
+            <h3>Objectives</h3>
+            <p>We will build a code library for SNT analysis to:</p>
             <ul>
-                <li><a href="https://en.wikipedia.org/wiki/Shapefile" target="_blank" style="color: #47B5FF;">Shapefile - Wikipedia</a></li>
-                <li><a href="https://geopandas.org/" target="_blank" style="color: #47B5FF;">Geopandas Documentation</a></li>
-                <li><a href="https://ggplot2.tidyverse.org/" target="_blank" style="color: #47B5FF;">ggplot2 Documentation</a></li>
+                <li>Improve quality and reproducibility of SNT analysis by ensuring that analysts are using similar, correct approaches.</li>
+                <li>Improve efficiency of SNT analysis by minimizing duplication of effort.</li>
+                <li>Promote accessibility of SNT analysis by lowering barriers to entry.</li>
             </ul>
+
+            <h3>Target audience</h3>
+            <p>Anyone doing this kind of work. We assume some basic knowledge of R, some understanding of the data, and a strong connection to the NMCP.</p>
+
+            <h3>Scope</h3>
+            <p>All analysis steps of SNT up to but not including mathematical modeling; some related analysis.</p>
         </div>
         <div class="main-content">
             <div class="code-section">
