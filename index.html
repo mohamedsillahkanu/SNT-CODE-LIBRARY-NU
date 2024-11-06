@@ -129,15 +129,13 @@
 
         function toggleDropdown(item) {
             item.classList.toggle('open');
-            const siblings = document.querySelectorAll('.sidebar li');
-            siblings.forEach(sib => {
+            document.querySelectorAll('.sidebar li').forEach(sib => {
                 if (sib !== item) sib.classList.remove('open');
             });
         }
 
         function selectSidebarItem(item, section) {
-            const sidebarItems = document.querySelectorAll('.sidebar li');
-            sidebarItems.forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.sidebar li').forEach(el => el.classList.remove('active'));
             item.classList.add('active');
             currentSection = section;
             updateContent();
@@ -146,12 +144,8 @@
         function showCode(language) {
             currentLanguage = language;
             updateContent();
-            const buttons = document.querySelectorAll('.section-buttons button');
-            buttons.forEach(button => button.classList.remove('active'));
-            const activeButton = document.querySelector(`#${language.toLowerCase().replace(' ', '-')}-btn`);
-            if (activeButton) {
-                activeButton.classList.add('active');
-            }
+            document.querySelectorAll('.section-buttons button').forEach(button => button.classList.remove('active'));
+            document.querySelector(`#${language.toLowerCase().replace(' ', '-')}-btn`).classList.add('active');
         }
 
         function updateContent() {
@@ -159,18 +153,27 @@
             const codeDisplay = document.querySelector('.full-code');
             const sampleImage = document.querySelector('.sample-image img');
 
+            if (!currentSection || !currentLanguage) {
+                topicIntro.innerText = 'Error: Please select both a code section and a language.';
+                codeDisplay.innerText = 'No code available.';
+                sampleImage.src = 'https://via.placeholder.com/300x200.png?text=Error';
+                return;
+            }
+
             if (currentSection === 'shapefile-info' && currentLanguage === 'R English') {
                 topicIntro.innerText = 'R code to display shapefile info.';
-                codeDisplay.innerText = `# Load necessary libraries\nlibrary(sf)\n\n# Load shapefile\nadmin <- st_read("/path/to/admin.shp")\n\n# Print shapefile info\nprint(admin)`;
+                codeDisplay.innerText = `
+library(sf)
+admin <- st_read("/path/to/admin.shp")
+print(admin)`;
                 sampleImage.src = 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/main/shapefile-info.png';
             } else if (currentSection === 'shapefile-info' && currentLanguage === 'Python English') {
                 topicIntro.innerText = 'Python code to display shapefile info.';
-                codeDisplay.innerText = `import geopandas as gpd\n\n# Load shapefile\nadmin = gpd.read_file("/path/to/admin.shp")\n\n# Print shapefile info\nprint(admin.head())`;
+                codeDisplay.innerText = `
+import geopandas as gpd
+admin = gpd.read_file("/path/to/admin.shp")
+print(admin.head())`;
                 sampleImage.src = 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/main/shapefile-info.png';
-            } else {
-                topicIntro.innerText = 'Select a code section and language.';
-                codeDisplay.innerText = 'No code available.';
-                sampleImage.src = 'https://via.placeholder.com/300x200.png?text=Select+a+Code+Language';
             }
         }
     </script>
