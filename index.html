@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Code library for stratification and SNT</title>
+    <title>Code Library UI</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -16,7 +16,7 @@
             overflow: hidden;
         }
         .sidebar {
-            min-width: 250px;
+            width: 250px;
             background-color: #28293d;
             padding: 20px;
             display: flex;
@@ -102,6 +102,30 @@
         .section-buttons button:hover {
             background-color: #3a3b52;
         }
+        .search-bar {
+            margin-bottom: 20px;
+        }
+        .search-bar input {
+            width: 85%;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 1em;
+        }
+        .search-bar button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #47B5FF;
+            color: #000;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+        .search-bar button:hover {
+            background-color: #3a3b52;
+            color: #ffffff;
+        }
         .main-content {
             display: flex;
             height: calc(100% - 100px);
@@ -113,9 +137,8 @@
             padding: 20px;
             overflow: auto;
             margin: 10px;
-            display: none; /* Hide content sections initially */
         }
-        .code-header, .image-header {
+        .code-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -127,7 +150,7 @@
             overflow: auto;
             margin-top: 10px;
             color: #000;
-            text-align: left; /* Left alignment for code */
+            display: none;
         }
         .sample-image {
             display: flex;
@@ -136,11 +159,10 @@
             border: 2px solid #FF6347;
             border-radius: 10px;
             padding: 10px;
-            height: calc(100% - 40px);
         }
         .sample-image img {
             width: 100%;
-            height: 100%;
+            height: auto;
             object-fit: cover;
             border-radius: 10px;
         }
@@ -161,120 +183,144 @@
             background-color: #00E0B5;
             color: #000000;
         }
-        .topic-intro {
-            background-color: #ffffff;
-            color: #000;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+        .sidebar li.active {
+            background-color: #47B5FF;
+            color: #000000;
         }
     </style>
     <script>
-        let selectedSection = "";
-        let selectedLanguage = "";
-
+        let currentSection = null;
         function selectSidebarItem(item, section) {
             // Highlight the selected sidebar item
             const sidebarItems = document.querySelectorAll('.sidebar li');
             sidebarItems.forEach(el => el.classList.remove('active'));
             item.classList.add('active');
-            selectedSection = section;
-            updateContent();
+            // Update URL hash
+            window.location.hash = `/${section}`;
+            currentSection = section;
+            document.querySelector('.full-code').style.display = 'none';
+            document.querySelector('.sample-image img').src = 'https://via.placeholder.com/300x200.png?text=Select+a+Code+Language';
         }
 
         function showCode(language) {
-            if (!selectedSection) {
+            if (!currentSection) {
                 alert('Please select a section from the sidebar first.');
                 return;
             }
-            selectedLanguage = language;
-            updateContent();
-        }
-
-        function updateContent() {
+            window.location.hash = `/${currentSection}/${language.toLowerCase().replace(' ', '-')}`;
+            
             const codeSnippets = {
                 "shapefile-info": {
-                    "r-english": {
-                        code: `# Step 1: Install necessary libraries
-install.packages("sf")
-
-# Step 2: Import necessary libraries
+                    "r-english": `# Load necessary libraries
 library(sf)
 
-# Step 3: Define the path to the shapefile
-shapefile_path <- "./path/to/shapefile.shp"
+# Load shapefile
+admin <- st_read("/path/to/admin.shp")
 
-# Step 4: Load shapefile data into an sf object
-gdf <- st_read(shapefile_path)
+# Print shapefile info
+print(admin)`,
 
-# Step 5: Set the Coordinate Reference System (CRS)
-st_crs(gdf) <- 4326
-
-# Step 6: View the first few rows of the sf object
-print(gdf)`,
-                        image: "https://example.com/r-english-image.png"
-                    },
-                    "python-english": {
-                        code: `import geopandas as gpd
+                    "python-english": `import geopandas as gpd
 
 # Load shapefile
 admin = gpd.read_file("/path/to/admin.shp")
 
 # Print shapefile info
 print(admin.head())`,
-                        image: "https://example.com/python-english-image.png"
-                    }
-                },
+
+                    "stata-english": `* Load shapefile
+shp2dta using "/path/to/admin.shp", database(admin_db) coordinates(admin_coords)
+
+* List shapefile info
+list`},
                 "basic-plot": {
-                    "r-english": {
-                        code: `# Load necessary libraries
+                    "r-english": `# Load necessary libraries
 library(sf)
 library(ggplot2)
 
 # Load shapefile
-gdf <- st_read("./path/to/shapefile.shp")
+admin <- st_read("/path/to/admin.shp")
 
-# Plot basic map
-ggplot(data = gdf) +
-  geom_sf()`,
-                        image: "https://example.com/r-basic-plot.png"
-                    },
-                    "python-english": {
-                        code: `import geopandas as gpd
+# Basic plot
+ggplot() +
+  geom_sf(data = admin, fill = NA, color = "blue")`,
+                    "python-english": `import geopandas as gpd
 import matplotlib.pyplot as plt
 
 # Load shapefile
-gdf = gpd.read_file("./path/to/shapefile.shp")
+admin = gpd.read_file("/path/to/admin.shp")
 
-# Plot basic map
-gdf.plot()
+# Basic plot
+admin.plot()
 plt.show()`,
-                        image: "https://example.com/python-basic-plot.png"
-                    }
+                    "stata-english": `* Load shapefile
+shp2dta using "/path/to/admin.shp", database(admin_db) coordinates(admin_coords)
+
+* Basic plot
+spmap using admin_coords, id(_ID)`
+                },
+                "admin-unit-overlay": {
+                    "r-english": `# Load necessary libraries
+library(sf)
+library(ggplot2)
+
+# Load shapefiles
+admin1 <- st_read("/path/to/admin1.shp")
+admin2 <- st_read("/path/to/admin2.shp")
+
+# Ensure both layers have the same CRS
+admin1 <- st_transform(admin1, crs = st_crs(admin2))
+
+# Plot overlays
+ggplot() +
+  geom_sf(data = admin1, fill = NA, color = "blue") +
+  geom_sf(data = admin2, fill = NA, color = "red")`,
+                    "python-english": `import geopandas as gpd
+import matplotlib.pyplot as plt
+
+# Load shapefiles
+admin1 = gpd.read_file("/path/to/admin1.shp")
+admin2 = gpd.read_file("/path/to/admin2.shp")
+
+# Ensure both layers have the same CRS
+admin1 = admin1.to_crs(admin2.crs)
+
+# Plot overlays
+fig, ax = plt.subplots()
+admin1.plot(ax=ax, edgecolor='blue')
+admin2.plot(ax=ax, edgecolor='red')
+plt.title("Overlay of Admin Units")
+plt.show()`,
+                    "stata-english": `* Load shapefiles
+shp2dta using "/path/to/admin1.shp", database(admin1_db) coordinates(admin1_coords)
+shp2dta using "/path/to/admin2.shp", database(admin2_db) coordinates(admin2_coords)
+
+* Merge shapefiles
+drop _all
+use admin1_db, clear
+append using admin2_db
+
+* Plot overlays
+spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolor(red ..)`
                 }
-                // Add more sections and languages here
             };
 
+            const selectedCode = codeSnippets[currentSection]?.[language.toLowerCase().replace(' ', '-')];
             const codeDisplay = document.querySelector('.full-code');
-            const imageDisplay = document.querySelector('.sample-image img');
-            const codeSection = document.querySelector('.code-section');
-            const imageSection = document.querySelector('.image-section');
-
-            if (selectedSection && selectedLanguage && codeSnippets[selectedSection] && codeSnippets[selectedSection][selectedLanguage.toLowerCase().replace(' ', '-')]) {
-                const selectedContent = codeSnippets[selectedSection][selectedLanguage.toLowerCase().replace(' ', '-')];
-                codeDisplay.innerText = selectedContent.code;
-                codeSection.style.display = 'block';
-                imageDisplay.src = selectedContent.image;
-                imageSection.style.display = 'block';
+            if (selectedCode) {
+                codeDisplay.innerText = selectedCode;
+                codeDisplay.style.display = 'block';
+                // Change the sample image to a relevant example image
+                document.querySelector('.sample-image img').src = `https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/16df021948e18e142e103ee7e9c78ff8311005ef/${currentSection}.png`;
             } else {
-                codeSection.style.display = 'none';
-                imageSection.style.display = 'none';
+                codeDisplay.innerText = 'No code available.';
+                codeDisplay.style.display = 'block';
             }
 
             // Update active button styling
             const buttons = document.querySelectorAll('.section-buttons button');
             buttons.forEach(button => button.classList.remove('active'));
-            const activeButton = document.querySelector(`#${selectedLanguage.toLowerCase().replace(' ', '-')}-btn`);
+            const activeButton = document.querySelector(`#${language.toLowerCase().replace(' ', '-')}-btn`);
             if (activeButton) {
                 activeButton.classList.add('active');
             }
@@ -299,24 +345,48 @@ plt.show()`,
     <div class="sidebar">
         <h2>Code Library</h2>
         <ul>
-            <li onclick="selectSidebarItem(this, 'shapefile-info')">Shapefile Info</li>
-            <li onclick="selectSidebarItem(this, 'basic-plot')">Basic Plot</li>
-            <li onclick="selectSidebarItem(this, 'admin-unit-overlay')">Admin Unit Overlay</li>
-            <li onclick="selectSidebarItem(this, 'shapefile-link')">Link shapefile with excel</li>
-            <li onclick="selectSidebarItem(this, 'plot-map-numeric')">Map using numeric variable</li>
-            <li onclick="selectSidebarItem(this, 'plot-map-categorial')">Map using categorical variable</li>
-            <li onclick="selectSidebarItem(this, 'plot-map-manual')">Map using manual coloring</li>
-            <li onclick="selectSidebarItem(this, 'health-info')">Health Facilities</li>
-            <li onclick="selectSidebarItem(this, 'routine-case-data')">Routine Case Data from DHIS2</li>
+            <li>
+                A.1 Shapefiles
+                <ul class="dropdown-content">
+                    <li onclick="selectSidebarItem(this, 'shapefile-info')">Shapefile Info</li>
+                    <li onclick="selectSidebarItem(this, 'basic-plot')">Basic Plot</li>
+                    <li onclick="selectSidebarItem(this, 'admin-unit-overlay')">Admin Unit Overlay</li>
+                </ul>
+            </li>
+            <li>
+                A.2 Health Facilities
+                <ul class="dropdown-content">
+                    <li onclick="selectSidebarItem(this, 'health-info')">R</li>
+                    <li onclick="selectSidebarItem(this, 'health-info')">Python</li>
+                    <li onclick="selectSidebarItem(this, 'health-info')">Stata</li>
+                </ul>
+            </li>
+            <li>
+                A.3 Routine Case Data from DHIS2
+                <ul class="dropdown-content">
+                    <li onclick="selectSidebarItem(this, 'routine-case-data')">R</li>
+                    <li onclick="selectSidebarItem(this, 'routine-case-data')">Python</li>
+                    <li onclick="selectSidebarItem(this, 'routine-case-data')">Stata</li>
+                </ul>
+            </li>
         </ul>
     </div>
     <div class="content">
         <div class="section-buttons">
             <button onclick="showCode('R English')" id="r-english-btn">R English</button>
+            <button onclick="showCode('R French')" id="r-french-btn">R French</button>
             <button onclick="showCode('Python English')" id="python-english-btn">Python English</button>
+            <button onclick="showCode('Python French')" id="python-french-btn">Python French</button>
+            <button onclick="showCode('Stata English')" id="stata-english-btn">Stata English</button>
+            <button onclick="showCode('Stata French')" id="stata-french-btn">Stata French</button>
         </div>
         <div class="topic-intro" style="background-color: #ffffff; color: #000; padding: 20px; border-radius: 10px;">
-            Welcome to the Code Library UI. Here you will find various examples of code snippets related to geospatial analysis, data visualization, and more.
+            <p style="font-style: italic;">Welcome to the Code Library UI. Here you will find various examples of code snippets related to geospatial analysis, data visualization, and more. For further reading, please check out the following links:</p>
+            <ul>
+                <li><a href="https://en.wikipedia.org/wiki/Shapefile" target="_blank" style="color: #47B5FF;">Shapefile - Wikipedia</a></li>
+                <li><a href="https://geopandas.org/" target="_blank" style="color: #47B5FF;">Geopandas Documentation</a></li>
+                <li><a href="https://ggplot2.tidyverse.org/" target="_blank" style="color: #47B5FF;">ggplot2 Documentation</a></li>
+            </ul>
         </div>
         <div class="main-content">
             <div class="code-section">
@@ -327,11 +397,9 @@ plt.show()`,
                 <pre class="full-code" style="background-color: #ffffff; color: #000;">No code selected.</pre>
             </div>
             <div class="image-section">
-                <div class="image-header">
-                    <h3>Image</h3>
-                </div>
+                <h3>Sample Image</h3>
                 <div class="sample-image">
-                    <img src="" alt="Sample Image">
+                    <img src="https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/16df021948e18e142e103ee7e9c78ff8311005ef/overlay%20final3.png" alt="Sample Image">
                 </div>
             </div>
         </div>
