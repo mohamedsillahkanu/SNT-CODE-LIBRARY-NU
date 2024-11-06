@@ -13,10 +13,10 @@
             display: flex;
             background-color: #1e1e2e;
             color: #ffffff;
-            overflow: hidden;
         }
+
         .sidebar {
-            width: 20%; /* Fixed sidebar width */
+            width: 30%; /* Fixed sidebar width */
             background-color: #28293d;
             padding: 20px;
             display: flex;
@@ -25,27 +25,38 @@
             overflow-y: auto;
             position: fixed; /* Sidebar fixed on left */
             height: 100vh;
+            z-index: 10; /* Ensure the sidebar stays above the content */
         }
+
         .sidebar h2 {
             color: #47B5FF;
             font-size: 1.5em;
             margin-bottom: 20px;
         }
+
         .sidebar ul {
             list-style: none;
             padding: 0;
         }
+
         .sidebar li {
             padding: 10px;
             border-radius: 5px;
             cursor: pointer;
             position: relative;
             user-select: none;
+            transition: background-color 0.3s ease;
         }
+
         .sidebar li.active {
-            background-color: #47B5FF;
-            color: #000000;
+            background-color: #47B5FF; /* Highlight color for active item */
+            color: #000000; /* Change text color when active */
         }
+
+        .sidebar li:hover {
+            background-color: #44475a; /* Hover effect */
+        }
+
         .dropdown-content {
             display: none;
             padding-left: 20px;
@@ -53,9 +64,11 @@
             border-radius: 5px;
             margin-top: 5px;
         }
+
         .sidebar li.open .dropdown-content {
             display: block;
         }
+
         .content {
             flex-grow: 1;
             display: flex;
@@ -63,12 +76,16 @@
             padding: 20px;
             overflow-y: auto;
             margin-left: 30%; /* Adjust content to leave space for sidebar */
+            background-color: #1e1e2e; /* Ensure the content has a consistent background */
+            z-index: 1; /* Ensure it is below the sidebar */
         }
+
         .section-buttons {
             align-self: flex-start;
             margin-bottom: 20px;
             display: none; /* Hide by default */
         }
+
         .section-buttons button {
             padding: 10px;
             margin-right: 10px;
@@ -78,10 +95,12 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
         .section-buttons button.active {
             background-color: #47B5FF;
             color: #000000;
         }
+
         .topic-intro {
             background-color: #ffffff;
             color: #000;
@@ -89,20 +108,24 @@
             border-radius: 10px;
             margin-bottom: 20px;
         }
+
         .main-content {
             display: flex;
             flex-direction: column;
             gap: 20px;
         }
+
         .code-section, .image-section {
             background-color: #33334d;
             border-radius: 10px;
             padding: 20px;
             overflow: auto;
         }
+
         .code-section h3, .image-section h3 {
             margin-top: 0;
         }
+
         .full-code {
             background-color: #ffffff;
             padding: 10px;
@@ -110,6 +133,7 @@
             color: #000;
             margin-top: 10px;
         }
+
         .sample-image {
             display: flex;
             justify-content: center;
@@ -118,11 +142,28 @@
             border-radius: 10px;
             padding: 10px;
         }
+
         .sample-image img {
             width: 100%;
             height: auto;
             object-fit: cover;
             border-radius: 10px;
+        }
+
+        /* Add background image or pattern if needed */
+        .content {
+            background-color: #2a2a38; /* Dark background for the content */
+            z-index: 2; /* Ensure content sits on top of any background */
+            position: relative;
+        }
+
+        .sidebar li.active {
+            background-color: #47B5FF;
+            color: #000000;
+        }
+
+        .dropdown-content {
+            display: block; /* Ensures dropdown is always open when clicked */
         }
     </style>
     <script>
@@ -188,57 +229,16 @@
 
             // Show section buttons for all pages except overview
             document.querySelector('.section-buttons').style.display = 'flex';
-
-            // Display error if no section or language is selected
-            if (!currentLanguage) {
-                topicIntro.innerText = 'Error: Please select both a section and a language.';
-                codeDisplay.innerText = '';
-                sampleImage.src = '';
-                document.querySelector('.code-section').style.display = 'none';
-                document.querySelector('.image-section').style.display = 'none';
-                return;
+            // Define content for other sections
+            // Example for shapefile-info
+            if (currentSection === 'shapefile-info') {
+                topicIntro.innerHTML = `<h3>Shapefile Information</h3><p>Details on Shapefile usage in the code.</p>`;
+                codeDisplay.innerHTML = `<h3>Shapefile Info Code</h3><div class="full-code"><pre>var shapefileData = loadShapefile();</pre></div>`;
+                sampleImage.src = 'path-to-shapefile-image.png';
+                document.querySelector('.image-section').style.display = 'block';
+                document.querySelector('.code-section').style.display = 'block';
             }
-
-            // Show content if both section and language are selected
-            document.querySelector('.code-section').style.display = 'block';
-            document.querySelector('.image-section').style.display = 'block';
-
-            // Example of content for other sections
-            if (currentSection === 'shapefile-info' && currentLanguage === 'R English') {
-                topicIntro.innerText = 'R code to display shapefile info.';
-                codeDisplay.innerText = `
-library(sf)
-admin <- st_read("/path/to/admin.shp")
-print(admin)`;
-                sampleImage.src = 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/main/shapefile-info.png';
-            } else if (currentSection === 'vector-analysis' && currentLanguage === 'Python English') {
-                topicIntro.innerText = 'Python code for vector analysis.';
-                codeDisplay.innerText = `
-import matplotlib.pyplot as plt
-plt.scatter(x_coords, y_coords)
-plt.show()`;
-                sampleImage.src = 'https://via.placeholder.com/300x200.png?text=Vector+Analysis+Example';
-            } else if (currentSection === 'data-cleaning' && currentLanguage === 'R English') {
-                topicIntro.innerText = 'R code for data cleaning.';
-                codeDisplay.innerText = `
-library(dplyr)
-clean_data <- data %>% filter(!is.na(variable))`;
-                sampleImage.src = 'https://via.placeholder.com/300x200.png?text=Data+Cleaning+Example';
-            }
-        }
-
-        // Function to handle sidebar item clicks and section switching
-        function selectSidebarItem(event, element, section) {
-            event.stopPropagation();
-            loadContent(section);
-        }
-
-        // Function to handle language button selection
-        function showCode(language) {
-            currentLanguage = language;
-            updateContent();
-            document.querySelectorAll('.section-buttons button').forEach(el => el.classList.remove('active'));
-            document.querySelector(`#${language.toLowerCase().replace(' ', '-')}-btn`).classList.add('active');
+            // Similarly for other sections
         }
     </script>
 </head>
@@ -247,31 +247,16 @@ clean_data <- data %>% filter(!is.na(variable))`;
         <h2>Code Library</h2>
         <ul>
             <li id="overview-btn" onclick="loadContent('overview')">Overview</li>
-            <li class="dropdown" onclick="this.classList.toggle('open')">
-                <span>Shapefile Info</span>
-                <ul class="dropdown-content">
-                    <li onclick="selectSidebarItem(event, this, 'shapefile-info')">Shapefile Info</li>
-                    <li onclick="selectSidebarItem(event, this, 'vector-analysis')">Vector Analysis</li>
-                    <li onclick="selectSidebarItem(event, this, 'data-cleaning')">Data Cleaning</li>
-                </ul>
-            </li>
+            <li id="shapefile-info-btn" onclick="loadContent('shapefile-info')">Shapefile Info</li>
+            <li id="vector-analysis-btn" onclick="loadContent('vector-analysis')">Vector Analysis</li>
+            <li id="data-cleaning-btn" onclick="loadContent('data-cleaning')">Data Cleaning</li>
         </ul>
     </div>
     <div class="content">
-        <div class="section-buttons">
-            <button id="r-english-btn" onclick="showCode('R English')">R English</button>
-            <button id="python-english-btn" onclick="showCode('Python English')">Python English</button>
-        </div>
-        <div class="topic-intro">
-            <p>Select a section and a language to display code and sample image.</p>
-        </div>
+        <div class="topic-intro"></div>
         <div class="main-content">
-            <div class="code-section">
-                <h3>Code</h3>
-                <pre class="full-code"></pre>
-            </div>
+            <div class="code-section"></div>
             <div class="image-section">
-                <h3>Sample Image</h3>
                 <div class="sample-image">
                     <img src="" alt="Sample Image">
                 </div>
