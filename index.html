@@ -127,11 +127,14 @@
         let currentSection = '';
         let currentLanguage = '';
 
+        // Toggle dropdown on click, prevent closing when clicking inside
         function toggleDropdown(item) {
             item.classList.toggle('open');
         }
 
-        function selectSidebarItem(item, section) {
+        // Prevent dropdown from collapsing when clicking on a submenu item
+        function selectSidebarItem(event, item, section) {
+            event.stopPropagation();  // Prevent the click event from propagating to the parent
             document.querySelectorAll('.sidebar li').forEach(el => el.classList.remove('active'));
             item.classList.add('active');
             currentSection = section;
@@ -208,36 +211,36 @@ clean_data = data.dropna(subset=['variable'])`;
             <li onclick="toggleDropdown(this)">
                 A.1 Shapefiles
                 <ul class="dropdown-content">
-                    <li onclick="selectSidebarItem(this, 'shapefile-info')">Shapefile Info</li>
-                    <li onclick="selectSidebarItem(this, 'shapefile-merge')">Shapefile Merge</li>
-                    <li onclick="selectSidebarItem(this, 'shapefile-conversion')">Shapefile Conversion</li>
+                    <li onclick="selectSidebarItem(event, this, 'shapefile-info')">Shapefile Info</li>
+                    <li onclick="selectSidebarItem(event, this, 'shapefile-merge')">Shapefile Merge</li>
+                    <li onclick="selectSidebarItem(event, this, 'shapefile-conversion')">Shapefile Conversion</li>
                 </ul>
             </li>
             <li onclick="toggleDropdown(this)">
                 A.2 Vector Analysis
                 <ul class="dropdown-content">
-                    <li onclick="selectSidebarItem(this, 'vector-analysis')">Vector Analysis</li>
-                    <li onclick="selectSidebarItem(this, 'buffer-analysis')">Buffer Analysis</li>
-                    <li onclick="selectSidebarItem(this, 'overlay-analysis')">Overlay Analysis</li>
+                    <li onclick="selectSidebarItem(event, this, 'vector-analysis')">Vector Analysis</li>
+                    <li onclick="selectSidebarItem(event, this, 'buffer-analysis')">Buffer Analysis</li>
+                    <li onclick="selectSidebarItem(event, this, 'overlay-analysis')">Overlay Analysis</li>
                 </ul>
             </li>
             <li onclick="toggleDropdown(this)">
                 A.3 Data Cleaning
                 <ul class="dropdown-content">
-                    <li onclick="selectSidebarItem(this, 'data-cleaning')">Data Cleaning</li>
-                    <li onclick="selectSidebarItem(this, 'remove-duplicates')">Remove Duplicates</li>
-                    <li onclick="selectSidebarItem(this, 'data-imputation')">Data Imputation</li>
+                    <li onclick="selectSidebarItem(event, this, 'data-cleaning')">Data Cleaning</li>
+                    <li onclick="selectSidebarItem(event, this, 'remove-duplicates')">Remove Duplicates</li>
+                    <li onclick="selectSidebarItem(event, this, 'normalize-data')">Normalize Data</li>
                 </ul>
             </li>
         </ul>
     </div>
     <div class="content">
         <div class="section-buttons">
-            <button onclick="showCode('R English')" id="r-english-btn">R English</button>
-            <button onclick="showCode('Python English')" id="python-english-btn">Python English</button>
+            <button id="r-english-btn" onclick="showCode('R English')">R English</button>
+            <button id="python-english-btn" onclick="showCode('Python English')">Python English</button>
         </div>
         <div class="topic-intro">
-            <p>Select a section and language to display code and sample image.</p>
+            <p>Select a section and a language to display code and sample image.</p>
         </div>
         <div class="main-content">
             <div class="code-section">
