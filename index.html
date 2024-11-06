@@ -39,6 +39,7 @@
             border-radius: 5px;
             cursor: pointer;
             position: relative;
+            user-select: none;
         }
         .sidebar li.active {
             background-color: #47B5FF;
@@ -78,9 +79,6 @@
         .section-buttons button.active {
             background-color: #47B5FF;
             color: #000000;
-        }
-        .section-buttons button:hover {
-            background-color: #3a3b52;
         }
         .topic-intro {
             background-color: #ffffff;
@@ -124,34 +122,17 @@
             object-fit: cover;
             border-radius: 10px;
         }
-        .copy-btn {
-            padding: 8px;
-            background-color: #47B5FF;
-            color: #000000;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .copy-btn:hover {
-            background-color: #3a3b52;
-            color: #ffffff;
-        }
-        .copy-btn.active {
-            background-color: #00E0B5;
-            color: #000000;
-        }
     </style>
     <script>
-        let currentSection = 'shapefile-info';
+        let currentSection = '';
+        let currentLanguage = '';
+
         function toggleDropdown(item) {
-            const isOpen = item.classList.toggle('open');
-            if (isOpen) {
-                const siblings = document.querySelectorAll('.sidebar li');
-                siblings.forEach(sib => {
-                    if (sib !== item) sib.classList.remove('open');
-                });
-            }
+            item.classList.toggle('open');
+            const siblings = document.querySelectorAll('.sidebar li');
+            siblings.forEach(sib => {
+                if (sib !== item) sib.classList.remove('open');
+            });
         }
 
         function selectSidebarItem(item, section) {
@@ -159,44 +140,12 @@
             sidebarItems.forEach(el => el.classList.remove('active'));
             item.classList.add('active');
             currentSection = section;
-            document.querySelector('.full-code').innerText = '';
-            document.querySelector('.sample-image img').src = 'https://via.placeholder.com/300x200.png?text=Select+a+Code+Language';
+            updateContent();
         }
 
         function showCode(language) {
-            if (!currentSection) {
-                alert('Please select a section from the sidebar first.');
-                return;
-            }
-            const codeSnippets = {
-                "shapefile-info": {
-                    "r-english": `# Load necessary libraries
-library(sf)
-
-# Load shapefile
-admin <- st_read("/path/to/admin.shp")
-
-# Print shapefile info
-print(admin)`,
-                    "python-english": `import geopandas as gpd
-
-# Load shapefile
-admin = gpd.read_file("/path/to/admin.shp")
-
-# Print shapefile info
-print(admin.head())`
-                }
-            };
-
-            const selectedCode = codeSnippets[currentSection]?.[language.toLowerCase().replace(' ', '-')];
-            const codeDisplay = document.querySelector('.full-code');
-            if (selectedCode) {
-                codeDisplay.innerText = selectedCode;
-                document.querySelector('.sample-image img').src = 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/main/shapefile-info.png';
-            } else {
-                codeDisplay.innerText = 'No code available.';
-            }
-
+            currentLanguage = language;
+            updateContent();
             const buttons = document.querySelectorAll('.section-buttons button');
             buttons.forEach(button => button.classList.remove('active'));
             const activeButton = document.querySelector(`#${language.toLowerCase().replace(' ', '-')}-btn`);
@@ -205,13 +154,24 @@ print(admin.head())`
             }
         }
 
-        function copyCode() {
-            const codeToCopy = document.querySelector('.full-code').innerText;
-            navigator.clipboard.writeText(codeToCopy).then(() => {
-                const button = document.querySelector('.copy-btn');
-                button.classList.add('active');
-                setTimeout(() => button.classList.remove('active'), 1000);
-            });
+        function updateContent() {
+            const topicIntro = document.querySelector('.topic-intro');
+            const codeDisplay = document.querySelector('.full-code');
+            const sampleImage = document.querySelector('.sample-image img');
+
+            if (currentSection === 'shapefile-info' && currentLanguage === 'R English') {
+                topicIntro.innerText = 'R code to display shapefile info.';
+                codeDisplay.innerText = `# Load necessary libraries\nlibrary(sf)\n\n# Load shapefile\nadmin <- st_read("/path/to/admin.shp")\n\n# Print shapefile info\nprint(admin)`;
+                sampleImage.src = 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/main/shapefile-info.png';
+            } else if (currentSection === 'shapefile-info' && currentLanguage === 'Python English') {
+                topicIntro.innerText = 'Python code to display shapefile info.';
+                codeDisplay.innerText = `import geopandas as gpd\n\n# Load shapefile\nadmin = gpd.read_file("/path/to/admin.shp")\n\n# Print shapefile info\nprint(admin.head())`;
+                sampleImage.src = 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/main/shapefile-info.png';
+            } else {
+                topicIntro.innerText = 'Select a code section and language.';
+                codeDisplay.innerText = 'No code available.';
+                sampleImage.src = 'https://via.placeholder.com/300x200.png?text=Select+a+Code+Language';
+            }
         }
     </script>
 </head>
@@ -233,13 +193,12 @@ print(admin.head())`
             <button onclick="showCode('Python English')" id="python-english-btn">Python English</button>
         </div>
         <div class="topic-intro">
-            <p>Welcome to the Code Library UI. This section contains code examples for geospatial analysis.</p>
+            <p>Select a code section and language.</p>
         </div>
         <div class="main-content">
             <div class="code-section">
                 <h3>Code</h3>
-                <button class="copy-btn" onclick="copyCode()">Copy</button>
-                <pre class="full-code">No code selected.</pre>
+                <pre class="full-code">No code available.</pre>
             </div>
             <div class="image-section">
                 <h3>Sample Image</h3>
