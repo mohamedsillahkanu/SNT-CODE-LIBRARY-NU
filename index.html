@@ -26,7 +26,7 @@
             gap: 20px;
             overflow-y: auto;
             scrollbar-width: none;
-            flex-shrink: 0; /* Prevent the sidebar from shrinking */
+            flex-shrink: 0;
         }
 
         .sidebar::-webkit-scrollbar {
@@ -103,6 +103,84 @@
             height: calc(100% - 100px);
         }
 
+        .section-buttons {
+            align-self: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .section-buttons button {
+            padding: 10px;
+            margin-left: 10px;
+            background-color: #474761;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .section-buttons button.active {
+            background-color: #47B5FF;
+            color: #000000;
+        }
+
+        .section-buttons button:hover {
+            background-color: #3a3b52;
+        }
+
+        .code-section {
+            background-color: #33334d;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px 0;
+            color: #ffffff;
+        }
+
+        .full-code {
+            background-color: #ffffff;
+            padding: 10px;
+            border-radius: 10px;
+            overflow: auto;
+            margin-top: 10px;
+            color: #000;
+        }
+
+        .sample-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #FF6347;
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 20px;
+        }
+
+        .sample-image img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .copy-btn {
+            padding: 8px;
+            background-color: #47B5FF;
+            color: #000000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .copy-btn:hover {
+            background-color: #3a3b52;
+            color: #ffffff;
+        }
+
+        .copy-btn.active {
+            background-color: #00E0B5;
+            color: #000000;
+        }
     </style>
     <script>
         let currentSection = null;
@@ -116,6 +194,9 @@
             // Update URL hash
             window.location.hash = `/${section}`;
             currentSection = section;
+
+            // Display the content based on the selection
+            showCodeContent(section);
         }
 
         function toggleDropdown(item) {
@@ -123,6 +204,109 @@
             if (dropdownContent) {
                 dropdownContent.classList.toggle('show');
             }
+        }
+
+        function showCodeContent(section) {
+            const codeSnippets = {
+                "shapefile-info": {
+                    "r-english": `# Load necessary libraries
+library(sf)
+
+# Load shapefile
+admin <- st_read("/path/to/admin.shp")
+
+# Print shapefile info
+print(admin)`,
+                    "python-english": `import geopandas as gpd
+
+# Load shapefile
+admin = gpd.read_file("/path/to/admin.shp")
+
+# Print shapefile info
+print(admin.head())`,
+                    "stata-english": `* Load shapefile
+shp2dta using "/path/to/admin.shp", database(admin_db) coordinates(admin_coords)
+
+* List shapefile info
+list`
+                }
+            };
+
+            // Get the selected code snippet
+            const selectedCode = codeSnippets[section]?.["python-english"]; // Default to Python-English if available
+            const codeDisplay = document.querySelector('.full-code');
+            if (selectedCode) {
+                codeDisplay.innerText = selectedCode;
+                document.querySelector('.code-section').style.display = 'block';
+                codeDisplay.style.display = 'block';
+
+                // Update sample image
+                document.querySelector('.sample-image img').src = `https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/16df021948e18e142e103ee7e9c78ff8311005ef/${section}.png`;
+                document.querySelector('.sample-image').style.display = 'block';
+            } else {
+                document.querySelector('.code-section').style.display = 'none';
+                document.querySelector('.sample-image').style.display = 'none';
+            }
+        }
+
+        function showCode(language) {
+            if (!currentSection) {
+                alert('Please select a section from the sidebar first.');
+                return;
+            }
+
+            const codeSnippets = {
+                "shapefile-info": {
+                    "r-english": `# Load necessary libraries
+library(sf)
+
+# Load shapefile
+admin <- st_read("/path/to/admin.shp")
+
+# Print shapefile info
+print(admin)`,
+                    "python-english": `import geopandas as gpd
+
+# Load shapefile
+admin = gpd.read_file("/path/to/admin.shp")
+
+# Print shapefile info
+print(admin.head())`,
+                    "stata-english": `* Load shapefile
+shp2dta using "/path/to/admin.shp", database(admin_db) coordinates(admin_coords)
+
+* List shapefile info
+list`
+                }
+            };
+
+            // Get the selected code snippet
+            const selectedCode = codeSnippets[currentSection]?.[language.toLowerCase().replace(' ', '-')];
+            const codeDisplay = document.querySelector('.full-code');
+            if (selectedCode) {
+                codeDisplay.innerText = selectedCode;
+                document.querySelector('.code-section').style.display = 'block';
+                codeDisplay.style.display = 'block';
+
+                // Update active button styling
+                const buttons = document.querySelectorAll('.section-buttons button');
+                buttons.forEach(button => button.classList.remove('active'));
+                const activeButton = document.querySelector(`#${language.toLowerCase().replace(' ', '-')}-btn`);
+                if (activeButton) {
+                    activeButton.classList.add('active');
+                }
+            }
+        }
+
+        function copyCode() {
+            const codeToCopy = document.querySelector('.full-code').innerText;
+            navigator.clipboard.writeText(codeToCopy).then(() => {
+                const button = document.querySelector('.copy-btn');
+                button.classList.add('active');
+                setTimeout(() => {
+                    button.classList.remove('active');
+                }, 1000);
+            });
         }
     </script>
 </head>
@@ -179,6 +363,18 @@
 
             <h3>Scope</h3>
             <p>All analysis steps of SNT up to but not including mathematical modeling; some related analysis.</p>
+        </div>
+        <div class="section-buttons">
+            <button onclick="showCode('R English')" id="r-english-btn">R English</button>
+            <button onclick="showCode('Python English')" id="python-english-btn">Python English</button>
+            <button onclick="showCode('Stata English')" id="stata-english-btn">Stata English</button>
+            <button class="copy-btn" onclick="copyCode()">Copy</button>
+        </div>
+        <div class="code-section" style="display: none;">
+            <pre class="full-code">No code selected.</pre>
+        </div>
+        <div class="sample-image" style="display: none;">
+            <img src="https://via.placeholder.com/300x200.png?text=Select+a+Code+Language" alt="Sample Image">
         </div>
     </div>
 </body>
