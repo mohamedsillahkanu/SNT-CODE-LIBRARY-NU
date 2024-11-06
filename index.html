@@ -153,12 +153,19 @@
             const codeDisplay = document.querySelector('.full-code');
             const sampleImage = document.querySelector('.sample-image img');
 
+            // Only show content if both section and language are selected
             if (!currentSection || !currentLanguage) {
-                topicIntro.innerText = 'Error: Please select both a code section and a language.';
+                topicIntro.innerText = 'Error: Please select both a section and a language.';
                 codeDisplay.innerText = '';
                 sampleImage.src = '';
+                document.querySelector('.code-section').style.display = 'none';
+                document.querySelector('.image-section').style.display = 'none';
                 return;
             }
+
+            // Show content if both section and language are selected
+            document.querySelector('.code-section').style.display = 'block';
+            document.querySelector('.image-section').style.display = 'block';
 
             if (currentSection === 'shapefile-info' && currentLanguage === 'R English') {
                 topicIntro.innerText = 'R code to display shapefile info.';
