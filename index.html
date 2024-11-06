@@ -16,7 +16,7 @@
             overflow: hidden;
         }
         .sidebar {
-            width: 20%; /* Fixed sidebar width */
+            width: 30%; /* Fixed sidebar width */
             background-color: #28293d;
             padding: 20px;
             display: flex;
@@ -67,6 +67,7 @@
         .section-buttons {
             align-self: flex-start;
             margin-bottom: 20px;
+            display: none; /* Hide by default */
         }
         .section-buttons button {
             padding: 10px;
@@ -132,6 +133,7 @@
         window.onload = function() {
             const currentUrl = window.location.href;
 
+            // Default landing page should be overview without buttons
             if (currentUrl.includes('#overview') || !currentUrl.includes('#')) {
                 loadContent('overview');
             } else if (currentUrl.includes('#shapefile-info')) {
@@ -184,6 +186,9 @@
                 return;
             }
 
+            // Show section buttons for all pages except overview
+            document.querySelector('.section-buttons').style.display = 'flex';
+
             // Display error if no section or language is selected
             if (!currentLanguage) {
                 topicIntro.innerText = 'Error: Please select both a section and a language.';
@@ -222,11 +227,9 @@ clean_data <- data %>% filter(!is.na(variable))`;
             }
         }
 
-        // Function to handle sidebar item clicks and toggle active state
-        function selectSidebarItem(event, item, section) {
+        // Function to handle sidebar item clicks and section switching
+        function selectSidebarItem(event, element, section) {
             event.stopPropagation();
-            document.querySelectorAll('.sidebar li').forEach(el => el.classList.remove('active'));
-            item.classList.add('active');
             loadContent(section);
         }
 
