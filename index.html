@@ -205,7 +205,15 @@
 
         function toggleDropdown(item) {
             const dropdownContent = item.nextElementSibling;
-            dropdownContent.classList.toggle('show');
+            if (dropdownContent.classList.contains('show')) {
+                dropdownContent.classList.remove('show');
+            } else {
+                // Close any other open dropdowns
+                const dropdowns = document.querySelectorAll('.dropdown-content');
+                dropdowns.forEach(dd => dd.classList.remove('show'));
+
+                dropdownContent.classList.add('show');
+            }
         }
 
         function showCode(language) {
