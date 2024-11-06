@@ -16,7 +16,7 @@
             overflow: hidden;
         }
         .sidebar {
-            width: 20%; /* Fixed sidebar width */
+            width: 30%; /* Fixed sidebar width */
             background-color: #28293d;
             padding: 20px;
             display: flex;
@@ -132,7 +132,7 @@
         window.onload = function() {
             const currentUrl = window.location.href;
 
-            if (currentUrl.includes('#overview')) {
+            if (currentUrl.includes('#overview') || !currentUrl.includes('#')) {
                 loadContent('overview');
             } else if (currentUrl.includes('#shapefile-info')) {
                 loadContent('shapefile-info');
@@ -148,7 +148,9 @@
             currentSection = section;
             updateContent();
             document.querySelectorAll('.sidebar li').forEach(el => el.classList.remove('active'));
-            document.querySelector(`#${section}-btn`).classList.add('active');
+            if (section !== 'overview') {
+                document.querySelector(`#${section}-btn`).classList.add('active');
+            }
             window.location.hash = section; // Update URL hash when a section is selected
         }
 
@@ -228,7 +230,7 @@ clean_data <- data %>% filter(!is.na(variable))`;
             loadContent(section);
         }
 
-        // Language button click handler
+        // Function to handle language button selection
         function showCode(language) {
             currentLanguage = language;
             updateContent();
