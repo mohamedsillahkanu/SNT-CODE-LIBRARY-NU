@@ -16,7 +16,7 @@
             overflow: hidden;
         }
         .sidebar {
-            width: 15%; /* Fixed sidebar width */
+            width: 20%; /* Fixed sidebar width */
             background-color: #28293d;
             padding: 20px;
             display: flex;
@@ -152,13 +152,13 @@
             window.location.hash = section; // Update URL hash when a section is selected
         }
 
-        // Update the content based on selected section and language
+        // Update the content based on selected section
         function updateContent() {
             const topicIntro = document.querySelector('.topic-intro');
             const codeDisplay = document.querySelector('.full-code');
             const sampleImage = document.querySelector('.sample-image img');
 
-            // Display overview content
+            // Display overview content without language selection buttons
             if (currentSection === 'overview') {
                 topicIntro.innerHTML = `
                     <h3 class="sidebar-title">Version: 3 October 2024 </h3>
@@ -178,10 +178,11 @@
                 `;
                 document.querySelector('.code-section').style.display = 'none';
                 document.querySelector('.image-section').style.display = 'none';
+                document.querySelector('.section-buttons').style.display = 'none';  // Hide language buttons on overview page
                 return;
             }
 
-            // Display error if no section or language selected
+            // Display error if no section or language is selected
             if (!currentLanguage) {
                 topicIntro.innerText = 'Error: Please select both a section and a language.';
                 codeDisplay.innerText = '';
