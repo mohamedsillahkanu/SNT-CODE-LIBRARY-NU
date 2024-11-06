@@ -155,8 +155,8 @@
 
             if (!currentSection || !currentLanguage) {
                 topicIntro.innerText = 'Error: Please select both a code section and a language.';
-                codeDisplay.innerText = 'No code available.';
-                sampleImage.src = 'https://via.placeholder.com/300x200.png?text=Error';
+                codeDisplay.innerText = '';
+                sampleImage.src = '';
                 return;
             }
 
@@ -174,6 +174,32 @@ import geopandas as gpd
 admin = gpd.read_file("/path/to/admin.shp")
 print(admin.head())`;
                 sampleImage.src = 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/main/shapefile-info.png';
+            } else if (currentSection === 'vector-analysis' && currentLanguage === 'R English') {
+                topicIntro.innerText = 'R code for vector analysis.';
+                codeDisplay.innerText = `
+library(sp)
+coordinates(data) <- ~longitude+latitude
+plot(data)`;
+                sampleImage.src = 'https://via.placeholder.com/300x200.png?text=Vector+Analysis+Example';
+            } else if (currentSection === 'vector-analysis' && currentLanguage === 'Python English') {
+                topicIntro.innerText = 'Python code for vector analysis.';
+                codeDisplay.innerText = `
+import matplotlib.pyplot as plt
+plt.scatter(x_coords, y_coords)
+plt.show()`;
+                sampleImage.src = 'https://via.placeholder.com/300x200.png?text=Vector+Analysis+Example';
+            } else if (currentSection === 'data-cleaning' && currentLanguage === 'R English') {
+                topicIntro.innerText = 'R code for data cleaning.';
+                codeDisplay.innerText = `
+library(dplyr)
+clean_data <- data %>% filter(!is.na(variable))`;
+                sampleImage.src = 'https://via.placeholder.com/300x200.png?text=Data+Cleaning+Example';
+            } else if (currentSection === 'data-cleaning' && currentLanguage === 'Python English') {
+                topicIntro.innerText = 'Python code for data cleaning.';
+                codeDisplay.innerText = `
+import pandas as pd
+clean_data = data.dropna(subset=['variable'])`;
+                sampleImage.src = 'https://via.placeholder.com/300x200.png?text=Data+Cleaning+Example';
             }
         }
     </script>
@@ -186,6 +212,18 @@ print(admin.head())`;
                 A.1 Shapefiles
                 <ul class="dropdown-content">
                     <li onclick="selectSidebarItem(this, 'shapefile-info')">Shapefile Info</li>
+                </ul>
+            </li>
+            <li onclick="toggleDropdown(this)">
+                A.2 Vector Analysis
+                <ul class="dropdown-content">
+                    <li onclick="selectSidebarItem(this, 'vector-analysis')">Vector Analysis</li>
+                </ul>
+            </li>
+            <li onclick="toggleDropdown(this)">
+                A.3 Data Cleaning
+                <ul class="dropdown-content">
+                    <li onclick="selectSidebarItem(this, 'data-cleaning')">Data Cleaning</li>
                 </ul>
             </li>
         </ul>
@@ -201,15 +239,15 @@ print(admin.head())`;
         <div class="main-content">
             <div class="code-section">
                 <h3>Code</h3>
-                <pre class="full-code">No code available.</pre>
+                <pre class="full-code"></pre>
             </div>
             <div class="image-section">
                 <h3>Sample Image</h3>
                 <div class="sample-image">
-                    <img src="https://via.placeholder.com/300x200.png?text=Select+a+Code+Language" alt="Sample Image">
+                    <img src="" alt="Sample Image">
                 </div>
             </div>
         </div>
     </div>
-</body>
-</html>
+
+    
