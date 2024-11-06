@@ -129,9 +129,6 @@
 
         function toggleDropdown(item) {
             item.classList.toggle('open');
-            document.querySelectorAll('.sidebar li').forEach(sib => {
-                if (sib !== item) sib.classList.remove('open');
-            });
         }
 
         function selectSidebarItem(item, section) {
@@ -240,7 +237,7 @@ clean_data = data.dropna(subset=['variable'])`;
             <button onclick="showCode('Python English')" id="python-english-btn">Python English</button>
         </div>
         <div class="topic-intro">
-            <p>Select a code section and language.</p>
+            <p>Select a section and language to display code and sample image.</p>
         </div>
         <div class="main-content">
             <div class="code-section">
