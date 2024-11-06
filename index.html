@@ -46,14 +46,13 @@
         }
         .dropdown-content {
             display: none;
-            margin-top: 5px;
+            padding-left: 20px;
             background-color: #3a3b52;
-            padding-left: 10px;
             border-radius: 5px;
+            margin-top: 5px;
         }
-        .dropdown-content li {
-            padding: 8px;
-            cursor: pointer;
+        .sidebar li.open .dropdown-content {
+            display: block;
         }
         .content {
             flex-grow: 1;
@@ -61,15 +60,14 @@
             flex-direction: column;
             padding: 20px;
             overflow-y: auto;
-            scrollbar-width: none;
         }
         .section-buttons {
-            align-self: flex-end;
+            align-self: flex-start;
             margin-bottom: 20px;
         }
         .section-buttons button {
             padding: 10px;
-            margin-left: 10px;
+            margin-right: 10px;
             background-color: #474761;
             color: #ffffff;
             border: none;
@@ -84,23 +82,41 @@
         .section-buttons button:hover {
             background-color: #3a3b52;
         }
-        .main-content {
-            display: flex;
-            height: calc(100% - 100px);
-        }
-        .code-section, .image-section {
-            flex: 1;
-            background-color: #33334d;
-            border-radius: 10px;
-            padding: 20px;
-            overflow: auto;
-            margin: 10px;
-        }
         .topic-intro {
             background-color: #ffffff;
             color: #000;
             padding: 20px;
             border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .code-section, .image-section {
+            background-color: #33334d;
+            border-radius: 10px;
+            padding: 20px;
+            overflow: auto;
+        }
+        .code-section h3, .image-section h3 {
+            margin-top: 0;
+        }
+        .full-code {
+            background-color: #ffffff;
+            padding: 10px;
+            border-radius: 10px;
+            color: #000;
+            margin-top: 10px;
+        }
+        .sample-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #FF6347;
+            border-radius: 10px;
+            padding: 10px;
         }
         .sample-image img {
             width: 100%;
@@ -117,15 +133,25 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
+        .copy-btn:hover {
+            background-color: #3a3b52;
+            color: #ffffff;
+        }
         .copy-btn.active {
             background-color: #00E0B5;
+            color: #000000;
         }
     </style>
     <script>
-        let currentSection = null;
+        let currentSection = 'shapefile-info';
         function toggleDropdown(item) {
-            const dropdown = item.querySelector('.dropdown-content');
-            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+            const isOpen = item.classList.toggle('open');
+            if (isOpen) {
+                const siblings = document.querySelectorAll('.sidebar li');
+                siblings.forEach(sib => {
+                    if (sib !== item) sib.classList.remove('open');
+                });
+            }
         }
 
         function selectSidebarItem(item, section) {
@@ -133,18 +159,59 @@
             sidebarItems.forEach(el => el.classList.remove('active'));
             item.classList.add('active');
             currentSection = section;
-            document.querySelector('.full-code').style.display = 'none';
+            document.querySelector('.full-code').innerText = '';
             document.querySelector('.sample-image img').src = 'https://via.placeholder.com/300x200.png?text=Select+a+Code+Language';
-            updateTopicIntro(section);
         }
 
-        function updateTopicIntro(section) {
-            const intros = {
-                "shapefile-info": "Learn how to handle shapefiles in different languages. Get info on file structure and metadata.",
-                "basic-plot": "Create basic plots from shapefile data using geospatial libraries.",
-                "admin-unit-overlay": "Overlay administrative units on maps for multi-layered visualizations."
+        function showCode(language) {
+            if (!currentSection) {
+                alert('Please select a section from the sidebar first.');
+                return;
+            }
+            const codeSnippets = {
+                "shapefile-info": {
+                    "r-english": `# Load necessary libraries
+library(sf)
+
+# Load shapefile
+admin <- st_read("/path/to/admin.shp")
+
+# Print shapefile info
+print(admin)`,
+                    "python-english": `import geopandas as gpd
+
+# Load shapefile
+admin = gpd.read_file("/path/to/admin.shp")
+
+# Print shapefile info
+print(admin.head())`
+                }
             };
-            document.querySelector('.topic-intro').innerText = intros[section] || "No additional information available.";
+
+            const selectedCode = codeSnippets[currentSection]?.[language.toLowerCase().replace(' ', '-')];
+            const codeDisplay = document.querySelector('.full-code');
+            if (selectedCode) {
+                codeDisplay.innerText = selectedCode;
+                document.querySelector('.sample-image img').src = 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/main/shapefile-info.png';
+            } else {
+                codeDisplay.innerText = 'No code available.';
+            }
+
+            const buttons = document.querySelectorAll('.section-buttons button');
+            buttons.forEach(button => button.classList.remove('active'));
+            const activeButton = document.querySelector(`#${language.toLowerCase().replace(' ', '-')}-btn`);
+            if (activeButton) {
+                activeButton.classList.add('active');
+            }
+        }
+
+        function copyCode() {
+            const codeToCopy = document.querySelector('.full-code').innerText;
+            navigator.clipboard.writeText(codeToCopy).then(() => {
+                const button = document.querySelector('.copy-btn');
+                button.classList.add('active');
+                setTimeout(() => button.classList.remove('active'), 1000);
+            });
         }
     </script>
 </head>
@@ -156,8 +223,6 @@
                 A.1 Shapefiles
                 <ul class="dropdown-content">
                     <li onclick="selectSidebarItem(this, 'shapefile-info')">Shapefile Info</li>
-                    <li onclick="selectSidebarItem(this, 'basic-plot')">Basic Plot</li>
-                    <li onclick="selectSidebarItem(this, 'admin-unit-overlay')">Admin Unit Overlay</li>
                 </ul>
             </li>
         </ul>
@@ -166,21 +231,20 @@
         <div class="section-buttons">
             <button onclick="showCode('R English')" id="r-english-btn">R English</button>
             <button onclick="showCode('Python English')" id="python-english-btn">Python English</button>
-            <button onclick="showCode('Stata English')" id="stata-english-btn">Stata English</button>
         </div>
-        <div class="topic-intro">Select a section to view details.</div>
+        <div class="topic-intro">
+            <p>Welcome to the Code Library UI. This section contains code examples for geospatial analysis.</p>
+        </div>
         <div class="main-content">
             <div class="code-section">
-                <div class="code-header">
-                    <h3>Code</h3>
-                    <button class="copy-btn" onclick="copyCode('code-section')">Copy</button>
-                </div>
+                <h3>Code</h3>
+                <button class="copy-btn" onclick="copyCode()">Copy</button>
                 <pre class="full-code">No code selected.</pre>
             </div>
             <div class="image-section">
                 <h3>Sample Image</h3>
                 <div class="sample-image">
-                    <img src="https://via.placeholder.com/300x200.png?text=Sample+Image" alt="Sample Image">
+                    <img src="https://via.placeholder.com/300x200.png?text=Select+a+Code+Language" alt="Sample Image">
                 </div>
             </div>
         </div>
