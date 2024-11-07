@@ -1,258 +1,78 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Code Library UI</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            background-color: #1e1e2e;
-            color: #ffffff;
-        }
+else if (currentSection === 'data_analysis' && currentLanguage === 'Python') {
+    topicIntro.innerText = 'Data analysis in Python is essential for processing, analyzing, and visualizing large datasets effectively.';
+    codeDisplay.innerText = `
 
-        .sidebar {
-            width: 30%; /* Fixed sidebar width */
-            background-color: #28293d;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            overflow-y: auto;
-            position: fixed; /* Sidebar fixed on left */
-            height: 100vh;
-            z-index: 10; /* Ensure the sidebar stays above the content */
-        }
+# Step 1: Import necessary libraries
+import pandas as pd
+import matplotlib.pyplot as plt
 
-        .sidebar h2 {
-            color: #47B5FF;
-            font-size: 1.5em;
-            margin-bottom: 20px;
-        }
+# Explanation:
+# - pandas: Used for data manipulation and analysis.
+# - matplotlib: Used for data visualization.
 
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-        }
+# Step 2: Load the data
+data = pd.read_csv('https://example.com/sample_data.csv')
 
-        .sidebar li {
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            position: relative;
-            user-select: none;
-            transition: background-color 0.3s ease;
-        }
+# Step 3: Display the first few rows of the dataset
+print(data.head())
 
-        .sidebar li.active {
-            background-color: #47B5FF; /* Highlight color for active item */
-            color: #000000; /* Text color when active */
-        }
+# Explanation:
+# - 'data.head()' displays the first five rows of the dataset for a quick inspection.
 
-        .sidebar li:hover {
-            background-color: #44475a; /* Hover effect */
-        }
+# Step 4: Plot a basic histogram
+plt.hist(data['column_name'])
+plt.xlabel('Value')
+plt.ylabel('Frequency')
+plt.show()
 
-        .dropdown-content {
-            display: none;
-            padding-left: 20px;
-            background-color: #3a3b52;
-            border-radius: 5px;
-            margin-top: 5px;
-        }
+# Explanation:
+# - This histogram provides a simple visualization of data distribution.`;
+    sampleImage.src = 'https://example.com/path/to/python_histogram_example.png';
+} else if (currentSection === 'mapping_basics' && currentLanguage === 'QGIS') {
+    topicIntro.innerText = 'QGIS provides a powerful interface for creating maps and analyzing geospatial data interactively.';
+    codeDisplay.innerText = `
 
-        .sidebar li.open .dropdown-content {
-            display: block;
-        }
+# Step 1: Open QGIS and load shapefile
+# Step 2: Go to Layer > Add Layer > Add Vector Layer
+# Step 3: Select the shapefile you want to load
 
-        .content {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            overflow-y: auto;
-            margin-left: 30%; /* Adjust content to leave space for sidebar */
-            background-color: #1e1e2e; /* Ensure the content has a consistent background */
-            z-index: 1; /* Ensure it is below the sidebar */
-        }
+# Explanation:
+# - Adding a shapefile layer allows you to visualize spatial data within QGIS.
 
-        .section-buttons {
-            align-self: flex-start;
-            margin-bottom: 20px;
-            display: none; /* Hide by default */
-        }
+# Step 4: Style the layer
+# - Right-click on the layer, select Properties, and choose the Symbology tab.
 
-        .section-buttons button {
-            padding: 10px;
-            margin-right: 10px;
-            background-color: #474761;
-            color: #ffffff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+# Explanation:
+# - Here you can change colors, add labels, and adjust styling based on data attributes.`;
+    sampleImage.src = 'https://example.com/path/to/qgis_example.png';
+} else if (currentSection === 'database_connection' && currentLanguage === 'SQL') {
+    topicIntro.innerText = 'Connecting to databases is crucial for querying and managing data stored in structured formats.';
+    codeDisplay.innerText = `
 
-        .section-buttons button.active {
-            background-color: #47B5FF;
-            color: #000000;
-        }
+# Step 1: Establish a connection to a PostgreSQL database
+# Make sure to replace placeholders with your actual database details
 
-        .topic-intro {
-            background-color: #ffffff;
-            color: #000;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
+import psycopg2
 
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
+conn = psycopg2.connect(
+    host="your_host",
+    database="your_database",
+    user="your_user",
+    password="your_password"
+)
 
-        .code-section, .image-section {
-            background-color: #33334d;
-            border-radius: 10px;
-            padding: 20px;
-            overflow: auto;
-        }
+# Step 2: Create a cursor to execute SQL commands
+cur = conn.cursor()
 
-        .code-section h3, .image-section h3 {
-            margin-top: 0;
-        }
+# Step 3: Execute a sample query
+cur.execute("SELECT * FROM table_name LIMIT 10")
+rows = cur.fetchall()
 
-        .full-code {
-            background-color: #ffffff;
-            padding: 10px;
-            border-radius: 10px;
-            color: #000;
-            margin-top: 10px;
-        }
+# Step 4: Close the connection
+cur.close()
+conn.close()
 
-        .sample-image {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 2px solid #FF6347;
-            border-radius: 10px;
-            padding: 10px;
-        }
-
-        .sample-image img {
-            width: 100%;
-            height: auto;
-            object-fit: cover;
-            border-radius: 10px;
-        }
-
-        /* Add background image or pattern if needed */
-        .content {
-            background-color: #2a2a38; /* Dark background for the content */
-            z-index: 2; /* Ensure content sits on top of any background */
-            position: relative;
-        }
-    </style>
-    <script>
-        let currentSection = '';
-        let currentLanguage = '';
-
-        // Load content based on the URL hash
-        window.onload = function() {
-            const currentUrl = window.location.href;
-
-            // Default landing page should be overview without buttons
-            if (currentUrl.includes('#overview') || !currentUrl.includes('#')) {
-                loadContent('overview');
-            } else if (currentUrl.includes('#shapefile-info')) {
-                loadContent('shapefile-info');
-            } else if (currentUrl.includes('#vector-analysis')) {
-                loadContent('vector-analysis');
-            } else if (currentUrl.includes('#data-cleaning')) {
-                loadContent('data-cleaning');
-            }
-        };
-
-        // Function to load content based on section
-        function loadContent(section) {
-            currentSection = section;
-            updateContent();
-            document.querySelectorAll('.sidebar li').forEach(el => el.classList.remove('active'));
-            if (section !== 'overview') {
-                document.querySelector(`#${section}-btn`).classList.add('active');
-            }
-            window.location.hash = section; // Update URL hash when a section is selected
-        }
-
-        // Update the content based on selected section
-        function updateContent() {
-            const topicIntro = document.querySelector('.topic-intro');
-            const codeDisplay = document.querySelector('.full-code');
-            const sampleImage = document.querySelector('.sample-image img');
-
-            // Display overview content without language selection buttons
-            if (currentSection === 'overview') {
-                topicIntro.innerHTML = `
-                    <h3 class="sidebar-title">Version: 3 October 2024 </h3>
-                    <h3 class="sidebar-title">Authors: Mohamed Sillah Kanu, Sammy Oppong, Jaline Gerardin </h3>
-                    <h2>Overview</h2>
-                    <h3>Motivation</h3>
-                    <p>SNT is here to stay: many NMCPs have found it useful and are continuing to embrace it and further develop it for their analytical needs. Since 2019, multiple individuals have supported the analysis portions of SNT. In most cases, individuals have built their own code in a variety of languages (Stata, R, and Python), sometimes building on others’ previous code and sometimes re-developed independently.</p>
-                    <h3>Objectives</h3>
-                    <p>We will build a code library for SNT analysis to:</p>
-                    <p>1. Improve quality and reproducibility of SNT analysis by ensuring that analysts are using similar, correct approaches.</p>
-                    <p>2. Improve efficiency of SNT analysis by minimizing duplication of effort.</p>
-                    <p>3. Promote accessibility of SNT analysis by lowering barriers to entry.</p>
-                    <h3>Target audience</h3>
-                    <p>Anyone doing this kind of work. We assume some basic knowledge of R, some understanding of the data, and a strong connection to the NMCP.</p>
-                    <h3>Scope</h3>
-                    <p>All analysis steps of SNT up to but not including mathematical modeling; some related analysis.</p>
-                `;
-                document.querySelector('.code-section').style.display = 'none';
-                document.querySelector('.image-section').style.display = 'none';
-                document.querySelector('.section-buttons').style.display = 'none';  // Hide language buttons on overview page
-                return;
-            }
-
-            // Show section buttons for all pages except overview
-            document.querySelector('.section-buttons').style.display = 'flex';
-            // Define content for other sections
-            // Example for shapefile-info
-            if (currentSection === 'shapefile-info') {
-                topicIntro.innerHTML = `<h3>Shapefile Information</h3><p>Details on Shapefile usage in the code.</p>`;
-                codeDisplay.innerHTML = `<h3>Shapefile Info Code</h3><div class="full-code"><pre>var shapefileData = loadShapefile();</pre></div>`;
-                sampleImage.src = 'path-to-shapefile-image.png';
-                document.querySelector('.image-section').style.display = 'block';
-                document.querySelector('.code-section').style.display = 'block';
-            }
-            // Similarly for other sections
-        }
-    </script>
-</head>
-<body>
-    <div class="sidebar">
-        <h2>Code Library</h2>
-        <ul>
-            <li id="overview-btn" onclick="loadContent('overview')">Overview</li>
-            <li id="shapefile-info-btn" onclick="loadContent('shapefile-info')">Shapefile Info</li>
-            <li id="vector-analysis-btn" onclick="loadContent('vector-analysis')">Vector Analysis</li>
-            <li id="data-cleaning-btn" onclick="loadContent('data-cleaning')">Data Cleaning</li>
-        </ul>
-    </div>
-    <div class="content">
-        <div class="topic-intro"></div>
-        <div class="main-content">
-            <div class="code-section"></div>
-            <div class="image-section">
-                <div class="sample-image">
-                    <img src="" alt="Sample Image">
-                </div>
-            </div>
-        </div>
-    </div>
-</body>
-</html>
+# Explanation:
+# - This code establishes a connection to a PostgreSQL database, executes a query, retrieves results, and then closes the connection.`;
+    sampleImage.src = 'https://example.com/path/to/sql_connection_example.png';
+}
