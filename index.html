@@ -206,6 +206,22 @@
             document.querySelector(`#${language.toLowerCase().replace(' ', '-')}-btn`).classList.add('active');
         }
 
+
+
+        function copyCode(section) {
+            let codeToCopy;
+            if (section === 'code-section') {
+                codeToCopy = document.querySelector('.full-code').innerText;
+            }
+            navigator.clipboard.writeText(codeToCopy).then(() => {
+                const button = document.querySelector(`button[onclick="copyCode('${section}')"]`);
+                button.classList.add('active');
+                setTimeout(() => {
+                    button.classList.remove('active');
+                }, 1000);
+            });
+            
+
         function updateContent() {
             const topicIntro = document.querySelector('.topic-intro');
             const codeDisplay = document.querySelector('.full-code');
