@@ -161,11 +161,7 @@
             top: 30px;
             right: 10px;
         }
-
-
-
-        
-         .copy-btn {
+        .copy-btn {
             padding: 8px;
             background-color: #47B5FF;
             color: #000000;
@@ -206,9 +202,35 @@
             document.querySelector(`#${language.toLowerCase().replace(' ', '-')}-btn`).classList.add('active');
         }
 
+        function copyCode(section) {
+            let codeToCopy;
+            if (section === 'code-section') {
+                codeToCopy = document.querySelector('.full-code').innerText;
+            }
+            navigator.clipboard.writeText(codeToCopy).then(() => {
+                const button = document.querySelector(`button[onclick="copyCode('${section}')"]`);
+                button.classList.add('active');
+                setTimeout(() => {
+                    button.classList.remove('active');
+                }, 1000);
+            });
+        }
 
+        window.onload = function() {
+            const currentUrl = window.location.href;
+            if (currentUrl.includes('#Overview')) {
+                loadContent('overview');
+            } else if (currentUrl.includes('#shapefiles')) {
+                loadContent('shapefiles_info');
+            } else if (currentUrl.includes('#basic_plot')) {
+                loadContent('basic_plot');
+            }
+        };
 
-            
+        function loadContent(section) {
+            currentSection = section;
+            updateContent();
+        }
 
         function updateContent() {
             const topicIntro = document.querySelector('.topic-intro');
@@ -227,263 +249,54 @@
             document.querySelector('.code-section').style.display = 'block';
             document.querySelector('.image-section').style.display = 'block';
 
-        
-            // Sample content
             if (currentSection === 'shapefiles_info' && currentLanguage === 'R English') {
                 topicIntro.innerText = 'Viewing shapefile data is often the first step when working with spatial datasets. It involves loading and inspecting the spatial features and attributes to understand the structure and details of the data.'; 
                 codeDisplay.innerText = `
-
-# Step 1: Install necessary libraries
+# R Code for Viewing Shapefile Data
 install.packages("sf")
-
-# Step 2: Import necessary libraries
 library(sf)
 
-# Explanation:
-# - sf: Used to work with geospatial data in R.
+shapefile_shx <- 'https://raw.githubusercontent.com/path_to_shx'
+shapefile_dbf <- 'https://raw.githubusercontent.com/path_to_dbf'
+shapefile_path <- 'https://raw.githubusercontent.com/path_to_shp'
 
-# Step 3: Define the path to the shapefile components
-
-shapefile_shx <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.shx'
-shapefile_dbf <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.dbf'
-shapefile_path <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.shp'
-
-# Explanation:
-# - The variables 'shapefile_shx', 'shapefile_dbf', and 'shapefile_path' hold the raw paths to the shapefile components from the GitHub repository.
-# - All three files (.shp, .shx, .dbf) are required to correctly read the shapefile.
-
-# Step 3.1: Download the shapefile components
 download.file(shapefile_path, destfile = "Chiefdom_2021.shp")
 download.file(shapefile_shx, destfile = "Chiefdom_2021.shx")
 download.file(shapefile_dbf, destfile = "Chiefdom_2021.dbf")
 
-# Explanation:
-# - 'download.file()' is used to download each component of the shapefile from GitHub and save them locally.
-# - This ensures all necessary files are available for reading the shapefile.
-
-# Step 4: Load shapefile data into an sf object
 gdf <- st_read("Chiefdom_2021.shp")
-
-# Explanation:
-# - 'st_read()' reads the shapefile into an sf object, which is a data structure for handling geospatial data in R.
-# - The sf object 'gdf' contains both the geometry (spatial features) and attributes (data values) of the shapefile.
-
-# Step 4.1: Set the Coordinate Reference System (CRS)
 st_crs(gdf) <- 4326
-
-# Explanation:
-# - 'st_crs()' is used to set the CRS of the sf object.
-# - EPSG:4326 is a common CRS that represents coordinates in longitude and latitude.
-
-# Step 5: View the first few rows of the sf object
-print(gdf)
-
-# Explanation:
-# - 'print(gdf)' print only a portion of the spatial object by default.`;
-                sampleImage.src = 'https://github.com/mohamedsillahkanu/SNT-Code-Library/raw/31b914c1115de3ccd6c8045946adc4a84eadc4bb/print%20gdf%20in%20R.png';
-            } else if (currentSection === 'shapefiles_info' && currentLanguage === 'Python English') {
-    topicIntro.innerText = 'Data analysis in Python is essential for processing, analyzing, and visualizing large datasets effectively.';
-    codeDisplay.innerText = `
-
-# Step 1: Import necessary libraries
-import pandas as pd
-import matplotlib.pyplot as plt
-
-# Explanation:
-# - pandas: Used for data manipulation and analysis.
-# - matplotlib: Used for data visualization.
-
-# Step 2: Load the data
-data = pd.read_csv('https://example.com/sample_data.csv')
-
-# Step 3: Display the first few rows of the dataset
-print(data.head())
-
-# Explanation:
-# - 'data.head()' displays the first five rows of the dataset for a quick inspection.
-
-# Step 4: Plot a basic histogram
-plt.hist(data['column_name'])
-plt.xlabel('Value')
-plt.ylabel('Frequency')
-plt.show()
-
-# Explanation:
-# - This histogram provides a simple visualization of data distribution.`;
-    sampleImage.src = 'https://example.com/path/to/python_histogram_example.png';
-} else if (currentSection === 'mapping_basics' && currentLanguage === 'QGIS') {
-    topicIntro.innerText = 'QGIS provides a powerful interface for creating maps and analyzing geospatial data interactively.';
-    codeDisplay.innerText = `
-
-# Step 1: Open QGIS and load shapefile
-# Step 2: Go to Layer > Add Layer > Add Vector Layer
-# Step 3: Select the shapefile you want to load
-
-# Explanation:
-# - Adding a shapefile layer allows you to visualize spatial data within QGIS.
-
-# Step 4: Style the layer
-# - Right-click on the layer, select Properties, and choose the Symbology tab.
-
-# Explanation:
-# - Here you can change colors, add labels, and adjust styling based on data attributes.`;
-    sampleImage.src = 'https://example.com/path/to/qgis_example.png';
-} else if (currentSection === 'database_connection' && currentLanguage === 'SQL') {
-    topicIntro.innerText = 'Connecting to databases is crucial for querying and managing data stored in structured formats.';
-    codeDisplay.innerText = `
-
-# Step 1: Establish a connection to a PostgreSQL database
-# Make sure to replace placeholders with your actual database details
-
-import psycopg2
-
-conn = psycopg2.connect(
-    host="your_host",
-    database="your_database",
-    user="your_user",
-    password="your_password"
-)
-
-# Step 2: Create a cursor to execute SQL commands
-cur = conn.cursor()
-
-# Step 3: Execute a sample query
-cur.execute("SELECT * FROM table_name LIMIT 10")
-rows = cur.fetchall()
-
-# Step 4: Close the connection
-cur.close()
-conn.close()
-
-# Explanation:
-# - This code establishes a connection to a PostgreSQL database, executes a query, retrieves results, and then closes the connection.`;
-    sampleImage.src = 'https://example.com/path/to/sql_connection_example.png';
-} else if (currentSection === 'database_connection' && currentLanguage === 'SQL') {
-    topicIntro.innerText = 'Connecting to databases is crucial for querying and managing data stored in structured formats.';
-    codeDisplay.innerText = `
-
-# Step 1: Establish a connection to a PostgreSQL database
-# Make sure to replace placeholders with your actual database details
-
-import psycopg2
-
-conn = psycopg2.connect(
-    host="your_host",
-    database="your_database",
-    user="your_user",
-    password="your_password"
-)
-
-# Step 2: Create a cursor to execute SQL commands
-cur = conn.cursor()
-
-# Step 3: Execute a sample query
-cur.execute("SELECT * FROM table_name LIMIT 10")
-rows = cur.fetchall()
-
-# Step 4: Close the connection
-cur.close()
-conn.close()
-
-# Explanation:
-# - This code establishes a connection to a PostgreSQL database, executes a query, retrieves results, and then closes the connection.`;
-    sampleImage.src = 'https://example.com/path/to/sql_connection_example.png';
-}
-
+`;
+                sampleImage.src = 'path_to_sample_image.jpg';
+            }
         }
-
-
-
-        function showOverviewPage() {
-            document.querySelector('.overview').style.display = 'flex';
-            document.querySelector('.sidebar').style.display = 'none';
-            document.querySelector('.content').style.display = 'none';
-        }
-
-        function hideOverviewPage() {
-            document.querySelector('.overview').style.display = 'none';
-            document.querySelector('.sidebar').style.display = 'flex';
-            document.querySelector('.content').style.display = 'flex';
-        }
-
-        window.onload = showOverviewPage;
     </script>
 </head>
 <body>
-    <!-- Overview Page -->
-    <div class="overview">
-        <div>
-            <h1>Code library for stratification and SNT</h1>
-            <h3>Version: 6 November 2024</h3>
-            <h3>Authors: Mohamed Sillah Kanu, Sammy Oppong, Jaline Gerardin</h3>
-            <h2>Overview</h2>
-            <h3>Motivation</h3>
-            <p>SNT is here to stay: many NMCPs have found it useful and are continuing to embrace it and further develop it for their analytical needs. Since 2019, multiple individuals have supported the analysis portions of SNT. In most cases, individuals have built their own code in a variety of languages (Stata, R, and Python), sometimes building on others’ previous code and sometimes re-developed independently.
-           
-As SNT matures, more quality assurance is needed such that NMCPs can be confident that the analysis they use to inform their decisions is of high quality regardless of the individual supporting analyst. The continued rollout of SNT also means that analysis can become more efficient if analysts are better able to build on each other’s work rather than tempted to reinvent what has already been developed. Lastly, SNT analysis can become much more accessible if there is a common resource available to help those with intermediate coding skills quickly access the collective knowledge of the SNT analyst community.
-.</p>
-
-            <h3>Objectives</h3>
-            <p>We will build a code library for SNT analysis to:
-            <p>1. Improve quality and reproducibility of SNT analysis by ensuring that analysts are using similar, correct approaches.</p>
-            <p>2. Improve efficiency of SNT analysis by minimizing duplication of effort.</p>
-            <p>3. Promote accessibility of SNT analysis by lowering barriers to entry.</p>
-
-
-            <h3>Target audience</h3>
-            <p>Anyone doing this kind of work. We assume some basic knowledge of R, some understanding of the data, and a strong connection to the NMCP.</p>
-
-            <h3>Scope</h3>
-            <p>All analysis steps of SNT up to but not including mathematical modeling; some related analysis.</p>
-            </ul>
-            <button onclick="hideOverviewPage()" class="custom-button">Go to code library</button>
-        </div>
-    </div>
-
-    <!-- Sidebar Menu -->
-    <div class="sidebar" style="display:none;">
+    <div class="sidebar">
         <h2>Code Library</h2>
         <ul>
-            <li onclick="toggleDropdown(this)">
-                A.1 Shapefiles
-                <ul class="dropdown-content">
-                    <li onclick="selectSidebarItem(event, this, 'shapefiles_info')">View Shapefile Data</li>
-                    <li onclick="selectSidebarItem(event, this, 'basic_plot')">Basic Plotting</li>
-                    <li onclick="selectSidebarItem(event, this, 'admin_units')">Admin Units Overlay</li>
-                    <li onclick="selectSidebarItem(event, this, 'merge_excel')">Merge shapefile with excel</li>
-                    <li onclick="selectSidebarItem(event, this, 'map_numeric')">Map by numeric variable</li>
-                    <li onclick="selectSidebarItem(event, this, 'map_categorical')">Map by categorical variable</li>
-                    <li onclick="selectSidebarItem(event, this, 'manual_color')">Map with manual color coding</li>
-                    
-                </ul>
-            </li>
-            <li onclick="toggleDropdown(this)">
-                A.2 Vector Analysis
-                <ul class="dropdown-content">
-                    <li onclick="selectSidebarItem(event, this, 'vector-analysis')">Vector Analysis</li>
-                </ul>
-            </li>
+            <li onclick="selectSidebarItem(event, this, 'overview')">Overview</li>
+            <li onclick="selectSidebarItem(event, this, 'shapefiles_info')">Shapefiles</li>
+            <li onclick="selectSidebarItem(event, this, 'basic_plot')">Basic Plot</li>
         </ul>
     </div>
-
-    <!-- Content -->
-    <div class="content" style="display:none;">
+    <div class="content">
+        <div class="overview">
+            <div class="topic-intro">Topic Introduction will appear here.</div>
+        </div>
         <div class="section-buttons">
             <button id="r-english-btn" onclick="showCode('R English')">R English</button>
-            <button id="r-french-btn" onclick="showCode('R French')">R French</button>
-            <button id="python-english-btn" onclick="showCode('Python English')">Python English</button>
-            <button id="python-french-btn" onclick="showCode('Python French')">Python French</button>
             <button id="stata-english-btn" onclick="showCode('Stata English')">Stata English</button>
             <button id="stata-french-btn" onclick="showCode('Stata French')">Stata French</button>
-            
-        </div>
-        <div class="topic-intro">
-            <p>Select a section and a language to display code and sample image.</p>
+            <button id="python-english-btn" onclick="showCode('Python English')">Python English</button>
+            <button id="python-french-btn" onclick="showCode('Python French')">Python French</button>
         </div>
         <div class="main-content">
             <div class="code-section">
                 <h3>Code</h3>
                 <pre class="full-code"></pre>
+                <button class="copy-btn" onclick="copyCode('code-section')">Copy Code</button>
             </div>
             <div class="image-section">
                 <h3>Sample Image</h3>
@@ -494,12 +307,4 @@ As SNT matures, more quality assurance is needed such that NMCPs can be confiden
         </div>
     </div>
 </body>
-</html> 
-
-
-
-
-
-
-
-
+</html>
