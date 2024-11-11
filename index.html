@@ -370,6 +370,36 @@ conn.close()
 # Explanation:
 # - This code establishes a connection to a PostgreSQL database, executes a query, retrieves results, and then closes the connection.`;
     sampleImage.src = 'https://example.com/path/to/sql_connection_example.png';
+} else if (currentSection === 'database_connection' && currentLanguage === 'SQL') {
+    topicIntro.innerText = 'Connecting to databases is crucial for querying and managing data stored in structured formats.';
+    codeDisplay.innerText = `
+
+# Step 1: Establish a connection to a PostgreSQL database
+# Make sure to replace placeholders with your actual database details
+
+import psycopg2
+
+conn = psycopg2.connect(
+    host="your_host",
+    database="your_database",
+    user="your_user",
+    password="your_password"
+)
+
+# Step 2: Create a cursor to execute SQL commands
+cur = conn.cursor()
+
+# Step 3: Execute a sample query
+cur.execute("SELECT * FROM table_name LIMIT 10")
+rows = cur.fetchall()
+
+# Step 4: Close the connection
+cur.close()
+conn.close()
+
+# Explanation:
+# - This code establishes a connection to a PostgreSQL database, executes a query, retrieves results, and then closes the connection.`;
+    sampleImage.src = 'https://example.com/path/to/sql_connection_example.png';
 }
 
         }
