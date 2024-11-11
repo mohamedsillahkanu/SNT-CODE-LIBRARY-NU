@@ -208,18 +208,6 @@
 
 
 
-        function copyCode(section) {
-            let codeToCopy;
-            if (section === 'code-section') {
-                codeToCopy = document.querySelector('.full-code').innerText;
-            }
-            navigator.clipboard.writeText(codeToCopy).then(() => {
-                const button = document.querySelector(`button[onclick="copyCode('${section}')"]`);
-                button.classList.add('active');
-                setTimeout(() => {
-                    button.classList.remove('active');
-                }, 1000);
-            }
             
 
         function updateContent() {
