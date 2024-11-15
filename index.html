@@ -59,8 +59,7 @@
             padding-left: 10px;
             border-radius: 5px;
         }
-        .sidebar li:hover .dropdown-content,
-        .sidebar li.active .dropdown-content {
+        .sidebar li:hover .dropdown-content {
             display: block;
         }
         .dropdown-content li {
@@ -156,14 +155,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            height: 100%;
             border: 2px solid #FF6347;
             border-radius: 10px;
             padding: 10px;
         }
         .sample-image img {
-            width: 100%;
-            height: auto;
-            object-fit: cover;
+            max-width: 100%;
+            height: 100%;
             border-radius: 10px;
         }
         .copy-btn {
@@ -189,7 +188,6 @@
         }
     </style>
     <script>
-        let currentSection = null;
         function selectSidebarItem(item, section) {
             // Highlight the selected sidebar item
             const sidebarItems = document.querySelectorAll('.sidebar li');
@@ -197,17 +195,15 @@
             item.classList.add('active');
             // Update URL hash
             window.location.hash = `/${section}`;
-            currentSection = section;
-            document.querySelector('.full-code').style.display = 'none';
-            document.querySelector('.sample-image img').src = 'https://via.placeholder.com/300x200.png?text=Select+a+Code+Language';
         }
 
         function showCode(language) {
-            if (!currentSection) {
+            const section = window.location.hash.split('/')[1];
+            if (!section) {
                 alert('Please select a section from the sidebar first.');
                 return;
             }
-            window.location.hash = `/${currentSection}/${language.toLowerCase().replace(' ', '-')}`;
+            window.location.hash = `/${section}/${language.toLowerCase().replace(' ', '-')}`;
             
             const codeSnippets = {
                 "shapefile-info": {
@@ -305,13 +301,11 @@ spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolo
                 }
             };
 
-            const selectedCode = codeSnippets[currentSection]?.[language.toLowerCase().replace(' ', '-')];
+            const selectedCode = codeSnippets[section]?.[language.toLowerCase().replace(' ', '-')];
             const codeDisplay = document.querySelector('.full-code');
             if (selectedCode) {
                 codeDisplay.innerText = selectedCode;
                 codeDisplay.style.display = 'block';
-                // Change the sample image to a relevant example image
-                document.querySelector('.sample-image img').src = `https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/16df021948e18e142e103ee7e9c78ff8311005ef/${currentSection}.png`;
             } else {
                 codeDisplay.innerText = 'No code available.';
                 codeDisplay.style.display = 'block';
@@ -380,13 +374,9 @@ spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolo
             <button onclick="showCode('Stata English')" id="stata-english-btn">Stata English</button>
             <button onclick="showCode('Stata French')" id="stata-french-btn">Stata French</button>
         </div>
-        <div class="topic-intro" style="background-color: #ffffff; color: #000; padding: 20px; border-radius: 10px;">
-            <p style="font-style: italic;">Welcome to the Code Library UI. Here you will find various examples of code snippets related to geospatial analysis, data visualization, and more. For further reading, please check out the following links:</p>
-            <ul>
-                <li><a href="https://en.wikipedia.org/wiki/Shapefile" target="_blank" style="color: #47B5FF;">Shapefile - Wikipedia</a></li>
-                <li><a href="https://geopandas.org/" target="_blank" style="color: #47B5FF;">Geopandas Documentation</a></li>
-                <li><a href="https://ggplot2.tidyverse.org/" target="_blank" style="color: #47B5FF;">ggplot2 Documentation</a></li>
-            </ul>
+        <div class="search-bar">
+            <input type="text" placeholder="Search code snippets...">
+            <button>Search</button>
         </div>
         <div class="main-content">
             <div class="code-section">
