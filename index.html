@@ -4,29 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Code Library UI</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Verdana:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Roboto', sans-serif;
             margin: 0;
-            height: 100vh;
+            height: 100vh; 
             display: flex;
             background-color: #1e1e2e;
             color: #ffffff;
             overflow: hidden;
         }
+        .overview {
+            width: 100%;
+            height: 100vh;
+            background-color: #28293d;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: left;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .overview h1 {
+            color: #47B5FF;
+            font-size: 2.5em;
+        }
+        .overview h2, .overview h3 {
+            margin-top: 15px;
+            color: #ffffff;
+        }
+        .overview p {
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
         .sidebar {
-            width: 250px;
+            width: 15%;
             background-color: #28293d;
             padding: 20px;
             display: flex;
             flex-direction: column;
             gap: 20px;
             overflow-y: auto;
-            scrollbar-width: none; /* Hide scrollbar for Firefox */
-        }
-        .sidebar::-webkit-scrollbar {
-            display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+            scrollbar-width: none;
+            position: fixed;
+            height: 100vh;
         }
         .sidebar h2 {
             color: #47B5FF;
@@ -41,11 +63,8 @@
             padding: 10px;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
             position: relative;
-        }
-        .sidebar li:hover {
-            background-color: #3a3b52;
+            user-select: none;
         }
         .sidebar li.active {
             background-color: #47B5FF;
@@ -53,21 +72,13 @@
         }
         .dropdown-content {
             display: none;
-            position: relative;
-            margin-top: 5px;
+            padding-left: 20px;
             background-color: #3a3b52;
-            padding-left: 10px;
             border-radius: 5px;
+            margin-top: 5px;
         }
-        .sidebar li:hover .dropdown-content {
+        .sidebar li.open .dropdown-content {
             display: block;
-        }
-        .dropdown-content li {
-            padding: 8px;
-            cursor: pointer;
-        }
-        .dropdown-content li:hover {
-            background-color: #474761;
         }
         .content {
             flex-grow: 1;
@@ -75,10 +86,8 @@
             flex-direction: column;
             padding: 20px;
             overflow-y: auto;
-            scrollbar-width: none; /* Hide scrollbar for Firefox */
-        }
-        .content::-webkit-scrollbar {
-            display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+            margin-left: 20%;
+            background-color: #1e1e2e;
         }
         .section-buttons {
             align-self: flex-end;
@@ -86,7 +95,7 @@
         }
         .section-buttons button {
             padding: 10px;
-            margin-left: 10px;
+            margin-right: 10px;
             background-color: #474761;
             color: #ffffff;
             border: none;
@@ -98,72 +107,59 @@
             background-color: #47B5FF;
             color: #000000;
         }
-        .section-buttons button:hover {
-            background-color: #3a3b52;
-        }
-        .search-bar {
-            margin-bottom: 20px;
-        }
-        .search-bar input {
-            width: 85%;
-            padding: 10px;
-            border-radius: 5px;
-            border: none;
-            font-size: 1em;
-        }
-        .search-bar button {
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: #47B5FF;
+        .topic-intro {
+            background-color: #ffffff;
             color: #000;
-            cursor: pointer;
-            font-size: 1em;
-            transition: background-color 0.3s;
-        }
-        .search-bar button:hover {
-            background-color: #3a3b52;
-            color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
         }
         .main-content {
             display: flex;
-            height: calc(100% - 100px);
+            flex-direction: column;
+            gap: 20px;
         }
         .code-section, .image-section {
-            flex: 1;
             background-color: #33334d;
             border-radius: 10px;
             padding: 20px;
             overflow: auto;
-            margin: 10px;
         }
-        .code-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .code-section h3, .image-section h3 {
+            margin-top: 0;
         }
         .full-code {
             background-color: #ffffff;
             padding: 10px;
             border-radius: 10px;
-            overflow: auto;
-            margin-top: 10px;
             color: #000;
-            display: none;
+            margin-top: 10px;
         }
         .sample-image {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100%;
             border: 2px solid #FF6347;
             border-radius: 10px;
             padding: 10px;
         }
         .sample-image img {
-            max-width: 100%;
-            height: 100%;
+            width: 100%;
+            height: auto;
+            object-fit: cover;
             border-radius: 10px;
+        }
+        .custom-button {
+            background-color: #47B5FF;
+            font-size: 18px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            position: absolute;
+            top: 30px;
+            right: 10px;
         }
         .copy-btn {
             padding: 8px;
@@ -182,142 +178,28 @@
             background-color: #00E0B5;
             color: #000000;
         }
-        .sidebar li.active {
-            background-color: #47B5FF;
-            color: #000000;
-        }
     </style>
     <script>
-        function selectSidebarItem(item, section) {
-            // Highlight the selected sidebar item
-            const sidebarItems = document.querySelectorAll('.sidebar li');
-            sidebarItems.forEach(el => el.classList.remove('active'));
+        let currentSection = '';
+        let currentLanguage = '';
+
+        function toggleDropdown(item) {
+            item.classList.toggle('open');
+        }
+
+        function selectSidebarItem(event, item, section) {
+            event.stopPropagation();
+            document.querySelectorAll('.sidebar li').forEach(el => el.classList.remove('active'));
             item.classList.add('active');
-            // Update URL hash
-            window.location.hash = `/${section}`;
+            currentSection = section;
+            updateContent();
         }
 
         function showCode(language) {
-            const section = window.location.hash.split('/')[1];
-            if (!section) {
-                alert('Please select a section from the sidebar first.');
-                return;
-            }
-            window.location.hash = `/${section}/${language.toLowerCase().replace(' ', '-')}`;
-            
-            const codeSnippets = {
-                "shapefile-info": {
-                    "r-english": `# Load necessary libraries
-library(sf)
-
-# Load shapefile
-admin <- st_read("/path/to/admin.shp")
-
-# Print shapefile info
-print(admin)`,
-
-                    "python-english": `import geopandas as gpd
-
-# Load shapefile
-admin = gpd.read_file("/path/to/admin.shp")
-
-# Print shapefile info
-print(admin.head())`,
-
-                    "stata-english": `* Load shapefile
-shp2dta using "/path/to/admin.shp", database(admin_db) coordinates(admin_coords)
-
-* List shapefile info
-list`},
-                "basic-plot": {
-                    "r-english": `# Load necessary libraries
-library(sf)
-library(ggplot2)
-
-# Load shapefile
-admin <- st_read("/path/to/admin.shp")
-
-# Basic plot
-ggplot() +
-  geom_sf(data = admin, fill = NA, color = "blue")`,
-                    "python-english": `import geopandas as gpd
-import matplotlib.pyplot as plt
-
-# Load shapefile
-admin = gpd.read_file("/path/to/admin.shp")
-
-# Basic plot
-admin.plot()
-plt.show()`,
-                    "stata-english": `* Load shapefile
-shp2dta using "/path/to/admin.shp", database(admin_db) coordinates(admin_coords)
-
-* Basic plot
-spmap using admin_coords, id(_ID)`
-                },
-                "admin-unit-overlay": {
-                    "r-english": `# Load necessary libraries
-library(sf)
-library(ggplot2)
-
-# Load shapefiles
-admin1 <- st_read("/path/to/admin1.shp")
-admin2 <- st_read("/path/to/admin2.shp")
-
-# Ensure both layers have the same CRS
-admin1 <- st_transform(admin1, crs = st_crs(admin2))
-
-# Plot overlays
-ggplot() +
-  geom_sf(data = admin1, fill = NA, color = "blue") +
-  geom_sf(data = admin2, fill = NA, color = "red")`,
-                    "python-english": `import geopandas as gpd
-import matplotlib.pyplot as plt
-
-# Load shapefiles
-admin1 = gpd.read_file("/path/to/admin1.shp")
-admin2 = gpd.read_file("/path/to/admin2.shp")
-
-# Ensure both layers have the same CRS
-admin1 = admin1.to_crs(admin2.crs)
-
-# Plot overlays
-fig, ax = plt.subplots()
-admin1.plot(ax=ax, edgecolor='blue')
-admin2.plot(ax=ax, edgecolor='red')
-plt.title("Overlay of Admin Units")
-plt.show()`,
-                    "stata-english": `* Load shapefiles
-shp2dta using "/path/to/admin1.shp", database(admin1_db) coordinates(admin1_coords)
-shp2dta using "/path/to/admin2.shp", database(admin2_db) coordinates(admin2_coords)
-
-* Merge shapefiles
-drop _all
-use admin1_db, clear
-append using admin2_db
-
-* Plot overlays
-spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolor(red ..)`
-                }
-            };
-
-            const selectedCode = codeSnippets[section]?.[language.toLowerCase().replace(' ', '-')];
-            const codeDisplay = document.querySelector('.full-code');
-            if (selectedCode) {
-                codeDisplay.innerText = selectedCode;
-                codeDisplay.style.display = 'block';
-            } else {
-                codeDisplay.innerText = 'No code available.';
-                codeDisplay.style.display = 'block';
-            }
-
-            // Update active button styling
-            const buttons = document.querySelectorAll('.section-buttons button');
-            buttons.forEach(button => button.classList.remove('active'));
-            const activeButton = document.querySelector(`#${language.toLowerCase().replace(' ', '-')}-btn`);
-            if (activeButton) {
-                activeButton.classList.add('active');
-            }
+            currentLanguage = language;
+            updateContent();
+            document.querySelectorAll('.section-buttons button').forEach(button => button.classList.remove('active'));
+            document.querySelector(`#${language.toLowerCase().replace(' ', '-')}-btn`).classList.add('active');
         }
 
         function copyCode(section) {
@@ -333,63 +215,93 @@ spmap using admin1_coords, id(_ID) ocolor(blue ..) || using admin2_coords, ocolo
                 }, 1000);
             });
         }
+
+        window.onload = function() {
+            const currentUrl = window.location.href;
+            if (currentUrl.includes('#Overview')) {
+                loadContent('overview');
+            } else if (currentUrl.includes('#shapefiles')) {
+                loadContent('shapefiles_info');
+            } else if (currentUrl.includes('#basic_plot')) {
+                loadContent('basic_plot');
+            }
+        };
+
+        function loadContent(section) {
+            currentSection = section;
+            updateContent();
+        }
+
+        function updateContent() {
+            const topicIntro = document.querySelector('.topic-intro');
+            const codeDisplay = document.querySelector('.full-code');
+            const sampleImage = document.querySelector('.sample-image img');
+
+            if (!currentSection || !currentLanguage) {
+                topicIntro.innerText = 'Error: Please select both a section and a language.';
+                codeDisplay.innerText = '';
+                sampleImage.src = '';
+                document.querySelector('.code-section').style.display = 'none';
+                document.querySelector('.image-section').style.display = 'none';
+                return;
+            }
+
+            document.querySelector('.code-section').style.display = 'block';
+            document.querySelector('.image-section').style.display = 'block';
+
+            if (currentSection === 'shapefiles_info' && currentLanguage === 'R English') {
+                topicIntro.innerText = 'Viewing shapefile data is often the first step when working with spatial datasets. It involves loading and inspecting the spatial features and attributes to understand the structure and details of the data.'; 
+                codeDisplay.innerText = `
+# R Code for Viewing Shapefile Data
+install.packages("sf")
+library(sf)
+
+shapefile_shx <- 'https://raw.githubusercontent.com/path_to_shx'
+shapefile_dbf <- 'https://raw.githubusercontent.com/path_to_dbf'
+shapefile_path <- 'https://raw.githubusercontent.com/path_to_shp'
+
+download.file(shapefile_path, destfile = "Chiefdom_2021.shp")
+download.file(shapefile_shx, destfile = "Chiefdom_2021.shx")
+download.file(shapefile_dbf, destfile = "Chiefdom_2021.dbf")
+
+gdf <- st_read("Chiefdom_2021.shp")
+st_crs(gdf) <- 4326
+`;
+                sampleImage.src = 'path_to_sample_image.jpg';
+            }
+        }
     </script>
 </head>
 <body>
     <div class="sidebar">
         <h2>Code Library</h2>
         <ul>
-            <li>
-                A.1 Shapefiles
-                <ul class="dropdown-content">
-                    <li onclick="selectSidebarItem(this, 'shapefile-info')">Shapefile Info</li>
-                    <li onclick="selectSidebarItem(this, 'basic-plot')">Basic Plot</li>
-                    <li onclick="selectSidebarItem(this, 'admin-unit-overlay')">Admin Unit Overlay</li>
-                </ul>
-            </li>
-            <li>
-                A.2 Health Facilities
-                <ul class="dropdown-content">
-                    <li onclick="selectSidebarItem(this, 'health-info')">R</li>
-                    <li onclick="selectSidebarItem(this, 'health-info')">Python</li>
-                    <li onclick="selectSidebarItem(this, 'health-info')">Stata</li>
-                </ul>
-            </li>
-            <li>
-                A.3 Routine Case Data from DHIS2
-                <ul class="dropdown-content">
-                    <li onclick="selectSidebarItem(this, 'routine-case-data')">R</li>
-                    <li onclick="selectSidebarItem(this, 'routine-case-data')">Python</li>
-                    <li onclick="selectSidebarItem(this, 'routine-case-data')">Stata</li>
-                </ul>
-            </li>
+            <li onclick="selectSidebarItem(event, this, 'overview')">Overview</li>
+            <li onclick="selectSidebarItem(event, this, 'shapefiles_info')">Shapefiles</li>
+            <li onclick="selectSidebarItem(event, this, 'basic_plot')">Basic Plot</li>
         </ul>
     </div>
     <div class="content">
-        <div class="section-buttons">
-            <button onclick="showCode('R English')" id="r-english-btn">R English</button>
-            <button onclick="showCode('R French')" id="r-french-btn">R French</button>
-            <button onclick="showCode('Python English')" id="python-english-btn">Python English</button>
-            <button onclick="showCode('Python French')" id="python-french-btn">Python French</button>
-            <button onclick="showCode('Stata English')" id="stata-english-btn">Stata English</button>
-            <button onclick="showCode('Stata French')" id="stata-french-btn">Stata French</button>
+        <div class="overview">
+            <div class="topic-intro">Topic Introduction will appear here.</div>
         </div>
-        <div class="search-bar">
-            <input type="text" placeholder="Search code snippets...">
-            <button>Search</button>
+        <div class="section-buttons">
+            <button id="r-english-btn" onclick="showCode('R English')">R English</button>
+            <button id="stata-english-btn" onclick="showCode('Stata English')">Stata English</button>
+            <button id="stata-french-btn" onclick="showCode('Stata French')">Stata French</button>
+            <button id="python-english-btn" onclick="showCode('Python English')">Python English</button>
+            <button id="python-french-btn" onclick="showCode('Python French')">Python French</button>
         </div>
         <div class="main-content">
             <div class="code-section">
-                <div class="code-header">
-                    <h3>Code</h3>
-                    <button class="copy-btn" onclick="copyCode('code-section')">Copy</button>
-                </div>
-                <pre class="full-code" style="background-color: #ffffff; color: #000;">No code selected.</pre>
+                <h3>Code</h3>
+                <pre class="full-code"></pre>
+                <button class="copy-btn" onclick="copyCode('code-section')">Copy Code</button>
             </div>
             <div class="image-section">
                 <h3>Sample Image</h3>
                 <div class="sample-image">
-                    <img src="https://raw.githubusercontent.com/mohamedsillahkanu/SNT-CODE-LIBRARY-NU/16df021948e18e142e103ee7e9c78ff8311005ef/overlay%20final3.png" alt="Sample Image">
+                    <img src="" alt="Sample Image">
                 </div>
             </div>
         </div>
