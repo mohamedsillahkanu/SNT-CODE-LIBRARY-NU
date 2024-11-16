@@ -256,55 +256,55 @@
             if (currentSection === 'shapefiles_info' && currentLanguage === 'R English') {
                 topicIntro.innerText = 'This section provides code to read and display shapefiles in R.';
                 codeDisplay.innerText = `
-# Step 1: Install necessary libraries
+// Step 1: Install necessary libraries
 install.packages("sf")
 
-# Step 2: Import necessary libraries
-# Explanation:
-# - sf: Used to work with geospatial data in R.
+// Step 2: Import necessary libraries
+// Explanation:
+// - sf: Used to work with geospatial data in R.
 library(sf)
 
-# Step 3: Define the path to the shapefile components
-# Explanation:
-# - The variables 'shapefile_shx', 'shapefile_dbf', and 'shapefile_path' hold the raw paths to the shapefile components from the GitHub repository.
-# - All three files (.shp, .shx, .dbf) are required to correctly read the shapefile.
+// Step 3: Define the path to the shapefile components
+// Explanation:
+// - The variables 'shapefile_shx', 'shapefile_dbf', and 'shapefile_path' hold the raw paths to the shapefile components from the GitHub repository.
+// - All three files (.shp, .shx, .dbf) are required to correctly read the shapefile.
 
-# [44mThese URLs should be modified if using a different shapefile or repository[0m
+// [44mThese URLs should be modified if using a different shapefile or repository[0m
 shapefile_shx <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.shx'
 shapefile_dbf <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.dbf'
 shapefile_path <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.shp'
 
-# Step 4: Download the shapefile components
-# [44mThe destination file names can be modified if a different naming convention is preferred[0m
+// Step 4: Download the shapefile components
+// [44mThe destination file names can be modified if a different naming convention is preferred[0m
 download.file(shapefile_path, destfile = "Chiefdom_2021.shp")
 download.file(shapefile_shx, destfile = "Chiefdom_2021.shx")
 download.file(shapefile_dbf, destfile = "Chiefdom_2021.dbf")
 
-# Explanation:
-# - 'download.file()' is used to download each component of the shapefile from GitHub and save them locally.
-# - This ensures all necessary files are available for reading the shapefile.
+// Explanation:
+// - 'download.file()' is used to download each component of the shapefile from GitHub and save them locally.
+// - This ensures all necessary files are available for reading the shapefile.
 
-# Step 4: Load shapefile data into an sf object
-# [44mThe file name should match the downloaded shapefile name if changed above[0m
+// Step 4: Load shapefile data into an sf object
+// [44mThe file name should match the downloaded shapefile name if changed above[0m
 gdf <- st_read("Chiefdom_2021.shp")
 
-# Explanation:
-# - 'st_read()' reads the shapefile into an sf object, which is a data structure for handling geospatial data in R.
-# - The sf object 'gdf' contains both the geometry (spatial features) and attributes (data values) of the shapefile.
+// Explanation:
+// - 'st_read()' reads the shapefile into an sf object, which is a data structure for handling geospatial data in R.
+// - The sf object 'gdf' contains both the geometry (spatial features) and attributes (data values) of the shapefile.
 
-# Step 4.1: Set the Coordinate Reference System (CRS)
-# [44mIf a different CRS is required, change the EPSG code accordingly[0m
+// Step 4.1: Set the Coordinate Reference System (CRS)
+// [44mIf a different CRS is required, change the EPSG code accordingly[0m
 st_crs(gdf) <- 4326
 
-# Explanation:
-# - 'st_crs()' is used to set the CRS of the sf object.
-# - EPSG:4326 is a common CRS that represents coordinates in longitude and latitude.
+// Explanation:
+// - 'st_crs()' is used to set the CRS of the sf object.
+// - EPSG:4326 is a common CRS that represents coordinates in longitude and latitude.
 
-# Step 5: View the first few rows of the sf object
+// Step 5: View the first few rows of the sf object
 print(gdf)
 
-# Explanation:
-# - 'print(gdf)' prints only a portion of the spatial object by default.`;
+// Explanation:
+// - 'print(gdf)' prints only a portion of the spatial object by default.`;
                 sampleImage.src = 'https://github.com/mohamedsillahkanu/SNT-Code-Library/raw/31b914c1115de3ccd6c8045946adc4a84eadc4bb/print%20gdf%20in%20R.png';
             } else if (currentSection === 'basic_plot' && currentLanguage === 'R English') {
     topicIntro.innerText = 'Basic map plotting involves visualizing geographic data to understand spatial patterns';
