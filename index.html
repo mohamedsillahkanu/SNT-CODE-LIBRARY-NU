@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Code library for stratification and SNT</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/themes/prism-okaidia.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/themes/prism-tomorrow.min.css" rel="stylesheet">
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -136,14 +136,22 @@
             margin-top: 0;
         }
         .full-code {
-            background-color: white;
+            background-color: #ffffff;
             padding: 10px;
             border-radius: 10px;
-            color: black;
+            color: #000000;
             margin-top: 10px;
         }
         .full-code code {
             font-size: 1em;
+        }
+        pre[class*="language-"] {
+            background-color: #ffffff !important;
+            padding: 1em;
+            margin: 0;
+            overflow: auto;
+            border-radius: 10px;
+            color: #000000;
         }
         .sample-image {
             display: flex;
@@ -260,55 +268,76 @@
 
             if (currentSection === 'shapefiles_info' && currentLanguage === 'R English') {
                 topicIntro.innerText = 'This section provides code to read and display shapefiles in R.';
-                codeDisplay.innerHTML = `<pre class="language-r"><code>// Step 1: Install necessary libraries
+                codeDisplay.innerHTML = `<pre class="language-r"><code>/*
+Step 1: Install necessary libraries
+*/
 install.packages("sf")
 
-// Step 2: Import necessary libraries
-// Explanation:
-// - sf: Used to work with geospatial data in R.
+/*
+Step 2: Import necessary libraries
+Explanation:
+- sf: Used to work with geospatial data in R.
+*/
 library(sf)
 
-// Step 3: Define the path to the shapefile components
-// Explanation:
-// - The variables 'shapefile_shx', 'shapefile_dbf', and 'shapefile_path' hold the raw paths to the shapefile components from the GitHub repository.
-// - All three files (.shp, .shx, .dbf) are required to correctly read the shapefile.
-
+/*
+Step 3: Define the path to the shapefile components
+Explanation:
+- The variables 'shapefile_shx', 'shapefile_dbf', and 'shapefile_path' hold the raw paths to the shapefile components from the GitHub repository.
+- All three files (.shp, .shx, .dbf) are required to correctly read the shapefile.
+*/
 // These URLs should be modified if using a different shapefile or repository
 shapefile_shx <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.shx'
 shapefile_dbf <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.dbf'
 shapefile_path <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.shp'
 
-// Step 4: Download the shapefile components
-// The destination file names can be modified if a different naming convention is preferred
+/*
+Step 4: Download the shapefile components
+The destination file names can be modified if a different naming convention is preferred
+*/
 download.file(shapefile_path, destfile = "Chiefdom_2021.shp")
 download.file(shapefile_shx, destfile = "Chiefdom_2021.shx")
 download.file(shapefile_dbf, destfile = "Chiefdom_2021.dbf")
 
-// Explanation:
-// - 'download.file()' is used to download each component of the shapefile from GitHub and save them locally.
-// - This ensures all necessary files are available for reading the shapefile.
+/*
+Explanation:
+- 'download.file()' is used to download each component of the shapefile from GitHub and save them locally.
+- This ensures all necessary files are available for reading the shapefile.
+*/
 
-// Step 4: Load shapefile data into an sf object
-// The file name should match the downloaded shapefile name if changed above
+/*
+Step 5: Load shapefile data into an sf object
+The file name should match the downloaded shapefile name if changed above
+*/
 gdf <- st_read("Chiefdom_2021.shp")
 
-// Explanation:
-// - 'st_read()' reads the shapefile into an sf object, which is a data structure for handling geospatial data in R.
-// - The sf object 'gdf' contains both the geometry (spatial features) and attributes (data values) of the shapefile.
+/*
+Explanation:
+- 'st_read()' reads the shapefile into an sf object, which is a data structure for handling geospatial data in R.
+- The sf object 'gdf' contains both the geometry (spatial features) and attributes (data values) of the shapefile.
+*/
 
-// Step 4.1: Set the Coordinate Reference System (CRS)
-// If a different CRS is required, change the EPSG code accordingly
+/*
+Step 6: Set the Coordinate Reference System (CRS)
+If a different CRS is required, change the EPSG code accordingly
+*/
 st_crs(gdf) <- 4326
 
-// Explanation:
-// - 'st_crs()' is used to set the CRS of the sf object.
-// - EPSG:4326 is a common CRS that represents coordinates in longitude and latitude.
+/*
+Explanation:
+- 'st_crs()' is used to set the CRS of the sf object.
+- EPSG:4326 is a common CRS that represents coordinates in longitude and latitude.
+*/
 
-// Step 5: View the first few rows of the sf object
+/*
+Step 7: View the first few rows of the sf object
+*/
 print(gdf)
 
-// Explanation:
-// - 'print(gdf)' prints only a portion of the spatial object by default.
+/*
+Explanation:
+- 'print(gdf)' prints only a portion of the spatial object by default.
+*/
 </code></pre>`;
                 sampleImage.src = 'https://github.com/mohamedsillahkanu/SNT-Code-Library/raw/31b914c1115de3ccd6c8045946adc4a84eadc4bb/print%20gdf%20in%20R.png';
                 Prism.highlightAll();
