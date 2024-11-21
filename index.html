@@ -5,21 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Code library for stratification and SNT</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/themes/prism-solarizedlight.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/themes/prism-coy.min.css" rel="stylesheet">
     <style>
         body {
             font-family: 'Roboto', sans-serif;
             margin: 0;
             height: 100vh;
             display: flex;
-            background-color: #f0f0f0;
+            background-color: #ffffff;
             color: #000000;
             overflow: hidden;
         }
         .overview {
             width: 100%;
             height: 100vh;
-            background-color: #f0f0f0;
+            background-color: #ffffff;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -28,7 +28,7 @@
             box-sizing: border-box;
         }
         .overview h1 {
-            color: black;
+            color: #47BF55;
             font-size: 2.5em;
         }
         .overview h2, .overview h3 {
@@ -53,7 +53,7 @@
             height: 100vh;
         }
         .sidebar h2 {
-            color: black;
+            color: #47BF55;
             font-size: 1.5em;
             margin-bottom: 10px;
         }
@@ -61,8 +61,8 @@
             margin-bottom: 50px;
             font-size: 16px;
             padding: 10px;
-            background-color: white;
-            color: black;
+            background-color: #47BF55;
+            color: #ffffff;
             border: none;
             cursor: pointer;
             border-radius: 5px;
@@ -80,13 +80,13 @@
             color: #000000;
         }
         .sidebar li.active {
-            background-color: white;
-            color: black;
+            background-color: #47BF55;
+            color: #ffffff;
         }
         .dropdown-content {
             display: none;
             padding-left: 20px;
-            background-color: #f0f0f0;
+            background-color: #d9d9d9;
             border-radius: 5px;
             margin-top: 5px;
         }
@@ -100,7 +100,7 @@
             padding: 20px;
             overflow-y: auto;
             margin-left: 20%;
-            background-color: #f0f0f0;
+            background-color: #ffffff;
             color: #000000;
         }
         .section-buttons {
@@ -110,16 +110,16 @@
         .section-buttons button {
             padding: 10px;
             margin-right: 10px;
-            background-color: white;
-            color: black;
+            background-color: #47BF55;
+            color: #ffffff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s;
         }
         .section-buttons button.active {
-            background-color: white;
-            color: black;
+            background-color: #2E8B57;
+            color: #ffffff;
         }
         .topic-intro {
             background-color: #ffffff;
@@ -148,7 +148,7 @@
             background-color: #ffffff;
             padding: 10px;
             border-radius: 10px;
-            color: black;
+            color: #000000;
             margin-top: 10px;
         }
         .full-code code {
@@ -166,7 +166,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            border: 2px solid black;
+            border: 2px solid #47BF55;
             border-radius: 10px;
             padding: 10px;
         }
@@ -177,13 +177,13 @@
             border-radius: 10px;
         }
         .custom-button {
-            background-color: white;
+            background-color: #47BF55;
             font-size: 18px;
             padding: 12px 24px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            color: black;
+            color: #ffffff;
             position: absolute;
             top: 30px;
             right: 10px;
@@ -193,8 +193,8 @@
             top: 10px;
             right: 10px;
             padding: 5px 10px;
-            background-color: #f0f0f0;
-            color: white;
+            background-color: #47BF55;
+            color: #ffffff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -441,14 +441,14 @@ Explanation:
 
     <!-- Sidebar Menu -->
     <div class="sidebar" style="display:none;">
-        <button onclick="showOverviewPage(event, this, 'overview')" style="width: 85%; border: none; cursor: pointer; border-radius: 5px; padding: 10px; font-size: 18px; background-color: #f0f0f0; color: white; position: absolute; top: 25px; left: 10px;margin: 0;">
+        <button onclick="showOverviewPage(event, this, 'overview')" style="width: 85%; border: none; cursor: pointer; border-radius: 5px; padding: 10px; font-size: 18px; background-color: #47BF55; color: white; position: absolute; top: 25px; left: 10px;margin: 0;">
             Go to Homepage
         </button>
        
         <ul>  
             <h2 style="color: #f0f0f0; font-size: 25px;">--</h2>   
-            <h2 style="color: black; font-size: 25px;">Table of Contents</h2>          
-            <h4 style="color: black; font-size: 20px;">Data Management</h4>
+            <h2 style="color: #000000; font-size: 25px;">Table of Contents</h2>          
+            <h4 style="color: #47BF55; font-size: 20px;">Data Management</h4>
             <li onclick="toggleDropdown(this)">
                 Shapefiles
                 <ul class="dropdown-content">
