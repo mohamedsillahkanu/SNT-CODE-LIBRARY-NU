@@ -12,14 +12,14 @@
             margin: 0;
             height: 100vh;
             display: flex;
-            background-color: #1e1e2e;
-            color: #ffffff;
+            background-color: #ffffff;
+            color: #000000;
             overflow: hidden;
         }
         .overview {
             width: 100%;
             height: 100vh;
-            background-color: #28293d;
+            background-color: #ffffff;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -28,20 +28,21 @@
             box-sizing: border-box;
         }
         .overview h1 {
-            color: #87CEEB;
+            color: #47BF55;
             font-size: 2.5em;
         }
         .overview h2, .overview h3 {
             margin-top: 15px;
-            color: #ffffff;
+            color: #000000;
         }
         .overview p {
             font-size: 1.1em;
             line-height: 1.6;
+            color: #000000;
         }
         .sidebar {
             width: 15%;
-            background-color: #28293d;
+            background-color: #f0f0f0;
             padding: 20px;
             display: flex;
             flex-direction: column;
@@ -52,7 +53,7 @@
             height: 100vh;
         }
         .sidebar h2 {
-            color: #87CEEB;
+            color: #47BF55;
             font-size: 1.5em;
             margin-bottom: 10px;
         }
@@ -60,6 +61,11 @@
             margin-bottom: 50px;
             font-size: 16px;
             padding: 10px;
+            background-color: #47BF55;
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
         }
         .sidebar ul {
             list-style: none;
@@ -71,15 +77,16 @@
             cursor: pointer;
             position: relative;
             user-select: none;
+            color: #000000;
         }
         .sidebar li.active {
-            background-color: #87CEEB;
-            color: #000000;
+            background-color: #47BF55;
+            color: #ffffff;
         }
         .dropdown-content {
             display: none;
             padding-left: 20px;
-            background-color: #3a3b52;
+            background-color: #d9d9d9;
             border-radius: 5px;
             margin-top: 5px;
         }
@@ -93,7 +100,8 @@
             padding: 20px;
             overflow-y: auto;
             margin-left: 20%;
-            background-color: #1e1e2e;
+            background-color: #ffffff;
+            color: #000000;
         }
         .section-buttons {
             align-self: flex-end;
@@ -102,7 +110,7 @@
         .section-buttons button {
             padding: 10px;
             margin-right: 10px;
-            background-color: #474761;
+            background-color: #47BF55;
             color: #ffffff;
             border: none;
             border-radius: 5px;
@@ -110,12 +118,12 @@
             transition: background-color 0.3s;
         }
         .section-buttons button.active {
-            background-color: #87CEEB;
-            color: #000000;
+            background-color: #2E8B57;
+            color: #ffffff;
         }
         .topic-intro {
             background-color: #ffffff;
-            color: #000;
+            color: #000000;
             padding: 20px;
             border-radius: 10px;
             margin-bottom: 20px;
@@ -126,7 +134,7 @@
             gap: 20px;
         }
         .code-section, .image-section {
-            background-color: #33334d;
+            background-color: #f5f5f5;
             border-radius: 10px;
             padding: 20px;
             overflow: auto;
@@ -134,12 +142,13 @@
         }
         .code-section h3, .image-section h3 {
             margin-top: 0;
+            color: #000000;
         }
         .full-code {
             background-color: #ffffff;
             padding: 10px;
             border-radius: 10px;
-            color: #47BF55;
+            color: #000000;
             margin-top: 10px;
         }
         .full-code code {
@@ -151,13 +160,13 @@
             margin: 0;
             overflow: auto;
             border-radius: 10px;
-            color: #47BF55;
+            color: #000000;
         }
         .sample-image {
             display: flex;
             justify-content: center;
             align-items: center;
-            border: 2px solid #FF6347;
+            border: 2px solid #47BF55;
             border-radius: 10px;
             padding: 10px;
         }
@@ -168,13 +177,13 @@
             border-radius: 10px;
         }
         .custom-button {
-            background-color: #87CEEB;
+            background-color: #47BF55;
             font-size: 18px;
             padding: 12px 24px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            color: white;
+            color: #ffffff;
             position: absolute;
             top: 30px;
             right: 10px;
@@ -184,8 +193,8 @@
             top: 10px;
             right: 10px;
             padding: 5px 10px;
-            background-color: #87CEEB;
-            color: black;
+            background-color: #47BF55;
+            color: #ffffff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -432,14 +441,14 @@ Explanation:
 
     <!-- Sidebar Menu -->
     <div class="sidebar" style="display:none;">
-        <button onclick="showOverviewPage(event, this, 'overview')" style="width: 85%; border: none; cursor: pointer; border-radius: 5px; padding: 10px; font-size: 18px; background-color: #87CEEB; color: black; position: absolute; top: 25px; left: 10px;margin: 0;">
+        <button onclick="showOverviewPage(event, this, 'overview')" style="width: 85%; border: none; cursor: pointer; border-radius: 5px; padding: 10px; font-size: 18px; background-color: #47BF55; color: white; position: absolute; top: 25px; left: 10px;margin: 0;">
             Go to Homepage
         </button>
        
         <ul>  
-            <h2 style="color: #28293d; font-size: 25px;">--</h2>   
-            <h2 style="color: white; font-size: 25px;">Table of Contents</h2>          
-            <h4 style="color: #87CEEB; font-size: 20px;">Data Management</h4>
+            <h2 style="color: #f0f0f0; font-size: 25px;">--</h2>   
+            <h2 style="color: #000000; font-size: 25px;">Table of Contents</h2>          
+            <h4 style="color: #47BF55; font-size: 20px;">Data Management</h4>
             <li onclick="toggleDropdown(this)">
                 Shapefiles
                 <ul class="dropdown-content">
